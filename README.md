@@ -9,4 +9,4 @@
 - Toon Staes
 - Wilfer Spaepen
 - Britt Theunis
-## URL: [https://xxy.sinners.be](https://xxy.sinners.be)
+## URL: [https://cma.sinners.be](https://cma.sinners.be)
