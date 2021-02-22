@@ -35,7 +35,16 @@ class CreateProgrammesTable extends Migration
                     'created_at' => now()
                 ]
             ]
-    );
+        );
+
+        for ($i = 0; $i <= 20; $i++) {
+            DB::table('programmes')->insert(
+                [
+                    'name' => "programme $i",
+                    'created_at' => now()
+                ]
+            );
+        }
     }
 
     /**
