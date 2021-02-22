@@ -16,18 +16,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all()->transform(function ($item, $key) {
-            $item->name = $item->first_name . ' ' . $item->last_name;
-            $item->address = $item->address . ' ' . $item->zip_code . ' ' . $item->city;
+//        $users = $this->getUsers();
+//
+//        $result = compact('users');
+//        Json::dump($result);
 
-            unset($item->first_name, $item->last_name, $item->zip_code, $item->city);
-
-            return $item;
-        });
-        $result = compact('users');
-        Json::dump($result);
-
-        return view('financial_employee.users.index', $result);
+        return view('financial_employee.users.index');
     }
 
     /**
@@ -93,8 +87,28 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        $user->isActive = 0;
+        $user->save();
         session()->flash('success', "The user <b>$user->name</b> has been deleted");
-        return redirect('/users');
+
+        $users = $this->getUsers();
+
+        $result = compact('users');
+        Json::dump($result);
+
+        return $result;
+    }
+
+    public function getUsers()
+    {
+        return User::all()->transform(function ($item, $key) {
+            $item->name = $item->first_name . ' ' . $item->last_name;
+            $item->address = $item->address . ' ' . $item->zip_code . ' ' . $item->city;
+            $item->is_active = $item->isActive;
+
+            unset($item->first_name, $item->last_name, $item->zip_code, $item->city, $item->isActive);
+
+            return $item;
+        });
     }
 }

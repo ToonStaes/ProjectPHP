@@ -17,4 +17,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
 Route::resource('users', 'financial_employee\UserController');
