@@ -59,7 +59,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        redirect('/users');
     }
 
     /**
@@ -93,6 +93,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        session()->flash('success', "The user <b>$user->name</b> has been deleted");
+        return redirect('/users');
     }
 }

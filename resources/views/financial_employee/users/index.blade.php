@@ -43,8 +43,9 @@
                     <td>{{$user->isFinancial_employee}}</td>
                     <td>
                         <i class="fas fa-edit"></i>
-                        <form action="users/{{$user->userID}}">
+                        <form action="/users/{{$user->userID}}" method="post">
                             @method('delete')
+                            @csrf
                             <button type="submit"><i class="fas fa-trash-alt"></i></button>
                         </form>
                     </td>
