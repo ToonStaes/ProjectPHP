@@ -14,10 +14,13 @@ class CreateDiverseReimbursementEvidencesTable extends Migration
     public function up()
     {
         Schema::create('diverse_reimbursement_evidences', function (Blueprint $table) {
-            $table->id('diverse_reimbursement_evidenceID');
+            $table->id();
             $table->string('filepath');
             $table->foreignId('diverse_reimbursement_lineID');
             $table->timestamps();
+
+            // Foreign key relation
+            $table->foreign('diverse_reimbursement_lineID')->references('id')->on('diverse_reimbursement_lines')->onDelete('cascade')->onUpdate('cascade');
         });
 
         DB::table('diverse_reimbursement_evidences')->insert(

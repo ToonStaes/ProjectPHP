@@ -14,13 +14,17 @@ class CreateDiverseReimbursementLinesTable extends Migration
     public function up()
     {
         Schema::create('diverse_reimbursement_lines', function (Blueprint $table) {
-            $table->id('diverse_reimbursement_lineID');
+            $table->id();
             $table->foreignId('diverse_reimbursement_requestID');
             $table->float('amount')->nullable();
             $table->string('description');
             $table->float('number_of_km')->nullable();
             $table->foreignId('parameterID')->nullable();
             $table->timestamps();
+
+            // Foreign key relation
+            $table->foreign('diverse_reimbursement_requestID')->references('id')->on('diverse_reimbursement_requests')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('parameterID')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
         });
 
         DB::table('diverse_reimbursement_lines')->insert(

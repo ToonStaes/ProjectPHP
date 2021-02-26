@@ -14,7 +14,7 @@ class CreateBikeReimbursementsTable extends Migration
     public function up()
     {
         Schema::create('bike_reimbursements', function (Blueprint $table) {
-            $table->id('bike_reimbursementID');
+            $table->id();
             $table->foreignId('statusID');
             $table->foreignId('userID_Financial_employee')->nullable();
             $table->string('comment_Financial_employee')->nullable();
@@ -25,8 +25,8 @@ class CreateBikeReimbursementsTable extends Migration
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('userID_Financial_employee')->references('userID')->on('users')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('statusID')->references('statusID')->on('statuses')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('userID_Financial_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('statusID')->references('id')->on('statuses')->onDelete('restrict')->onUpdate('cascade');
         });
 
 

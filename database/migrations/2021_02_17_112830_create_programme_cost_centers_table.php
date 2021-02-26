@@ -14,14 +14,14 @@ class CreateProgrammeCostCentersTable extends Migration
     public function up()
     {
         Schema::create('programme_cost_centers', function (Blueprint $table) {
-            $table->id('programmeCost_centerID');
+            $table->id();
             $table->foreignId('programmeID');
             $table->foreignId('cost_centerID');
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('programmeID')->references('programmeID')->on('programmes')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('cost_centerID')->references('cost_centerID')->on('cost_centers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('programmeID')->references('id')->on('programmes')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('cost_centerID')->references('id')->on('cost_centers')->onDelete('cascade')->onUpdate('cascade');
         });
 
         // insert for testing

@@ -14,14 +14,14 @@ class CreateBikeReimbursementParametersTable extends Migration
     public function up()
     {
         Schema::create('bike_reimbursement_parameters', function (Blueprint $table) {
-            $table->id('bike_reimbursementParameterID');
+            $table->id();
             $table->foreignId('bike_reimbursementID');
             $table->foreignId('parameterID');
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('bike_reimbursementID')->references('bike_reimbursementID')->on('bike_reimbursements')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('parameterID')->references('parameterID')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('bike_reimbursementID')->references('id')->on('bike_reimbursements')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('parameterID')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
         });
 
         for ($i = 1; $i <= 21; $i++) {
