@@ -36,6 +36,10 @@
             <input type="text" class="form-control" id="aantal_km" name="aantal_km" required>
         </div>
         <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="actief" name="actief">
+            <label class="form-check-label" for="actief">Geactiveerd</label>
+        </div>
+        <div class="form-check">
             <input type="checkbox" class="form-check-input" id="kostenplaatsverantwoordelijke" name="kostenplaatsverantwoordelijke">
             <label class="form-check-label" for="kostenplaatsverantwoordelijke">Kostenplaatsverantwoordelijke</label>
         </div>

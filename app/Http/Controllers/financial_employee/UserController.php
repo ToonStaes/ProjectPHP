@@ -64,6 +64,12 @@ class UserController extends Controller
         $user->password = "1234";
         $user->isActive = true;
 
+        if ($request->actief == null){
+            $user->isActive = false;
+        } else {
+            $user->isActive = true;
+        }
+
         if ($request->kostenplaatsverantwoordelijke == null){
             $user->isCost_center_manager = false;
         } else {
@@ -92,6 +98,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $user->is_active = $user->isActive;
+        unset($user->isActive);
         return $user;
     }
 
@@ -121,7 +129,7 @@ class UserController extends Controller
             'adres' => 'required|min:3',
             'postcode' => 'required',
             'iban' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email,'.$user->userID.',userID',
             'aantal_km' => 'required',
         ]);
 
@@ -133,6 +141,12 @@ class UserController extends Controller
         $user->IBAN = $request->iban;
         $user->email = $request->email;
         $user->phone_number = $request->telefoonnummer;
+
+        if ($request->actief == null){
+            $user->isActive = false;
+        } else {
+            $user->isActive = true;
+        }
 
         if ($request->kostenplaatsverantwoordelijke == null){
             $user->isCost_center_manager = false;

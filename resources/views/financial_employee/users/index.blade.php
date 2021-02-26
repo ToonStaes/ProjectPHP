@@ -156,6 +156,20 @@
                 // Clear tbody tag
                 table.clear();
                 $.each(data, function (key, value) {
+                    let is_active = '';
+                    if (value.is_active) {
+                        is_active = '<i class="fas fa-check"></i>';
+                    }
+
+                    let isCost_Center_manager = '';
+                    if (value.isCost_Center_manager){
+                        isCost_Center_manager = '<i class="fas fa-check"></i>'
+                    }
+
+                    let isFinancial_employee = '';
+                    if (value.isFinancial_employee){
+                        isFinancial_employee = '<i class="fas fa-check"></i>'
+                    }
                     table.row.add([
                         value.userID,
                         value.name,
@@ -164,9 +178,9 @@
                         value.email,
                         value.phone_number,
                         value.number_of_km,
-                        value.is_active,
-                        value.isCost_Center_manager,
-                        value.isFinancial_employee,
+                        is_active,
+                        isCost_Center_manager,
+                        isFinancial_employee,
                         `<a href="#!" class="btn-edit" data-id="${value.userID}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-id="${value.userID}"><i class="fas fa-trash-alt"></i></a>`
                     ]).draw(false);
                 });
@@ -205,6 +219,10 @@
                 $('#gebruiker_bewerken input[name="email"]').val(data.email);
                 $('#gebruiker_bewerken input[name="telefoonnummer"]').val(data.phone_number);
                 $('#gebruiker_bewerken input[name="aantal_km"]').val(data.number_of_km);
+
+                if(data.is_active){
+                    $('#gebruiker_bewerken input[name="actief"]').prop( "checked", true );
+                }
 
                 if(data.isCost_Center_manager){
                     $('#gebruiker_bewerken input[name="kostenplaats_verantwoordelijke"]').prop( "checked", true );
