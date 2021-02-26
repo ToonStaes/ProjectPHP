@@ -42,7 +42,46 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'voornaam' => 'required|min:3',
+            'achternaam' => 'required|min:3',
+            'adres' => 'required|min:3',
+            'postcode' => 'required',
+            'iban' => 'required',
+            'email' => 'required|unique:users,email',
+            'aantal_km' => 'required',
+        ]);
+
+        $user = new User();
+        $user->first_name = $request->voornaam;
+        $user->last_name = $request->achternaam;
+        $user->address = $request->adres;
+        $user->city = $request->woonplaats;
+        $user->zip_code = $request->postcode;
+        $user->IBAN = $request->iban;
+        $user->email = $request->email;
+        $user->phone_number = $request->telefoonnummer;
+        $user->password = "1234";
+        $user->isActive = true;
+
+        if ($request->kostenplaatsverantwoordelijke == null){
+            $user->isCost_center_manager = false;
+        } else {
+            $user->isCost_center_manager = true;
+        }
+
+        if ($request->financieel_medewerker == null){
+            $user->isFinancial_employee = false;
+        } else {
+            $user->isFinancial_employee = true;
+        }
+
+        $user->number_of_km = $request->aantal_km;
+        $user->save();
+        return response()->json([
+            'type' => 'success',
+            'text' => "The user <b>$user->first_name $user->last_name</b> has been added"
+        ]);
     }
 
     /**
@@ -53,7 +92,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        redirect('/users');
+        return $user;
     }
 
     /**
@@ -76,7 +115,43 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $this->validate($request,[
+            'voornaam' => 'required|min:3',
+            'achternaam' => 'required|min:3',
+            'adres' => 'required|min:3',
+            'postcode' => 'required',
+            'iban' => 'required',
+            'email' => 'required|email',
+            'aantal_km' => 'required',
+        ]);
+
+        $user->first_name = $request->voornaam;
+        $user->last_name = $request->achternaam;
+        $user->address = $request->adres;
+        $user->city = $request->woonplaats;
+        $user->zip_code = $request->postcode;
+        $user->IBAN = $request->iban;
+        $user->email = $request->email;
+        $user->phone_number = $request->telefoonnummer;
+
+        if ($request->kostenplaatsverantwoordelijke == null){
+            $user->isCost_center_manager = false;
+        } else {
+            $user->isCost_center_manager = true;
+        }
+
+        if ($request->financieel_medewerker == null){
+            $user->isFinancial_employee = false;
+        } else {
+            $user->isFinancial_employee = true;
+        }
+
+        $user->number_of_km = $request->aantal_km;
+        $user->save();
+        return response()->json([
+            'type' => 'success',
+            'text' => "The user <b>$user->first_name $user->last_name</b> has been updated"
+        ]);
     }
 
     /**

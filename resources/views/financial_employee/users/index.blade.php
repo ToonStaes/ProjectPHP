@@ -11,6 +11,48 @@
 <body>
 
 <main class="container">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gebruiker_toevoegen">
+        Gebruiker toevoegen
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="gebruiker_toevoegen" tabindex="-1" role="dialog" aria-labelledby="gebruiker_toevoegenLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gebruiker_toevoegenLabel">Gebruiker toevoegen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/users" method="post">
+                    @method('post')
+                    @csrf
+                    @include('financial_employee.users.form')
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="gebruiker_bewerken" tabindex="-1" role="dialog" aria-labelledby="gebruiker_bewerkenabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gebruiker_bewerkenLabel">Gebruiker bewerken</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="" method="post">
+                    @method('put')
+                    @csrf
+                    @include('financial_employee.users.form')
+                </form>
+            </div>
+        </div>
+    </div>
+
     <table id="usersTable">
         <thead>
             <tr>
@@ -28,30 +70,7 @@
                 <th>Acties</th>
             </tr>
         </thead>
-        <tbody>
-{{--            @foreach($users as $user)--}}
-{{--                <tr>--}}
-{{--                    <td>{{$user->userID}}</td>--}}
-{{--                    <td>{{$user->name}}</td>--}}
-{{--                    <td>{{$user->address}}</td>--}}
-{{--                    <td>{{$user->IBAN}}</td>--}}
-{{--                    <td>{{$user->email}}</td>--}}
-{{--                    <td>{{$user->phone_number}}</td>--}}
-{{--                    <td>{{$user->number_of_km}}</td>--}}
-{{--                    <td>{{$user->isActive}}</td>--}}
-{{--                    <td>{{$user->isCost_Center_manager}}</td>--}}
-{{--                    <td>{{$user->isFinancial_employee}}</td>--}}
-{{--                    <td>--}}
-{{--                        <i class="fas fa-edit"></i>--}}
-{{--                        <form action="/users/{{$user->userID}}" method="post">--}}
-{{--                            @method('delete')--}}
-{{--                            @csrf--}}
-{{--                            <button type="submit" class="deleteUser"><i class="fas fa-trash-alt"></i></button>--}}
-{{--                        </form>--}}
-{{--                    </td>--}}
-{{--                </tr>--}}
-{{--            @endforeach--}}
-        </tbody>
+        <tbody></tbody>
     </table>
 </main>
 
@@ -81,6 +100,51 @@
         $('tbody').on('click', '.btn-delete', function () {
             let id = $(this).data('id');
             deleteUser(id);
+        });
+
+        $('#gebruiker_toevoegen form').submit(function (e) {
+            // Don't submit the form
+            e.preventDefault();
+
+            let action = $(this).attr('action');
+            let pars = $(this).serialize();
+            console.log(pars);
+            $.post(action, pars, 'json')
+                .done(function (data) {
+                    console.log(data);
+                    // Hide the modal
+                    $('#gebruiker_toevoegen').modal('hide');
+                    // Rebuild the table
+                    buildTable();
+                })
+                .fail(function (e) {
+                    console.log('error', e);
+                });
+        });
+
+        $('#gebruiker_bewerken form').submit(function (e) {
+            // Don't submit the form
+            e.preventDefault();
+
+            let action = $(this).attr('action');
+            let pars = $(this).serialize();
+            console.log(pars);
+            $.post(action, pars, 'json')
+                .done(function (data) {
+                    console.log(data);
+                    // Hide the modal
+                    $('#gebruiker_bewerken').modal('hide');
+                    // Rebuild the table
+                    buildTable();
+                })
+                .fail(function (e) {
+                    console.log('error', e);
+                });
+        });
+
+        $('tbody').on('click', '.btn-edit', function () {
+            let id = $(this).data('id');
+            editUser(id);
         });
     } );
 
@@ -121,13 +185,41 @@
             .done(function (data) {
                 console.log('data', data);
                 // Rebuild the table
-                console.log("Ik ga nu de tabel opnieuw opbouwen");
-
                 buildTable();
             })
             .fail(function (e) {
                 console.log('error', e);
             });
+    }
+
+    function editUser(id) {
+        $.getJSON(`/users/${id}`)
+            .done(function (data) {
+                console.log('data', data);
+                $('#gebruiker_bewerken input[name="voornaam"]').val(data.first_name);
+                $('#gebruiker_bewerken input[name="achternaam"]').val(data.last_name);
+                $('#gebruiker_bewerken input[name="adres"]').val(data.address);
+                $('#gebruiker_bewerken input[name="postcode"]').val(data.zip_code);
+                $('#gebruiker_bewerken input[name="woonplaats"]').val(data.city);
+                $('#gebruiker_bewerken input[name="iban"]').val(data.IBAN);
+                $('#gebruiker_bewerken input[name="email"]').val(data.email);
+                $('#gebruiker_bewerken input[name="telefoonnummer"]').val(data.phone_number);
+                $('#gebruiker_bewerken input[name="aantal_km"]').val(data.number_of_km);
+
+                if(data.isCost_Center_manager){
+                    $('#gebruiker_bewerken input[name="kostenplaats_verantwoordelijke"]').prop( "checked", true );
+                }
+
+                if(data.isFinancial_employee){
+                    $('#gebruiker_bewerken input[name="financieel_medewerker"]').prop( "checked", true );
+                }
+
+                $('#gebruiker_bewerken form').attr('action', "/users/" + data.userID);
+                $('#gebruiker_bewerken').modal('show');
+            })
+            .fail(function (e) {
+                console.log('error', e);
+            })
     }
 </script>
 </body>
