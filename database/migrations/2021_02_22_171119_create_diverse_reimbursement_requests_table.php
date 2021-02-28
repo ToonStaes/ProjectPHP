@@ -14,7 +14,7 @@ class CreateDiverseReimbursementRequestsTable extends Migration
     public function up()
     {
         Schema::create('diverse_reimbursement_requests', function (Blueprint $table) {
-            $table->id('diverse_reimbursement_requestID');
+            $table->id();
             $table->foreignId('userID');
             $table->foreignId('cost_centerID');
             $table->string('invoice_description')->nullable();
@@ -27,10 +27,10 @@ class CreateDiverseReimbursementRequestsTable extends Migration
             $table->string('comment_Financial_employee')->nullable();
 
             // Foreign key relation
-            $table->foreign('userID')->references('userID')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('userID_CC_manager')->references('userID')->on('users')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('userID_Financial_employee')->references('userID')->on('users')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('cost_centerID')->references('cost_centerID')->on('cost_centers')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('userID')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('userID_CC_manager')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('userID_Financial_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('cost_centerID')->references('id')->on('cost_centers')->onDelete('restrict')->onUpdate('cascade');
         });
 
         DB::table('diverse_reimbursement_requests')->insert(

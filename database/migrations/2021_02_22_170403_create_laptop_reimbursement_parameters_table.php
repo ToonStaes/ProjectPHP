@@ -14,14 +14,14 @@ class CreateLaptopReimbursementParametersTable extends Migration
     public function up()
     {
         Schema::create('laptop_reimbursement_parameters', function (Blueprint $table) {
-            $table->id('laptop_reimbursementParameterID');
+            $table->id();
             $table->foreignId('laptop_reimbursementID');
             $table->foreignId('parameterID');
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('laptop_reimbursementID')->references('laptop_reimbursementID')->on('laptop_reimbursements')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('parameterID')->references('parameterID')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('laptop_reimbursementID')->references('id')->on('laptop_reimbursements')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('parameterID')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
         });
 
         // insert for testing

@@ -14,21 +14,24 @@ class CreateDiverseReimbursementEvidencesTable extends Migration
     public function up()
     {
         Schema::create('diverse_reimbursement_evidences', function (Blueprint $table) {
-            $table->id('diverse_reimbursement_evidenceID');
+            $table->id();
             $table->string('filepath');
-            $table->foreignId('diverse_reimbursement_lineID');
+            $table->foreignId('DR_lineID');
             $table->timestamps();
+
+            // Foreign key relation
+            $table->foreign('DR_lineID')->references('id')->on('diverse_reimbursement_lines')->onDelete('cascade')->onUpdate('cascade');
         });
 
         DB::table('diverse_reimbursement_evidences')->insert(
             [
                 [
                     'filepath' => '/map/map/map/treinticket.jpg',
-                    'diverse_reimbursement_lineID' => 1,
+                    'DR_lineID' => 1,
                 ],
                 [
                     'filepath' => '/map/map/map/stagebezoekOmeta.docx',
-                    'diverse_reimbursement_lineID' => 2
+                    'DR_lineID' => 2
                 ],
             ]
         );

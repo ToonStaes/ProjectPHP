@@ -14,14 +14,14 @@ class CreateUserProgrammesTable extends Migration
     public function up()
     {
         Schema::create('user_programmes', function (Blueprint $table) {
-            $table->id('userProgrammeID');
+            $table->id();
             $table->foreignId('userID');
             $table->foreignId('programmeID');
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('userID')->references('userID')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('programmeID')->references('programmeID')->on('programmes')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('userID')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('programmeID')->references('id')->on('programmes')->onDelete('restrict')->onUpdate('cascade');
         });
 
         // insert for testing

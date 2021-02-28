@@ -14,7 +14,7 @@ class CreateParametersTable extends Migration
     public function up()
     {
         Schema::create('parameters', function (Blueprint $table) {
-            $table->id('parameterID');
+            $table->id();
             $table->string('name');
             $table->date('valid_from');
             $table->date('valid_until')->nullable();
@@ -25,7 +25,7 @@ class CreateParametersTable extends Migration
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('standard_Cost_centerID')->references('cost_centerID')->on('cost_centers')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('standard_Cost_centerID')->references('id')->on('cost_centers')->onDelete('restrict')->onUpdate('cascade');
         });
 
         DB::table('parameters')->insert(

@@ -14,7 +14,7 @@ class CreateMailcontentsTable extends Migration
     public function up()
     {
         Schema::create('mailcontents', function (Blueprint $table) {
-            $table->id('mailcontentID');
+            $table->id();
             $table->string('mailtype');
             $table->string('content');
             $table->timestamps();

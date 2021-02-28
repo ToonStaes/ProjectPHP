@@ -14,7 +14,7 @@ class CreateCostCentersTable extends Migration
     public function up()
     {
         Schema::create('cost_centers', function (Blueprint $table) {
-            $table->id('cost_centerID');
+            $table->id();
             $table->string('name')->unique();
             $table->foreignId('userID_Cost_center_manager');
             $table->string('description')->nullable();
@@ -22,7 +22,7 @@ class CreateCostCentersTable extends Migration
             $table->timestamps();
 
             // foreign key relation
-            $table->foreign('userID_Cost_center_manager')->references('userID')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('userID_Cost_center_manager')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
         });
 
         // insert for testing

@@ -14,7 +14,7 @@ class CreateBikeridesTable extends Migration
     public function up()
     {
         Schema::create('bikerides', function (Blueprint $table) {
-            $table->id('bikerideID');
+            $table->id();
             $table->date('date');
             $table->foreignId('bike_reimbursementID')->nullable();
             $table->foreignId('userID');
@@ -22,8 +22,8 @@ class CreateBikeridesTable extends Migration
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('bike_reimbursementID')->references('bike_reimbursementID')->on('bike_reimbursements')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('userID')->references('userID')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('bike_reimbursementID')->references('id')->on('bike_reimbursements')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('userID')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
 
         for ($i = 0; $i <= 20; $i++) {
