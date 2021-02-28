@@ -22,3 +22,8 @@ Auth::routes();
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::redirect('home', '/');
 Route::view('/', 'home');
+
+Route::middleware(['auth'])->prefix('user')->group(function () {
+    Route::get('password', 'User\PasswordController@edit');
+    Route::post('password', 'User\PasswordController@update');
+});

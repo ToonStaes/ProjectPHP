@@ -51,7 +51,7 @@
                                 <div class="dropdown-divider"></div>
                             @endif
 
-                        <a class="dropdown-item" href="">Wachtwoord aanpassen</a>
+                        <a class="dropdown-item" href="/user/password">Wachtwoord aanpassen</a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                            onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
