@@ -42,16 +42,6 @@ class User extends Authenticatable
         return $this->hasMany('App\Laptop_invoice');
     }
 
-//    // R1
-//    public function cost_center_manager() {
-//        return $this->belongsTo('App\User')->withDefault();
-//    }
-//
-//    // R3
-//    public function user() {
-//        return $this->belongsTo('App\User')->withDefault();
-//    }
-
     // R4
     public function laptop_reimbursements() {
         return $this->hasMany('App\Laptop_reimbursement');
