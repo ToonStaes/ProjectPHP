@@ -28,13 +28,9 @@
                     <td>{{$cost_center->description}}</td>
                     <td><input class="input-budget" type="number" value="{{$cost_center->amount}}"></td>
                     <td>
-                        <form action="kostenplaats/{{$cost_center->cost_centerID}}" method="post">
-                            @method("DELETE")
-                            @csrf
-                            <button type="submit" class="btn btn-outline-danger deleteCostCenter">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
+                        <button type="submit" class="btn btn-outline-danger deleteCostCenter">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </td>
                 </tr>
             @endforeach
@@ -47,13 +43,16 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
 <script>
     let budgets_changed = [];
-    let incomplete = [];
-    let failurecounter = 0;
+    let budgets_incomplete = [];
+    let budget_fails = 0;
+    let deletion_fails = 0;
     let _csrf = "{{csrf_token()}}";
+    let _query_url = "http://cma.test/kostenplaats/";
+    let _datatable;
 
     $(document).ready( function () {
         console.log("ready function called...");
-        $('#table-cost_center').DataTable();
+        _datatable = $('#table-cost_center').DataTable();
         jQuery.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": _csrf
@@ -68,29 +67,28 @@
     *   als we te vaak falen stoppen we met requests te sturen
     * */
     $(document).bind("ajaxStop", function(){
-        console.log("ajax all done!");
-        if(incomplete.length === 0){
+        if(budgets_incomplete.length === 0){
             budgets_changed = [];
-            failurecounter = 0;
+            budget_fails = 0;
             return;
         }
-        if(failurecounter >= 2){
+        if(budget_fails >= 2){
             alert("3 AJAX failures detected, stopping requests...");
-            incomplete = [];
+            budgets_incomplete = [];
             return;
         }
         let old_budgets = Array.from(budgets_changed);
         budgets_changed = [];
         for(budget_index in old_budgets){
-            for(incomplete_index in incomplete){
-                if(old_budgets[budget_index].id === incomplete[incomplete_index].id){
+            for(incomplete_index in budgets_incomplete){
+                if(old_budgets[budget_index].id === budgets_incomplete[incomplete_index].id){
                     budgets_changed.push(old_budgets[budget_index]);
                     break;
                 }
             }
         }
-        incomplete = [];
-        failurecounter++;
+        budgets_incomplete = [];
+        budget_fails++;
         send_budget_changes();
     });
 
@@ -104,7 +102,7 @@
     $('.input-budget').change(function() {
         budget = $(this).val();
         id = parseInt($(this).parent().parent().data("id"), 10);
-        failurecounter = 0;
+        budget_fails = 0;
         modify_budgets_changed(id, budget);
     });
 
@@ -112,7 +110,7 @@
         if(!(budgets_changed.length === 0)){
             for(budget_index in budgets_changed){
                 jQuery.ajax({
-                    url: "http://cma.test/kostenplaats/"+budgets_changed[budget_index].id,
+                    url: _query_url+budgets_changed[budget_index].id,
                     /*
                     *   Because we are sending asynchronous requests
                     *   we cannot rely on the budget_index for when
@@ -124,11 +122,8 @@
                     context: {index: budget_index},
                     method: "PUT",
                     data: budgets_changed[budget_index]
-                }).done(function(data){
-                    console.log("ajax success");
                 }).fail(function(jqXHR, statusText, errorText){
-                    console.log("ajax failure");
-                    incomplete.push({id: budgets_changed[this.index].id});
+                    budgets_incomplete.push({id: budgets_changed[this.index].id});
                 });
             }
         }
@@ -152,6 +147,36 @@
             if(!isPresent) budgets_changed.push({id: center_id, budget: center_budget});
         }
         console.log(budgets_changed);
+    }
+
+    $(".deleteCostCenter").on("click", function(){
+        id = parseInt($(this).parent().parent().data("id"), 10);
+        deletion_fails = 0;
+        send_deletion(id);
+    });
+
+    /*  Because at this point in time we
+    *   probably won't have more than 1
+    *   deletion request at any one time,
+    *   grouping failed requests is not that
+    *   useful
+    **/
+    function send_deletion(center_id){
+        jQuery.ajax({
+            url: _query_url+center_id,
+            method: "DELETE",
+            context: {id: center_id}
+        }).done(function(data){
+            delete_cost_center_row(this.id);
+        }).fail(function(jqXHR, statusText, errorText){
+            if(deletion_fails <= 2){
+                send_deletion(this.id);
+            }
+        });
+    }
+
+    function delete_cost_center_row(id){
+        _datatable.row($("tr[data-id="+id+"]")).remove().draw();
     }
 </script>
 </html>
