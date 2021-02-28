@@ -44,6 +44,7 @@ class CreateUsersTable extends Migration
                     'IBAN' => 'BE12345678912345',
                     'email' => 'financial.employee@mailinator.com',
                     'password' => Hash::make('finance1234'),
+                    'isCost_Center_manager' => false,
                     'isFinancial_employee' => true,
                     'number_of_km' => 6.7,
                     'created_at' => now()
@@ -56,7 +57,8 @@ class CreateUsersTable extends Migration
                     'IBAN' => 'BE12345678912346',
                     'email' => 'cost_center.manager@mailinator.com',
                     'password' => Hash::make('costcenter1234'),
-                    'isCost_center_manager' => true,
+                    'isCost_Center_manager' => true,
+                    'isFinancial_employee' => false,
                     'number_of_km' => 17.5,
                     'created_at' => now()
                 ],
@@ -68,6 +70,7 @@ class CreateUsersTable extends Migration
                     'IBAN' => 'BE12345678912347',
                     'email' => 'john.doe@mailinator.com',
                     'password' => Hash::make('user1234'),
+                    'isCost_Center_manager' => false,
                     'isFinancial_employee' => false,
                     'number_of_km' => 10.3,
                     'created_at' => now()
