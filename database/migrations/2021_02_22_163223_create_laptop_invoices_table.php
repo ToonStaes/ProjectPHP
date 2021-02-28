@@ -31,9 +31,9 @@ class CreateLaptopInvoicesTable extends Migration
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('userID')->references('userID')->on('id')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('userID_Cost_center_manager')->references('id')->on('id')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('userID_Financial_employee')->references('id')->on('id')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('userID')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('userID_Cost_center_manager')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('userID_Financial_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
         });
 
         for ($i = 1; $i <= 10; $i++) {
