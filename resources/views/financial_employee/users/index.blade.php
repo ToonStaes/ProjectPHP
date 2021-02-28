@@ -16,6 +16,7 @@
         Gebruiker toevoegen
     </button>
 
+
     <!-- Modal -->
     <div class="modal fade" id="gebruiker_toevoegen" tabindex="-1" role="dialog" aria-labelledby="gebruiker_toevoegenLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -35,7 +36,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="gebruiker_bewerken" tabindex="-1" role="dialog" aria-labelledby="gebruiker_bewerkenabel" aria-hidden="true">
+    <div class="modal fade" id="gebruiker_bewerken" tabindex="-1" role="dialog" aria-labelledby="gebruiker_bewerkenLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

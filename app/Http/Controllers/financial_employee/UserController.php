@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\financial_employee;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendPasswordMail;
 use App\User;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -61,8 +64,10 @@ class UserController extends Controller
         $user->IBAN = $request->iban;
         $user->email = $request->email;
         $user->phone_number = $request->telefoonnummer;
-        $user->password = "1234";
         $user->isActive = true;
+
+        $wachtwoord = $this->randomPassword();
+        $user->password = Hash::make($wachtwoord);
 
         if ($request->actief == null){
             $user->isActive = false;
@@ -84,6 +89,15 @@ class UserController extends Controller
 
         $user->number_of_km = $request->aantal_km;
         $user->save();
+
+        $data = array(
+            'naam' => $user->first_name,
+            'email' => $user->email,
+            'paswoord' => $wachtwoord,
+        );
+
+        Mail::to($user->email)->send(new SendPasswordMail($data));
+
         return response()->json([
             'type' => 'success',
             'text' => "The user <b>$user->first_name $user->last_name</b> has been added"
@@ -199,5 +213,16 @@ class UserController extends Controller
 
             return $item;
         });
+    }
+
+    private function randomPassword() {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 8; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass); //turn the array into a string
     }
 }
