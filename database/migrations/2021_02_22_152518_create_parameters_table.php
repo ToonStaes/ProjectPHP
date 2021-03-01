@@ -20,12 +20,12 @@ class CreateParametersTable extends Migration
             $table->date('valid_until')->nullable();
             $table->float('amount_per_km')->nullable();
             $table->string('description')->nullable();
-            $table->foreignId('standard_Cost_centerID')->nullable();
+            $table->foreignId('standard_Cost_center_id')->nullable();
             $table->float('max_reimbursement_laptop')->nullable();
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('standard_Cost_centerID')->references('id')->on('cost_centers')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('standard_Cost_center_id')->references('id')->on('cost_centers')->onDelete('restrict')->onUpdate('cascade');
         });
 
         DB::table('parameters')->insert(
