@@ -15,25 +15,25 @@ class CreateProgrammeCostCentersTable extends Migration
     {
         Schema::create('programme_cost_centers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('programmeID');
-            $table->foreignId('cost_centerID');
+            $table->foreignId('programme_id');
+            $table->foreignId('cost_center_id');
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('programmeID')->references('id')->on('programmes')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('cost_centerID')->references('id')->on('cost_centers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('programme_id')->references('id')->on('programmes')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('cost_center_id')->references('id')->on('cost_centers')->onDelete('cascade')->onUpdate('cascade');
         });
 
         // insert for testing
         DB::table('programme_cost_centers')->insert(
             [
                 [
-                    'programmeID' => 1,
-                    'cost_centerID' => 1
+                    'programme_id' => 1,
+                    'cost_center_id' => 1
                 ],
                 [
-                    'programmeID' => 1,
-                    'cost_centerID' => 2
+                    'programme_id' => 1,
+                    'cost_center_id' => 2
                 ]
             ]
         );

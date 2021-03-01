@@ -15,33 +15,33 @@ class CreateDiverseReimbursementLinesTable extends Migration
     {
         Schema::create('diverse_reimbursement_lines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('DR_requestID');
+            $table->foreignId('DR_request_id');
             $table->float('amount')->nullable();
             $table->string('description');
             $table->float('number_of_km')->nullable();
-            $table->foreignId('parameterID')->nullable();
+            $table->foreignId('parameter_id')->nullable();
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('DR_requestID')->references('id')->on('diverse_reimbursement_requests')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('parameterID')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('DR_request_id')->references('id')->on('diverse_reimbursement_requests')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('parameter_id')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
         });
 
         DB::table('diverse_reimbursement_lines')->insert(
             [
                 [
-                    'DR_requestID' => 1,
+                    'DR_request_id' => 1,
                     'description' => 'treinticket',
                     'amount' => 37.5,
                     'number_of_km' => null,
-                    'parameterID' => null,
+                    'parameter_id' => null,
                 ],
                 [
-                    'DR_requestID' => 1,
+                    'DR_request_id' => 1,
                     'description' => 'stagebezoek ometa',
                     'amount' => null,
                     'number_of_km' => 25,
-                    'parameterID' => 2,
+                    'parameter_id' => 2,
                 ]
             ]
         );

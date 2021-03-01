@@ -15,33 +15,33 @@ class CreateLaptopReimbursementParametersTable extends Migration
     {
         Schema::create('laptop_reimbursement_parameters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('laptop_reimbursementID');
-            $table->foreignId('parameterID');
+            $table->foreignId('laptop_reimbursement_id');
+            $table->foreignId('parameter_id');
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('laptop_reimbursementID')->references('id')->on('laptop_reimbursements')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('parameterID')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('laptop_reimbursement_id')->references('id')->on('laptop_reimbursements')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('parameter_id')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
         });
 
         // insert for testing
         DB::table('laptop_reimbursement_parameters')->insert(
             [
                 [
-                    'laptop_reimbursementID' => 1,
-                    'parameterID' => 3
+                    'laptop_reimbursement_id' => 1,
+                    'parameter_id' => 3
                 ],
                 [
-                    'laptop_reimbursementID' => 1,
-                    'parameterID' => 4
+                    'laptop_reimbursement_id' => 1,
+                    'parameter_id' => 4
                 ],
                 [
-                    'laptop_reimbursementID' => 2,
-                    'parameterID' => 3
+                    'laptop_reimbursement_id' => 2,
+                    'parameter_id' => 3
                 ],
                 [
-                    'laptop_reimbursementID' => 2,
-                    'parameterID' => 4
+                    'laptop_reimbursement_id' => 2,
+                    'parameter_id' => 4
                 ]
             ]
         );

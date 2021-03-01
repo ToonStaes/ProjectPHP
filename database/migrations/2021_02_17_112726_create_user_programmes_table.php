@@ -15,25 +15,25 @@ class CreateUserProgrammesTable extends Migration
     {
         Schema::create('user_programmes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('userID');
-            $table->foreignId('programmeID');
+            $table->foreignId('user_id');
+            $table->foreignId('programme_id');
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('userID')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('programmeID')->references('id')->on('programmes')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('programme_id')->references('id')->on('programmes')->onDelete('restrict')->onUpdate('cascade');
         });
 
         // insert for testing
         DB::table('user_programmes')->insert(
             [
                 [
-                    'userID' => 2,
-                    'programmeID' => 1
+                    'user_id' => 2,
+                    'programme_id' => 1
                 ],
                 [
-                    'userID' => 3,
-                    'programmeID' => 1
+                    'user_id' => 3,
+                    'programme_id' => 1
                 ]
             ]
         );

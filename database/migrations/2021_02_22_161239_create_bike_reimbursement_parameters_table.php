@@ -15,20 +15,20 @@ class CreateBikeReimbursementParametersTable extends Migration
     {
         Schema::create('bike_reimbursement_parameters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bike_reimbursementID');
-            $table->foreignId('parameterID');
+            $table->foreignId('bike_reimbursement_id');
+            $table->foreignId('parameter_id');
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('bike_reimbursementID')->references('id')->on('bike_reimbursements')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('parameterID')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('bike_reimbursement_id')->references('id')->on('bike_reimbursements')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('parameter_id')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
         });
 
         for ($i = 1; $i <= 21; $i++) {
             DB::table('bike_reimbursement_parameters')->insert(
                 [
-                    'bike_reimbursementID' => "$i",
-                    'parameterID' => 1,
+                    'bike_reimbursement_id' => "$i",
+                    'parameter_id' => 1,
                     'created_at' => now()
                 ]
             );

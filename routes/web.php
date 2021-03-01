@@ -17,7 +17,19 @@ Route::get('/', function () {
     return view('test');
 });
 
+Auth::routes();
+
+//Route::get('/home', 'HomeController@index')->name('home');
+Route::redirect('home', '/');
+Route::view('/', 'home');
+
+Route::middleware(['auth'])->prefix('user')->group(function () {
+    Route::get('password', 'User\PasswordController@edit');
+    Route::post('password', 'User\PasswordController@update');
+});
+
 //Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
 Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
 Route::get('/users/getProgrammes', 'financial_employee\UserController@getProgrammes');
 Route::resource('users', 'financial_employee\UserController');
+Route::resource('kostenplaats', 'financial_employee\Cost_center_controller');
