@@ -37,11 +37,11 @@
         </div>
         <div class="form-group">
             <label for="opleidingen">Opleiding toevoegen</label>
-            <input type="text" class="form-control" id="opleiding_zoek" name="opleiding_zoek">
-            <select multiple class="form-control opleidingen_select" id="opleidingen" name="opleidingen"></select>
-            <button class="btn btn-primary btn-sm" id="opleiding_toevoegen">Geselecteerde opleiding toevoegen</button>
+            <input type="text" class="form-control opleiding_zoek" name="opleiding_zoek">
+            <select multiple class="form-control opleidingen_select opleidingen" name="opleidingen"></select>
+            <a href="#!" class="btn btn-primary btn-sm opleiding_toevoegen">Geselecteerde opleiding toevoegen</a>
             <p>Opleidingen:</p>
-            <ul id="geselecteerde_opleidingen">
+            <ul class="geselecteerde_opleidingen">
 
             </ul>
         </div>

@@ -12,7 +12,7 @@
 
 <main class="container">
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gebruiker_toevoegen">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gebruiker_toevoegen" id="gebruiker_toevoegen_knop">
         Gebruiker toevoegen
     </button>
 
@@ -64,9 +64,9 @@
                 <th>Email</th>
                 <th>Telefoonnummer</th>
                 <th>Aantal km</th>
-                {{--<th>Unit</th>--}}
+                <th>Opleiding(en)</th>
                 <th>Geactiveerd</th>
-                <th>Kostenplaats verantwoordelijke</th>
+                <th>Kostenplaats&#8203;verantwoordelijke</th>
                 <th>Financieel medewerker</th>
                 <th>Acties</th>
             </tr>
@@ -88,6 +88,7 @@
             {"name": "Email", "orderable": true},
             {"name": "Telefoonnummer", "orderable": true},
             {"name": "AantalKM", "orderable": true},
+            {"name": "Opleiding(en)", "orderable": true},
             {"name": "Geactiveerd", "orderable": true},
             {"name": "Kostenplaats", "orderable": true},
             {"name": "Financieel", "orderable": true},
@@ -113,7 +114,7 @@
 
             let opleidingen = [];
             // Opleidingen ophalen
-            $("#geselecteerde_opleidingen li").each(function () {
+            $(".geselecteerde_opleidingen li").each(function () {
                 opleidingen.push($(this).data('id'));
             })
 
@@ -157,20 +158,24 @@
             editUser(id);
         });
 
-        $("#opleiding_zoek").keyup(function () {
+        $(".opleiding_zoek").keyup(function () {
             let filter = $(this).val();
             console.log(filter);
             getProgrammes(filter);
         });
 
-        $("#opleiding_toevoegen").click(function (e) {
+        $(".opleiding_toevoegen").click(function (e) {
             e.preventDefault();
 
-            let id = $("#opleidingen").val();
-            let name = $("#opleidingen option:selected").text();
+            let id = $(".opleidingen").val();
+            let name = $(".opleidingen option:selected").text();
 
-            $("#geselecteerde_opleidingen").append(`<li data-id="${id}">${name}</li>`);
+            $(".geselecteerde_opleidingen").append(`<li data-id="${id}">${name}</li>`);
         });
+
+        $("#gebruiker_toevoegen_knop").click(function () {
+            $(".geselecteerde_opleidingen").empty();
+        })
 
     } );
 
@@ -196,6 +201,15 @@
                     if (value.isFinancial_employee){
                         isFinancial_employee = '<i class="fas fa-check"></i>'
                     }
+
+                    let opleidingen = '';
+                    if (value.user_programmes.length === 0){
+                        opleidingen = 'N.V.T'
+                    } else {
+                        $.each(value.user_programmes, function (key, value) {
+                            opleidingen += value.programme.name + '\n';
+                        })
+                    }
                     table.row.add([
                         value.id,
                         value.name,
@@ -204,6 +218,7 @@
                         value.email,
                         value.phone_number,
                         value.number_of_km,
+                        opleidingen,
                         is_active,
                         isCost_Center_manager,
                         isFinancial_employee,
@@ -256,6 +271,14 @@
 
                 if(data.isFinancial_employee){
                     $('#gebruiker_bewerken input[name="financieel_medewerker"]').prop( "checked", true );
+                }
+
+                if (data.user_programmes.length !== 0){
+                    $(".geselecteerde_opleidingen").empty();
+                    $.each(data.user_programmes, function (key, value) {
+                        console.log(value.programme.name);
+                        $(".geselecteerde_opleidingen").append(`<li data-id="${value.programme.id}">${value.programme.name}</li>`);
+                    })
                 }
 
                 $('#gebruiker_bewerken form').attr('action', "/users/" + data.id);

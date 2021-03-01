@@ -96,8 +96,8 @@ class UserController extends Controller
 
         foreach ($programmes as $programme){
             $newProgramme = new UserProgramme();
-            $newProgramme->userID = $user->id;
-            $newProgramme->programmeID = $programme;
+            $newProgramme->user_id = $user->id;
+            $newProgramme->programme_id = $programme;
             $newProgramme->save();
         }
 
@@ -123,6 +123,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $user = User::with('userProgrammes.programme')->findOrFail($user->id);
         $user->is_active = $user->isActive;
         unset($user->isActive);
         return $user;
@@ -215,7 +216,8 @@ class UserController extends Controller
 
     public function getUsers()
     {
-        return User::all()
+        return User::with('userProgrammes.programme')
+            ->get()
             ->transform(function ($item, $key) {
             $item->name = $item->first_name . ' ' . $item->last_name;
             $item->address = $item->address . ' ' . $item->zip_code . ' ' . $item->city;
