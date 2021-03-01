@@ -6,9 +6,18 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * App\User
+ *
+ * @property boolean $isCost_Center_manager
+ * @property boolean $isFinancial_employee
+ */
+
 class User extends Authenticatable
 {
     use Notifiable;
+
+    protected $primaryKey = 'userID';
 
     /**
      * The attributes that are mass assignable.
@@ -72,3 +81,4 @@ class User extends Authenticatable
         return $this->hasMany('App\Bikeride');
     }
 }
+
