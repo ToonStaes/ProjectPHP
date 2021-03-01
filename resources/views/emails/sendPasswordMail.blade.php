@@ -8,5 +8,4 @@
     Wachtwoord: {{$data['paswoord']}}
 </p>
 <p>Als je de eerste keer inlogt, wordt er direct gevraagd om je wachtwoord te veranderen.</p>
-<br>
 <p>Bij eventuele vragen, twijfel dan niet om ons te contacteren!</p>
