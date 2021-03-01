@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('test');
 });
+
+//Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
+Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
+Route::resource('users', 'financial_employee\UserController');
