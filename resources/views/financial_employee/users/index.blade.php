@@ -172,7 +172,7 @@
                         isFinancial_employee = '<i class="fas fa-check"></i>'
                     }
                     table.row.add([
-                        value.userID,
+                        value.id,
                         value.name,
                         value.address,
                         value.IBAN,
@@ -182,7 +182,7 @@
                         is_active,
                         isCost_Center_manager,
                         isFinancial_employee,
-                        `<a href="#!" class="btn-edit" data-id="${value.userID}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-id="${value.userID}"><i class="fas fa-trash-alt"></i></a>`
+                        `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-id="${value.id}"><i class="fas fa-trash-alt"></i></a>`
                     ]).draw(false);
                 });
             })
@@ -233,7 +233,7 @@
                     $('#gebruiker_bewerken input[name="financieel_medewerker"]').prop( "checked", true );
                 }
 
-                $('#gebruiker_bewerken form').attr('action', "/users/" + data.userID);
+                $('#gebruiker_bewerken form').attr('action', "/users/" + data.id);
                 $('#gebruiker_bewerken').modal('show');
             })
             .fail(function (e) {

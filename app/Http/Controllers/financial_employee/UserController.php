@@ -143,7 +143,7 @@ class UserController extends Controller
             'adres' => 'required|min:3',
             'postcode' => 'required',
             'iban' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user->userID.',userID',
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'aantal_km' => 'required',
         ]);
 
