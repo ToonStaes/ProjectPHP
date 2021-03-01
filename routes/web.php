@@ -19,4 +19,5 @@ Route::get('/', function () {
 
 //Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
 Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
+Route::get('/users/getProgrammes', 'financial_employee\UserController@getProgrammes');
 Route::resource('users', 'financial_employee\UserController');

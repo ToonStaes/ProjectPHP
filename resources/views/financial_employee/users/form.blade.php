@@ -35,6 +35,16 @@
             <label for="aantal_km">Aantal km</label>
             <input type="text" class="form-control" id="aantal_km" name="aantal_km" required>
         </div>
+        <div class="form-group">
+            <label for="opleidingen">Opleiding toevoegen</label>
+            <input type="text" class="form-control" id="opleiding_zoek" name="opleiding_zoek">
+            <select multiple class="form-control opleidingen_select" id="opleidingen" name="opleidingen"></select>
+            <button class="btn btn-primary btn-sm" id="opleiding_toevoegen">Geselecteerde opleiding toevoegen</button>
+            <p>Opleidingen:</p>
+            <ul id="geselecteerde_opleidingen">
+
+            </ul>
+        </div>
         <div class="form-check">
             <input type="checkbox" class="form-check-input" id="actief" name="actief">
             <label class="form-check-label" for="actief">Geactiveerd</label>

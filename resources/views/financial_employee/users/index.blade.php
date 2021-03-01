@@ -97,6 +97,7 @@
 
     $(document).ready( function () {
         buildTable();
+        getProgrammes();
 
         $('tbody').on('click', '.btn-delete', function () {
             let id = $(this).data('id');
@@ -109,6 +110,14 @@
 
             let action = $(this).attr('action');
             let pars = $(this).serialize();
+
+            let opleidingen = [];
+            // Opleidingen ophalen
+            $("#geselecteerde_opleidingen li").each(function () {
+                opleidingen.push($(this).data('id'));
+            })
+
+            pars += '&opleidingen=' + opleidingen;
             console.log(pars);
             $.post(action, pars, 'json')
                 .done(function (data) {
@@ -147,6 +156,22 @@
             let id = $(this).data('id');
             editUser(id);
         });
+
+        $("#opleiding_zoek").keyup(function () {
+            let filter = $(this).val();
+            console.log(filter);
+            getProgrammes(filter);
+        });
+
+        $("#opleiding_toevoegen").click(function (e) {
+            e.preventDefault();
+
+            let id = $("#opleidingen").val();
+            let name = $("#opleidingen option:selected").text();
+
+            $("#geselecteerde_opleidingen").append(`<li data-id="${id}">${name}</li>`);
+        });
+
     } );
 
     function buildTable() {
@@ -239,6 +264,30 @@
             .fail(function (e) {
                 console.log('error', e);
             })
+    }
+
+    function getProgrammes(filter) {
+        let pars = {
+            '_token': '{{ csrf_token() }}',
+            '_method': 'get',
+            'filter': filter
+        };
+
+        $.post(`/users/getProgrammes`, pars, 'json')
+            .done(function (data) {
+                console.log('data', data);
+
+                let select = $(".opleidingen_select");
+                select.empty();
+                $.each(data, function (key, value) {
+                    select.append(`<option value="${value.id}">
+                                       ${value.name}
+                                  </option>`);
+                });
+            })
+            .fail(function (e) {
+                console.log('error', e);
+            });
     }
 </script>
 </body>

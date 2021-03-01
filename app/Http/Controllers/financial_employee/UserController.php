@@ -4,7 +4,9 @@ namespace App\Http\Controllers\financial_employee;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendPasswordMail;
+use App\Programme;
 use App\User;
+use App\UserProgramme;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -89,6 +91,15 @@ class UserController extends Controller
 
         $user->number_of_km = $request->aantal_km;
         $user->save();
+
+        $programmes = explode(',', $request->opleidingen);
+
+        foreach ($programmes as $programme){
+            $newProgramme = new UserProgramme();
+            $newProgramme->userID = $user->id;
+            $newProgramme->programmeID = $programme;
+            $newProgramme->save();
+        }
 
         $data = array(
             'naam' => $user->first_name,
@@ -204,7 +215,8 @@ class UserController extends Controller
 
     public function getUsers()
     {
-        return User::all()->transform(function ($item, $key) {
+        return User::all()
+            ->transform(function ($item, $key) {
             $item->name = $item->first_name . ' ' . $item->last_name;
             $item->address = $item->address . ' ' . $item->zip_code . ' ' . $item->city;
             $item->is_active = $item->isActive;
@@ -213,6 +225,12 @@ class UserController extends Controller
 
             return $item;
         });
+    }
+
+    public function getProgrammes(Request $request){
+        $filter = '%' . $request->filter . '%';
+        $programmes = Programme::where('name', 'like', $filter)->get();
+        return $programmes;
     }
 
     private function randomPassword() {
