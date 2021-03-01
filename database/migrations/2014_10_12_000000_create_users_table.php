@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('userID');
+            $table->id();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('address');
@@ -73,6 +73,22 @@ class CreateUsersTable extends Migration
                 ]
             ]
         );
+
+        for ($i = 0; $i <= 20; $i++) {
+            DB::table('users')->insert(
+                [
+                    'first_name' => 'normal',
+                    'last_name' => "User $i",
+                    'password' => Hash::make('user1234'),
+                    'address' => 'Kleinhoefstraat 4',
+                    'zip_code' => '2440',
+                    'IBAN' => "BE12345678912341$i",
+                    'email' => "normaluser$i@mailinator.com",
+                    'number_of_km' => '0',
+                    'created_at' => now()
+                ]
+            );
+        }
     }
 
     /**

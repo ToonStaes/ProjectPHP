@@ -37,5 +37,38 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $primaryKey = 'userID';
+    // R1, R2, R3
+    public function laptop_invoices() {
+        return $this->hasMany('App\Laptop_invoice');
+    }
+
+    // R4
+    public function laptop_reimbursements() {
+        return $this->hasMany('App\Laptop_reimbursement');
+    }
+
+    // R28
+    public function userProgrammes() {
+        return $this->hasMany('App\UserProgramme');
+    }
+
+    // R7
+    public function cost_centers() {
+        return $this->hasMany('App\Cost_center');
+    }
+
+    // R9, R10, R11
+    public function diverse_reimbursement_requests() {
+        return $this->hasMany('App\Diverse_reimbursement_request');
+    }
+
+    // R12
+    public function bike_reimbursements() {
+        return $this->hasMany('App\Bike_reimbursement');
+    }
+
+    // R13
+    public function bikerides() {
+        return $this->hasMany('App\Bikeride');
+    }
 }
