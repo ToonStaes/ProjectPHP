@@ -15,8 +15,8 @@ class CreateBikeReimbursementsTable extends Migration
     {
         Schema::create('bike_reimbursements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('statusID');
-            $table->foreignId('userID_Financial_employee')->nullable();
+            $table->foreignId('status_id');
+            $table->foreignId('user_id_Financial_employee')->nullable();
             $table->string('comment_Financial_employee')->nullable();
             $table->date('review_date_Financial_employee')->nullable();
             $table->date('request_date');
@@ -25,8 +25,8 @@ class CreateBikeReimbursementsTable extends Migration
             $table->timestamps();
 
             // Foreign key relation
-            $table->foreign('userID_Financial_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('statusID')->references('id')->on('statuses')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('user_id_Financial_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('restrict')->onUpdate('cascade');
         });
 
 
@@ -34,7 +34,7 @@ class CreateBikeReimbursementsTable extends Migration
         for ($i = 0; $i <= 20; $i++) {
             DB::table('bike_reimbursements')->insert(
                 [
-                    'statusID' => 1,
+                    'status_id' => 1,
                     'request_date' => now(),
                     'name' => "reimbursement $i",
                     'created_at' => now()

@@ -60,7 +60,7 @@ class CreateParametersTable extends Migration
             [
                 'name' => 'Standaard kostenplaats laptopvergoeding',
                 'valid_from' => now(),
-                'standard_Cost_centerID' => 3,
+                'standard_Cost_center_id' => 3,
                 'description' => 'Maximale schijfgrootte voor terugbetaling van laptop'
             ]
         );

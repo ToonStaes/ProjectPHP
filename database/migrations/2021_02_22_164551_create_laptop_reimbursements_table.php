@@ -15,26 +15,26 @@ class CreateLaptopReimbursementsTable extends Migration
     {
         Schema::create('laptop_reimbursements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('userID_Financial_employee');
-            $table->foreignId('laptop_invoiceID');
+            $table->foreignId('user_id_Financial_employee');
+            $table->foreignId('laptop_invoice_id');
             $table->date('payment_date');
 
             // Foreign key relation
-            $table->foreign('userID_Financial_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('laptop_invoiceID')->references('id')->on('laptop_invoices')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('user_id_Financial_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('laptop_invoice_id')->references('id')->on('laptop_invoices')->onDelete('restrict')->onUpdate('cascade');
         });
 
         // insert for testing
         DB::table('laptop_reimbursements')->insert(
             [
                 [
-                    'userID_Financial_employee' => 2,
-                    'laptop_invoiceID' => 1,
+                    'user_id_Financial_employee' => 2,
+                    'laptop_invoice_id' => 1,
                     'payment_date' => now()
                 ],
                 [
-                    'userID_Financial_employee' => 3,
-                    'laptop_invoiceID' => 1,
+                    'user_id_Financial_employee' => 3,
+                    'laptop_invoice_id' => 1,
                     'payment_date' => now()
                 ]
             ]
