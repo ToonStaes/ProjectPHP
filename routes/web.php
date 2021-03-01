@@ -27,3 +27,8 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
     Route::post('password', 'User\PasswordController@update');
 });
+
+//Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
+Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
+Route::resource('users', 'financial_employee\UserController');
+

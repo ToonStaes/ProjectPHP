@@ -14,7 +14,7 @@ class CreateProgrammesTable extends Migration
     public function up()
     {
         Schema::create('programmes', function (Blueprint $table) {
-            $table->id('programmeID');
+            $table->id();
             $table->string('name');
             $table->timestamps();
         });
@@ -35,7 +35,16 @@ class CreateProgrammesTable extends Migration
                     'created_at' => now()
                 ]
             ]
-    );
+        );
+
+        for ($i = 0; $i <= 20; $i++) {
+            DB::table('programmes')->insert(
+                [
+                    'name' => "programme $i",
+                    'created_at' => now()
+                ]
+            );
+        }
     }
 
     /**

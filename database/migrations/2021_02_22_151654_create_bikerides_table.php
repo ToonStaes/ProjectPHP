@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserProgrammesTable extends Migration
+class CreateBikeridesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,30 +13,28 @@ class CreateUserProgrammesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_programmes', function (Blueprint $table) {
+        Schema::create('bikerides', function (Blueprint $table) {
             $table->id();
+            $table->date('date');
+            $table->foreignId('bike_reimbursementID')->nullable();
             $table->foreignId('userID');
-            $table->foreignId('programmeID');
+            $table->float('number_of_km')->nullable();
             $table->timestamps();
 
             // Foreign key relation
+            $table->foreign('bike_reimbursementID')->references('id')->on('bike_reimbursements')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('userID')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('programmeID')->references('id')->on('programmes')->onDelete('restrict')->onUpdate('cascade');
         });
 
-        // insert for testing
-        DB::table('user_programmes')->insert(
-            [
+        for ($i = 0; $i <= 20; $i++) {
+            DB::table('bikerides')->insert(
                 [
-                    'userID' => 2,
-                    'programmeID' => 1
-                ],
-                [
+                    'date' => now(),
                     'userID' => 3,
-                    'programmeID' => 1
+                    'created_at' => now()
                 ]
-            ]
-        );
+            );
+        }
     }
 
     /**
@@ -46,6 +44,6 @@ class CreateUserProgrammesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_programmes');
+        Schema::dropIfExists('bikerides');
     }
 }
