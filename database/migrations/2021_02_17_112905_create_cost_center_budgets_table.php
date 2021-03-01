@@ -14,14 +14,14 @@ class CreateCostCenterBudgetsTable extends Migration
     public function up()
     {
         Schema::create('cost_center_budgets', function (Blueprint $table) {
-            $table->id('cost_center_budgetID');
+            $table->id();
             $table->float('amount')->nullable();
             $table->foreignId('cost_centerID');
             $table->string('year');
             $table->timestamps();
 
             // foreign key relations
-            $table->foreign('cost_centerID')->references('cost_centerID')->on('cost_centers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('cost_centerID')->references('id')->on('cost_centers')->onDelete('cascade')->onUpdate('cascade');
         });
 
         // insert for testing

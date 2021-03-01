@@ -11,10 +11,11 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
+
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('userID');
+            $table->id();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('address');
@@ -43,6 +44,7 @@ class CreateUsersTable extends Migration
                     'IBAN' => 'BE12345678912345',
                     'email' => 'financial.employee@mailinator.com',
                     'password' => Hash::make('finance1234'),
+                    'isCost_Center_manager' => false,
                     'isFinancial_employee' => true,
                     'number_of_km' => 6.7,
                     'created_at' => now()
@@ -55,7 +57,8 @@ class CreateUsersTable extends Migration
                     'IBAN' => 'BE12345678912346',
                     'email' => 'cost_center.manager@mailinator.com',
                     'password' => Hash::make('costcenter1234'),
-                    'isCost_center_manager' => true,
+                    'isCost_Center_manager' => true,
+                    'isFinancial_employee' => false,
                     'number_of_km' => 17.5,
                     'created_at' => now()
                 ],
@@ -67,12 +70,29 @@ class CreateUsersTable extends Migration
                     'IBAN' => 'BE12345678912347',
                     'email' => 'john.doe@mailinator.com',
                     'password' => Hash::make('user1234'),
+                    'isCost_Center_manager' => false,
                     'isFinancial_employee' => false,
                     'number_of_km' => 10.3,
                     'created_at' => now()
                 ]
             ]
         );
+
+        for ($i = 0; $i <= 20; $i++) {
+            DB::table('users')->insert(
+                [
+                    'first_name' => 'normal',
+                    'last_name' => "User $i",
+                    'password' => Hash::make('user1234'),
+                    'address' => 'Kleinhoefstraat 4',
+                    'zip_code' => '2440',
+                    'IBAN' => "BE12345678912341$i",
+                    'email' => "normaluser$i@mailinator.com",
+                    'number_of_km' => '0',
+                    'created_at' => now()
+                ]
+            );
+        }
     }
 
     /**
