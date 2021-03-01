@@ -20,3 +20,5 @@ mix.browserSync({
     proxy: 'cma.test',
     port: 3000
 });
+
+mix.disableNotifications();
