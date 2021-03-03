@@ -186,6 +186,22 @@ class UserController extends Controller
             $user->isFinancial_employee = true;
         }
 
+        //Oude programmes verwijderen
+        $oldProgrammes = UserProgramme::where('user_id', $user->id)->delete();
+//        foreach ($oldProgrammes as $oldProgramme){
+//            $oldProgramme->destroy();
+//        }
+
+        //Nieuwe programmes toevoegen
+        $programmes = explode(',', $request->opleidingen);
+
+        foreach ($programmes as $programme){
+            $newProgramme = new UserProgramme();
+            $newProgramme->user_id = $user->id;
+            $newProgramme->programme_id = $programme;
+            $newProgramme->save();
+        }
+
         $user->number_of_km = $request->aantal_km;
         $user->save();
         return response()->json([

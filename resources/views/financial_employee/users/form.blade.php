@@ -41,7 +41,7 @@
             <select multiple class="form-control opleidingen_select opleidingen" name="opleidingen"></select>
             <a href="#!" class="btn btn-primary btn-sm opleiding_toevoegen">Geselecteerde opleiding toevoegen</a>
             <p>Opleidingen:</p>
-            <ul class="geselecteerde_opleidingen">
+            <ul class="geselecteerde_opleidingen no-bullet">
 
             </ul>
         </div>

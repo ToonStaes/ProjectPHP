@@ -10,5 +10,9 @@ html{
         .container{
             max-width: 85vw;
         }
+
+        .no-bullet {
+            list-style-type: none;
+        }
     }
 }

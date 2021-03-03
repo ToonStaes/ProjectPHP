@@ -114,7 +114,7 @@
 
             let opleidingen = [];
             // Opleidingen ophalen
-            $(".geselecteerde_opleidingen li").each(function () {
+            $("#gebruiker_toevoegen .geselecteerde_opleidingen li").each(function () {
                 opleidingen.push($(this).data('id'));
             })
 
@@ -139,6 +139,13 @@
 
             let action = $(this).attr('action');
             let pars = $(this).serialize();
+            let opleidingen = [];
+            // Opleidingen ophalen
+            $('#gebruiker_bewerken form .geselecteerde_opleidingen li').each(function () {
+                opleidingen.push($(this).data('id'));
+            })
+
+            pars += '&opleidingen=' + opleidingen;
             console.log(pars);
             $.post(action, pars, 'json')
                 .done(function (data) {
@@ -167,15 +174,19 @@
         $(".opleiding_toevoegen").click(function (e) {
             e.preventDefault();
 
-            let id = $(".opleidingen").val();
+            let id = $(".opleidingen option:selected").val();
             let name = $(".opleidingen option:selected").text();
 
-            $(".geselecteerde_opleidingen").append(`<li data-id="${id}">${name}</li>`);
+            $(".geselecteerde_opleidingen").append(`<li data-id="${id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${name}</li>`);
         });
 
         $("#gebruiker_toevoegen_knop").click(function () {
             $(".geselecteerde_opleidingen").empty();
         })
+
+        $('.geselecteerde_opleidingen').on('click', '.verwijder-li-opleiding', function () {
+            $(this).parent().remove();
+        });
 
     } );
 
@@ -277,7 +288,7 @@
                     $(".geselecteerde_opleidingen").empty();
                     $.each(data.user_programmes, function (key, value) {
                         console.log(value.programme.name);
-                        $(".geselecteerde_opleidingen").append(`<li data-id="${value.programme.id}">${value.programme.name}</li>`);
+                        $(".geselecteerde_opleidingen").append(`<li data-id="${value.programme.id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${value.programme.name}</li>`);
                     })
                 }
 
