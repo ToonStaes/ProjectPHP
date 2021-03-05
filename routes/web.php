@@ -22,6 +22,8 @@ Auth::routes();
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::redirect('home', '/');
 Route::view('/', 'home');
+Route::view('/user/laptop', 'user.laptop');
+Route::post('/user/laptop', 'user\LaptopController@store');
 
 Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
@@ -32,3 +34,4 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
 Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
 Route::resource('users', 'financial_employee\UserController');
 Route::resource('kostenplaats', 'financial_employee\Cost_center_controller');
+
