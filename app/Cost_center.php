@@ -23,7 +23,7 @@ class Cost_center extends Model
 
     // R29
     public function parameters(){
-        return $this->hasMany('App\Parameter'); // a cost_center has many parameters
+        return $this->hasMany('App\Parameter', 'standard_Cost_center_id'); // a cost_center has many parameters
     }
 
     // R22

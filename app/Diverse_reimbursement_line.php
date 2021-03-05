@@ -8,7 +8,7 @@ class Diverse_reimbursement_line extends Model
 {
     // R19
     public function diverse_reimbursement_evidences() {
-        return $this->hasMany('App\Diverse_reimbursement_evidence');
+        return $this->hasMany('App\Diverse_reimbursement_evidence', 'DR_line_id');
     }
 
     // R20

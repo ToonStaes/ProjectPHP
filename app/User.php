@@ -51,7 +51,7 @@ class User extends Authenticatable
 
     // R4
     public function laptop_reimbursements() {
-        return $this->hasMany('App\Laptop_reimbursement');
+        return $this->hasMany('App\Laptop_reimbursement', 'user_id_Financial_employee');
     }
 
     // R28
@@ -61,7 +61,7 @@ class User extends Authenticatable
 
     // R7
     public function cost_centers() {
-        return $this->hasMany('App\Cost_center');
+        return $this->hasMany('App\Cost_center', 'user_id_Cost_center_manager');
     }
 
     // R9, R10, R11
@@ -71,7 +71,7 @@ class User extends Authenticatable
 
     // R12
     public function bike_reimbursements() {
-        return $this->hasMany('App\Bike_reimbursement');
+        return $this->hasMany('App\Bike_reimbursement', 'user_id_Financial_employee');
     }
 
     // R13
