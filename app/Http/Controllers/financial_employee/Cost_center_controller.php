@@ -21,19 +21,11 @@ class Cost_center_controller extends Controller
      */
     public function index()
     {
-        /*
-         *  using joins to test, eloquent model relations are required
-         *  to use the "with"-statement
-         * */
-        $data = Cost_center::join('programme_cost_centers as pcc', 'cost_centers.cost_centerID', '=', 'pcc.cost_centerID')
-            ->join('programmes as pgs', 'pcc.programmeID', '=', 'pgs.programmeID')
-            ->join('cost_center_budgets as ccb', 'pcc.cost_centerID', '=', 'ccb.cost_centerID')
-            ->join('users as u', 'cost_centers.userID_Cost_center_manager', '=', 'u.userID')
-            ->select('cost_centers.name as cost_center_name', 'pgs.name as programme_name', 'ccb.amount',
-                'cost_centers.description', 'u.first_name', 'u.last_name', 'cost_centers.cost_centerID');
+        $data = Cost_center::with(['user', 'cost_center_budgets', 'programmes']);
+        $cost_centers = $data->get();
 
-        $toReturn = $data->get();
-        $table_data = compact('toReturn');
+        $table_data = compact('cost_centers');
+
         return view('financial_employee.cost_center', $table_data);
     }
 
@@ -89,11 +81,19 @@ class Cost_center_controller extends Controller
      */
     public function update(Request $request, Cost_center $cost_center)
     {
-        //Bug: $cost_center is always empty
         $this->validate($request, ['budget'=>'required|integer']);
 
-        $cost_center_budget = Cost_center_budget::where("cost_centerID", "=", $request->id);
-        $cost_center_budget->update(['amount'=>$request->budget]);
+        if(Cost_center_budget::where('cost_center_id', '=', $cost_center->id)->exists()) {
+            $cost_center_budget = Cost_center_budget::where('cost_center_id', '=', $cost_center->id);
+            $cost_center_budget->update(['amount'=>$request->budget]);
+        }
+        else {
+            $cost_center_budget = new Cost_center_budget();
+            $cost_center_budget->cost_center_id = $cost_center->id;
+            $cost_center_budget->amount = $request->budget;
+            $cost_center_budget->year = strval(date('Y'));
+            $cost_center_budget->save();
+        }
         return response(['r'=>'ok']);
     }
 
@@ -105,8 +105,7 @@ class Cost_center_controller extends Controller
      */
     public function destroy(Cost_center $cost_center)
     {
-        //Bug: $cost_center is always empty
-        $id = $cost_center->id ?? 0;
+        $id = $cost_center->id;
         $cost_center->delete();
         return response(['r'=>'ok','id'=>$id]);
     }

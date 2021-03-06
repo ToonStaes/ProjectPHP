@@ -20,13 +20,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($toReturn as $cost_center)
-                <tr data-id="{{$cost_center->cost_centerID}}">
-                    <td>{{$cost_center->programme_name}}</td>
-                    <td class="cost_center_name">{{$cost_center->cost_center_name}}</td>
-                    <td>{{$cost_center->first_name." ".$cost_center->last_name}}</td>
+            @foreach($cost_centers as $cost_center)
+                <tr data-id="{{$cost_center->id}}">
+                    <td>{{count($cost_center->programmes) ? $cost_center->programmes[0]->name : "Onbekend"}}</td>
+                    <td class="cost_center_name">{{$cost_center->name}}</td>
+                    <td>{{$cost_center->user->first_name." ".$cost_center->user->last_name}}</td>
                     <td>{{$cost_center->description}}</td>
-                    <td><input class="input-budget" type="number" value="{{$cost_center->amount}}"></td>
+                    <td><input class="input-budget" type="number" value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"></td>
                     <td>
                         <button type="submit" class="btn btn-outline-danger deleteCostCenter">
                             <i class="fas fa-trash-alt"></i>
@@ -47,7 +47,7 @@
     let budget_fails = 0;
     let deletion_fails = 0;
     let _csrf = "{{csrf_token()}}";
-    let _query_url = "http://cma.test/kostenplaats/";
+    let _query_url = "http://cma.test/cost_centers/";
     let _datatable;
 
     $(document).ready( function () {
@@ -97,7 +97,10 @@
     *   we send an asynchronous ajax request to the server,
     *   updating the resource with our specified data
     * */
-    $('#button-save').on('click', send_budget_changes);
+    $('#button-save').on('click', function(){
+        budget_fails = 0;
+        send_budget_changes();
+    });
 
     $('.input-budget').change(function() {
         budget = $(this).val();
