@@ -37,9 +37,9 @@
         </div>
         <div class="form-group">
             <label for="opleidingen">Opleiding toevoegen</label>
-            <input type="text" class="form-control opleiding_zoek" name="opleiding_zoek">
+            <input type="text" class="form-control opleiding_zoek" name="opleiding_zoek" placeholder="Zoek een opleiding">
             <select multiple class="form-control opleidingen_select opleidingen" name="opleidingen"></select>
-            <a href="#!" class="btn btn-primary btn-sm opleiding_toevoegen">Geselecteerde opleiding toevoegen</a>
+            <p class="text-right mb-0"><a href="#!" class="btn btn-primary btn-sm opleiding_toevoegen mt-2">Geselecteerde opleiding toevoegen</a></p>
             <p>Opleidingen:</p>
             <ul class="geselecteerde_opleidingen no-bullet">
 
