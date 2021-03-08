@@ -49,25 +49,27 @@
         </div>
     </div>
 
-    <table id="usersTable">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Naam</th>
-            <th>Adres</th>
-            <th>IBAN</th>
-            <th>Email</th>
-            <th>Telefoonnummer</th>
-            <th>Aantal km</th>
-            <th>Opleiding(en)</th>
-            <th>Actief</th>
-            <th>Kostenplaats&#8203;verantwoordelijke</th>
-            <th>Financieel medewerker</th>
-            <th>Acties</th>
-        </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div id="tabel">
+        <table id="usersTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Naam</th>
+                <th>Adres</th>
+                <th>IBAN</th>
+                <th>Email</th>
+                <th>Telefoonnummer</th>
+                <th>Aantal km</th>
+                <th>Opleiding(en)</th>
+                <th>Actief</th>
+                <th>Kostenplaats&#8203;verantwoordelijke</th>
+                <th>Financieel medewerker</th>
+                <th>Acties</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 @endsection
 
 @section('script_after')
@@ -95,7 +97,13 @@
                 "info": "Gebruikers _START_ tot _END_ van _TOTAL_",
                 "infoEmpty": "",
                 "infoFiltered": "(gefilterd uit _MAX_ gebruikers)",
-                "search": "Filteren:"
+                "search": "Filteren:",
+                "paginate": {
+                    "next": "Volgende",
+                    "previous": "Vorige",
+                    "first": "Eerste",
+                    "last": "Laatste"
+                }
             }
         });
 
