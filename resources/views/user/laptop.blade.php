@@ -46,7 +46,7 @@
                             <div class="form-group">
                                 <label for="bestand">Uploaden bewijsstuk</label>
                                 <input type="file" name="UploadBestand" id="bestand"
-                                       class="form-control @error('bestand') is-invalid @enderror"
+                                       class="form-control-file @error('bestand') is-invalid @enderror"
                                        required>
                                 @error('bestand')
                                 <div class="invalid-feedback">{{ $message }}</div>

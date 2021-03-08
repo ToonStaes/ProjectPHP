@@ -22,12 +22,12 @@ Auth::routes();
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::redirect('home', '/');
 Route::view('/', 'home');
-Route::view('/user/laptop', 'user.laptop');
-Route::post('/user/laptop', 'user\LaptopController@store');
 
 Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
     Route::post('password', 'User\PasswordController@update');
+    Route::view('laptop', 'user.laptop');
+    Route::post('laptop', 'user\LaptopController@store');
 });
 
 //Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
