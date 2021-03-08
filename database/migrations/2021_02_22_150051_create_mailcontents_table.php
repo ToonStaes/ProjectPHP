@@ -22,9 +22,21 @@ class CreateMailcontentsTable extends Migration
 
         DB::table('mailcontents')->insert(
             [
-                'mailtype' => 'afwijzing',
-                'content' => 'uw mail is afgewezen omdat ...',
-                'created_at' => now()
+                [
+                    'mailtype' => 'Afwijzing',
+                    'content' => 'uw mail is afgewezen omdat ...',
+                    'created_at' => now()
+                ],
+                [
+                    'mailtype' => 'Nieuwe user',
+                    'content' => 'Welkom op onze website ...',
+                    'created_at' => now()
+                ],
+                [
+                    'mailtype' => 'Wachtwoord vergeten',
+                    'content' => 'Ga naar deze link: ...',
+                    'created_at' => now()
+                ]
             ]
         );
     }

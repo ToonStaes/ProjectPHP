@@ -40,7 +40,7 @@
                             <a class="dropdown-item" href="/">Vergoedingen behandelen</a>
                             <a class="dropdown-item" href="/">Gebruikers beheren</a>
                             <a class="dropdown-item" href="/">Kostenplaatsen beheren</a>
-                            <a class="dropdown-item" href="/">Mailteksten beheren</a>
+                            <a class="dropdown-item" href="/financial_employee/Mailcontent">Mailteksten beheren</a>
                             <a class="dropdown-item" href="/">Tarieven beheren</a>
                             <div class="dropdown-divider"></div>
                         @endif

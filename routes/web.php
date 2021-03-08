@@ -28,6 +28,11 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::post('password', 'User\PasswordController@update');
 });
 
+Route::middleware(['auth'])->prefix('financial_employee')->group(function(){
+    Route::get('Mailcontent/qryMailcontents', 'financial_employee\MailcontentController@qryMailcontents');
+    Route::resource('Mailcontent', 'financial_employee\MailcontentController');
+});
+
 //Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
 Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
 Route::resource('users', 'financial_employee\UserController');
