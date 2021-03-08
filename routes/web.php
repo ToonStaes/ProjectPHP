@@ -26,9 +26,12 @@ Route::view('/', 'home');
 Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
     Route::post('password', 'User\PasswordController@update');
+    Route::view('laptop', 'user.laptop');
+    Route::post('laptop', 'user\LaptopController@store');
 });
 
 //Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
 Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
 Route::resource('users', 'financial_employee\UserController');
 Route::resource('kostenplaats', 'financial_employee\Cost_center_controller');
+
