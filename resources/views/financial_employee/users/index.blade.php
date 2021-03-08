@@ -88,7 +88,15 @@
                 {"name": "Kostenplaats", "orderable": true},
                 {"name": "Financieel", "orderable": true},
                 {"name": "Acties", "orderable": false},
-            ]
+            ],
+            "language": {
+                "lengthMenu": "_MENU_ gebruikers per pagina",
+                "zeroRecords": "Er zijn geen gebruikers gevonden",
+                "info": "Gebruikers _START_ tot _END_ van _TOTAL_",
+                "infoEmpty": "",
+                "infoFiltered": "(gefilterd uit _MAX_ gebruikers)",
+                "search": "Filteren:"
+            }
         });
 
         $(document).ready( function () {
