@@ -18,6 +18,6 @@ class Cost_Center_manager
         if (auth()->user()->isCost_Center_manager) {
             return $next($request);
         }
-        return abort(403, 'Alleen kostenplaatsverantwoordelijke kunnen deze pagina bekijken');
+        return abort(403, 'Alleen kostenplaatsverantwoordelijken kunnen deze pagina bekijken');
     }
 }
