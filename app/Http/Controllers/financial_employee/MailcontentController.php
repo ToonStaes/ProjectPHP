@@ -92,7 +92,7 @@ class MailcontentController extends Controller
             ->transform(function ($item, $key) {
                 $item->ID = str_replace(' ', '', $item->mailtype);
                 // unset unnecessary fields
-                unset($item->created_at, $item->updated_at, $item->id);
+                unset($item->created_at, $item->updated_at);
                 return $item;
             });
 //        $mailcontent->ID = trim($mailcontent->mailtype, ' ');

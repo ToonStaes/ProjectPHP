@@ -1,6 +1,6 @@
 @extends('layouts.template')
 
-@section('title', 'Mailtekst aanpassen')
+@section('title', 'Mailtekst beheren')
 
 @section('main')
     <h1>Mailtekst aanpassen</h1>
@@ -36,7 +36,8 @@
                     let tr = `<tr>
                             <td class="column1">${value.mailtype}</td>
                             <td>${value.content}</td>
-                            <td><a href="#!" class="btn btn-outline-success btn-edit">
+                            <td data-id="${value.id}" data-mailtype="${value.mailtype}">
+                                        <a href="#!" class="btn btn-outline-success btn-edit">
                                             <i class="fas fa-edit"></i>
                                         </a></td>`;
                     $('tbody').append(tr);
