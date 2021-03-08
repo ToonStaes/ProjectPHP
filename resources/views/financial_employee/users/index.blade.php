@@ -1,16 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+@extends('layouts.template')
+@section('extra_css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-    <title>Users</title>
-</head>
-<body>
+@endsection
 
-<main class="container">
+@section('main')
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gebruiker_toevoegen" id="gebruiker_toevoegen_knop">
         Gebruiker toevoegen
@@ -54,275 +48,274 @@
         </div>
     </div>
 
-    <table id="usersTable">
+    <table id="usersTable" class="stripe mb-5">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Naam</th>
-                <th>Adres</th>
-                <th>IBAN</th>
-                <th>Email</th>
-                <th>Telefoonnummer</th>
-                <th>Aantal km</th>
-                <th>Opleiding(en)</th>
-                <th>Geactiveerd</th>
-                <th>Kostenplaats&#8203;verantwoordelijke</th>
-                <th>Financieel medewerker</th>
-                <th>Acties</th>
-            </tr>
+        <tr>
+            <th>ID</th>
+            <th>Naam</th>
+            <th>Adres</th>
+            <th>IBAN</th>
+            <th>Email</th>
+            <th>Telefoonnummer</th>
+            <th>Aantal km</th>
+            <th>Opleiding(en)</th>
+            <th>Geactiveerd</th>
+            <th>Kostenplaats&#8203;verantwoordelijke</th>
+            <th>Financieel medewerker</th>
+            <th>Acties</th>
+        </tr>
         </thead>
         <tbody></tbody>
     </table>
-</main>
+@endsection
 
-<script src="{{ mix('js/app.js') }}"></script>
-<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
-<script>
-    let table = $('#usersTable').DataTable({
-        "columns": [
-            {"name": "ID", "orderable": true},
-            {"name": "Naam", "orderable": true},
-            {"name": "Adres", "orderable": true},
-            {"name": "IBAN", "orderable": true},
-            {"name": "Email", "orderable": true},
-            {"name": "Telefoonnummer", "orderable": true},
-            {"name": "AantalKM", "orderable": true},
-            {"name": "Opleiding(en)", "orderable": true},
-            {"name": "Geactiveerd", "orderable": true},
-            {"name": "Kostenplaats", "orderable": true},
-            {"name": "Financieel", "orderable": true},
-            {"name": "Acties", "orderable": false},
-        ]
-    });
-
-    $(document).ready( function () {
-        buildTable();
-        getProgrammes();
-
-        $('tbody').on('click', '.btn-delete', function () {
-            let id = $(this).data('id');
-            deleteUser(id);
+@section('script_after')
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        let table = $('#usersTable').DataTable({
+            "columns": [
+                {"name": "ID", "orderable": true},
+                {"name": "Naam", "orderable": true},
+                {"name": "Adres", "orderable": true},
+                {"name": "IBAN", "orderable": true},
+                {"name": "Email", "orderable": true},
+                {"name": "Telefoonnummer", "orderable": true},
+                {"name": "AantalKM", "orderable": true},
+                {"name": "Opleiding(en)", "orderable": true},
+                {"name": "Geactiveerd", "orderable": true},
+                {"name": "Kostenplaats", "orderable": true},
+                {"name": "Financieel", "orderable": true},
+                {"name": "Acties", "orderable": false},
+            ]
         });
 
-        $('#gebruiker_toevoegen form').submit(function (e) {
-            // Don't submit the form
-            e.preventDefault();
+        $(document).ready( function () {
+            buildTable();
+            getProgrammes();
 
-            let action = $(this).attr('action');
-            let pars = $(this).serialize();
+            $('tbody').on('click', '.btn-delete', function () {
+                let id = $(this).data('id');
+                deleteUser(id);
+            });
 
-            let opleidingen = [];
-            // Opleidingen ophalen
-            $("#gebruiker_toevoegen .geselecteerde_opleidingen li").each(function () {
-                opleidingen.push($(this).data('id'));
+            $('#gebruiker_toevoegen form').submit(function (e) {
+                // Don't submit the form
+                e.preventDefault();
+
+                let action = $(this).attr('action');
+                let pars = $(this).serialize();
+
+                let opleidingen = [];
+                // Opleidingen ophalen
+                $("#gebruiker_toevoegen .geselecteerde_opleidingen li").each(function () {
+                    opleidingen.push($(this).data('id'));
+                })
+
+                pars += '&opleidingen=' + opleidingen;
+                console.log(pars);
+                $.post(action, pars, 'json')
+                    .done(function (data) {
+                        console.log(data);
+                        // Hide the modal
+                        $('#gebruiker_toevoegen').modal('hide');
+                        // Rebuild the table
+                        buildTable();
+                    })
+                    .fail(function (e) {
+                        console.log('error', e);
+                    });
+            });
+
+            $('#gebruiker_bewerken form').submit(function (e) {
+                // Don't submit the form
+                e.preventDefault();
+
+                let action = $(this).attr('action');
+                let pars = $(this).serialize();
+                let opleidingen = [];
+                // Opleidingen ophalen
+                $('#gebruiker_bewerken form .geselecteerde_opleidingen li').each(function () {
+                    opleidingen.push($(this).data('id'));
+                })
+
+                pars += '&opleidingen=' + opleidingen;
+                console.log(pars);
+                $.post(action, pars, 'json')
+                    .done(function (data) {
+                        console.log(data);
+                        // Hide the modal
+                        $('#gebruiker_bewerken').modal('hide');
+                        // Rebuild the table
+                        buildTable();
+                    })
+                    .fail(function (e) {
+                        console.log('error', e);
+                    });
+            });
+
+            $('tbody').on('click', '.btn-edit', function () {
+                let id = $(this).data('id');
+                editUser(id);
+            });
+
+            $(".opleiding_zoek").keyup(function () {
+                let filter = $(this).val();
+                console.log(filter);
+                getProgrammes(filter);
+            });
+
+            $(".opleiding_toevoegen").click(function (e) {
+                e.preventDefault();
+
+                let id = $(".opleidingen option:selected").val();
+                let name = $(".opleidingen option:selected").text();
+
+                $(".geselecteerde_opleidingen").append(`<li data-id="${id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${name}</li>`);
+            });
+
+            $("#gebruiker_toevoegen_knop").click(function () {
+                $(".geselecteerde_opleidingen").empty();
             })
 
-            pars += '&opleidingen=' + opleidingen;
-            console.log(pars);
-            $.post(action, pars, 'json')
+            $('.geselecteerde_opleidingen').on('click', '.verwijder-li-opleiding', function () {
+                $(this).parent().remove();
+            });
+
+        } );
+
+        function buildTable() {
+
+            $.getJSON('/users/getUsers')
                 .done(function (data) {
-                    console.log(data);
-                    // Hide the modal
-                    $('#gebruiker_toevoegen').modal('hide');
+                    console.log('data', data);
+                    // Clear tbody tag
+                    table.clear();
+                    $.each(data, function (key, value) {
+                        let is_active = '';
+                        if (value.is_active) {
+                            is_active = '<i class="fas fa-check"></i>';
+                        }
+
+                        let isCost_Center_manager = '';
+                        if (value.isCost_Center_manager){
+                            isCost_Center_manager = '<i class="fas fa-check"></i>'
+                        }
+
+                        let isFinancial_employee = '';
+                        if (value.isFinancial_employee){
+                            isFinancial_employee = '<i class="fas fa-check"></i>'
+                        }
+
+                        let opleidingen = '';
+                        if (value.user_programmes.length === 0){
+                            opleidingen = 'N.V.T'
+                        } else {
+                            $.each(value.user_programmes, function (key, value) {
+                                opleidingen += value.programme.name + '\n';
+                            })
+                        }
+                        table.row.add([
+                            value.id,
+                            value.name,
+                            value.address,
+                            value.IBAN,
+                            value.email,
+                            value.phone_number,
+                            value.number_of_km,
+                            opleidingen,
+                            is_active,
+                            isCost_Center_manager,
+                            isFinancial_employee,
+                            `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-id="${value.id}"><i class="fas fa-trash-alt"></i></a>`
+                        ]).draw(false);
+                    });
+                })
+                .fail(function (e) {
+                    console.log('error', e);
+                })
+        }
+
+        function deleteUser(id) {
+            let pars = {
+                '_token': '{{ csrf_token() }}',
+                '_method': 'delete'
+            };
+            $.post(`/users/${id}`, pars, 'json')
+                .done(function (data) {
+                    console.log('data', data);
                     // Rebuild the table
                     buildTable();
                 })
                 .fail(function (e) {
                     console.log('error', e);
                 });
-        });
+        }
 
-        $('#gebruiker_bewerken form').submit(function (e) {
-            // Don't submit the form
-            e.preventDefault();
-
-            let action = $(this).attr('action');
-            let pars = $(this).serialize();
-            let opleidingen = [];
-            // Opleidingen ophalen
-            $('#gebruiker_bewerken form .geselecteerde_opleidingen li').each(function () {
-                opleidingen.push($(this).data('id'));
-            })
-
-            pars += '&opleidingen=' + opleidingen;
-            console.log(pars);
-            $.post(action, pars, 'json')
+        function editUser(id) {
+            $.getJSON(`/users/${id}`)
                 .done(function (data) {
-                    console.log(data);
-                    // Hide the modal
-                    $('#gebruiker_bewerken').modal('hide');
-                    // Rebuild the table
-                    buildTable();
-                })
-                .fail(function (e) {
-                    console.log('error', e);
-                });
-        });
+                    console.log('data', data);
+                    $('#gebruiker_bewerken input[name="voornaam"]').val(data.first_name);
+                    $('#gebruiker_bewerken input[name="achternaam"]').val(data.last_name);
+                    $('#gebruiker_bewerken input[name="adres"]').val(data.address);
+                    $('#gebruiker_bewerken input[name="postcode"]').val(data.zip_code);
+                    $('#gebruiker_bewerken input[name="woonplaats"]').val(data.city);
+                    $('#gebruiker_bewerken input[name="iban"]').val(data.IBAN);
+                    $('#gebruiker_bewerken input[name="email"]').val(data.email);
+                    $('#gebruiker_bewerken input[name="telefoonnummer"]').val(data.phone_number);
+                    $('#gebruiker_bewerken input[name="aantal_km"]').val(data.number_of_km);
 
-        $('tbody').on('click', '.btn-edit', function () {
-            let id = $(this).data('id');
-            editUser(id);
-        });
-
-        $(".opleiding_zoek").keyup(function () {
-            let filter = $(this).val();
-            console.log(filter);
-            getProgrammes(filter);
-        });
-
-        $(".opleiding_toevoegen").click(function (e) {
-            e.preventDefault();
-
-            let id = $(".opleidingen option:selected").val();
-            let name = $(".opleidingen option:selected").text();
-
-            $(".geselecteerde_opleidingen").append(`<li data-id="${id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${name}</li>`);
-        });
-
-        $("#gebruiker_toevoegen_knop").click(function () {
-            $(".geselecteerde_opleidingen").empty();
-        })
-
-        $('.geselecteerde_opleidingen').on('click', '.verwijder-li-opleiding', function () {
-            $(this).parent().remove();
-        });
-
-    } );
-
-    function buildTable() {
-
-        $.getJSON('/users/getUsers')
-            .done(function (data) {
-                console.log('data', data);
-                // Clear tbody tag
-                table.clear();
-                $.each(data, function (key, value) {
-                    let is_active = '';
-                    if (value.is_active) {
-                        is_active = '<i class="fas fa-check"></i>';
+                    if(data.is_active){
+                        $('#gebruiker_bewerken input[name="actief"]').prop( "checked", true );
                     }
 
-                    let isCost_Center_manager = '';
-                    if (value.isCost_Center_manager){
-                        isCost_Center_manager = '<i class="fas fa-check"></i>'
+                    if(data.isCost_Center_manager){
+                        $('#gebruiker_bewerken input[name="kostenplaats_verantwoordelijke"]').prop( "checked", true );
                     }
 
-                    let isFinancial_employee = '';
-                    if (value.isFinancial_employee){
-                        isFinancial_employee = '<i class="fas fa-check"></i>'
+                    if(data.isFinancial_employee){
+                        $('#gebruiker_bewerken input[name="financieel_medewerker"]').prop( "checked", true );
                     }
 
-                    let opleidingen = '';
-                    if (value.user_programmes.length === 0){
-                        opleidingen = 'N.V.T'
-                    } else {
-                        $.each(value.user_programmes, function (key, value) {
-                            opleidingen += value.programme.name + '\n';
+                    if (data.user_programmes.length !== 0){
+                        $(".geselecteerde_opleidingen").empty();
+                        $.each(data.user_programmes, function (key, value) {
+                            console.log(value.programme.name);
+                            $(".geselecteerde_opleidingen").append(`<li data-id="${value.programme.id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${value.programme.name}</li>`);
                         })
                     }
-                    table.row.add([
-                        value.id,
-                        value.name,
-                        value.address,
-                        value.IBAN,
-                        value.email,
-                        value.phone_number,
-                        value.number_of_km,
-                        opleidingen,
-                        is_active,
-                        isCost_Center_manager,
-                        isFinancial_employee,
-                        `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-id="${value.id}"><i class="fas fa-trash-alt"></i></a>`
-                    ]).draw(false);
-                });
-            })
-            .fail(function (e) {
-                console.log('error', e);
-            })
-    }
 
-    function deleteUser(id) {
-        let pars = {
-            '_token': '{{ csrf_token() }}',
-            '_method': 'delete'
-        };
-        $.post(`/users/${id}`, pars, 'json')
-            .done(function (data) {
-                console.log('data', data);
-                // Rebuild the table
-                buildTable();
-            })
-            .fail(function (e) {
-                console.log('error', e);
-            });
-    }
+                    $('#gebruiker_bewerken form').attr('action', "/users/" + data.id);
+                    $('#gebruiker_bewerken').modal('show');
+                })
+                .fail(function (e) {
+                    console.log('error', e);
+                })
+        }
 
-    function editUser(id) {
-        $.getJSON(`/users/${id}`)
-            .done(function (data) {
-                console.log('data', data);
-                $('#gebruiker_bewerken input[name="voornaam"]').val(data.first_name);
-                $('#gebruiker_bewerken input[name="achternaam"]').val(data.last_name);
-                $('#gebruiker_bewerken input[name="adres"]').val(data.address);
-                $('#gebruiker_bewerken input[name="postcode"]').val(data.zip_code);
-                $('#gebruiker_bewerken input[name="woonplaats"]').val(data.city);
-                $('#gebruiker_bewerken input[name="iban"]').val(data.IBAN);
-                $('#gebruiker_bewerken input[name="email"]').val(data.email);
-                $('#gebruiker_bewerken input[name="telefoonnummer"]').val(data.phone_number);
-                $('#gebruiker_bewerken input[name="aantal_km"]').val(data.number_of_km);
+        function getProgrammes(filter) {
+            let pars = {
+                '_token': '{{ csrf_token() }}',
+                '_method': 'get',
+                'filter': filter
+            };
 
-                if(data.is_active){
-                    $('#gebruiker_bewerken input[name="actief"]').prop( "checked", true );
-                }
+            $.post(`/users/getProgrammes`, pars, 'json')
+                .done(function (data) {
+                    console.log('data', data);
 
-                if(data.isCost_Center_manager){
-                    $('#gebruiker_bewerken input[name="kostenplaats_verantwoordelijke"]').prop( "checked", true );
-                }
-
-                if(data.isFinancial_employee){
-                    $('#gebruiker_bewerken input[name="financieel_medewerker"]').prop( "checked", true );
-                }
-
-                if (data.user_programmes.length !== 0){
-                    $(".geselecteerde_opleidingen").empty();
-                    $.each(data.user_programmes, function (key, value) {
-                        console.log(value.programme.name);
-                        $(".geselecteerde_opleidingen").append(`<li data-id="${value.programme.id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${value.programme.name}</li>`);
-                    })
-                }
-
-                $('#gebruiker_bewerken form').attr('action', "/users/" + data.id);
-                $('#gebruiker_bewerken').modal('show');
-            })
-            .fail(function (e) {
-                console.log('error', e);
-            })
-    }
-
-    function getProgrammes(filter) {
-        let pars = {
-            '_token': '{{ csrf_token() }}',
-            '_method': 'get',
-            'filter': filter
-        };
-
-        $.post(`/users/getProgrammes`, pars, 'json')
-            .done(function (data) {
-                console.log('data', data);
-
-                let select = $(".opleidingen_select");
-                select.empty();
-                $.each(data, function (key, value) {
-                    select.append(`<option value="${value.id}">
+                    let select = $(".opleidingen_select");
+                    select.empty();
+                    $.each(data, function (key, value) {
+                        select.append(`<option value="${value.id}">
                                        ${value.name}
                                   </option>`);
+                    });
+                })
+                .fail(function (e) {
+                    console.log('error', e);
                 });
-            })
-            .fail(function (e) {
-                console.log('error', e);
-            });
-    }
-</script>
-</body>
-</html>
+        }
+    </script>
+@endsection
