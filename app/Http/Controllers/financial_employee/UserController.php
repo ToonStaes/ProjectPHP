@@ -11,6 +11,7 @@ use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use View;
 
 class UserController extends Controller
 {
@@ -109,10 +110,8 @@ class UserController extends Controller
 
         Mail::to($user->email)->send(new SendPasswordMail($data));
 
-        return response()->json([
-            'type' => 'success',
-            'text' => "The user <b>$user->first_name $user->last_name</b> has been added"
-        ]);
+        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is aangemaakt");
+        return View::make('shared.alert');
     }
 
     /**
@@ -187,27 +186,26 @@ class UserController extends Controller
         }
 
         //Oude programmes verwijderen
-        $oldProgrammes = UserProgramme::where('user_id', $user->id)->delete();
-//        foreach ($oldProgrammes as $oldProgramme){
-//            $oldProgramme->destroy();
-//        }
+        UserProgramme::where('user_id', $user->id)->delete();
 
-        //Nieuwe programmes toevoegen
-        $programmes = explode(',', $request->opleidingen);
+        if ($request->opleidingen != null){
 
-        foreach ($programmes as $programme){
-            $newProgramme = new UserProgramme();
-            $newProgramme->user_id = $user->id;
-            $newProgramme->programme_id = $programme;
-            $newProgramme->save();
+            //Nieuwe programmes toevoegen
+            $programmes = explode(',', $request->opleidingen);
+
+            foreach ($programmes as $programme){
+                $newProgramme = new UserProgramme();
+                $newProgramme->user_id = $user->id;
+                $newProgramme->programme_id = $programme;
+                $newProgramme->save();
+            }
         }
 
         $user->number_of_km = $request->aantal_km;
         $user->save();
-        return response()->json([
-            'type' => 'success',
-            'text' => "The user <b>$user->first_name $user->last_name</b> has been updated"
-        ]);
+
+        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is geüpdate");
+        return View::make('shared.alert');
     }
 
     /**
@@ -220,14 +218,9 @@ class UserController extends Controller
     {
         $user->isActive = 0;
         $user->save();
-        session()->flash('success', "The user <b>$user->name</b> has been deleted");
 
-        $users = $this->getUsers();
-
-        $result = compact('users');
-        Json::dump($result);
-
-        return $result;
+        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is gedeactiveerd");
+        return View::make('shared.alert');
     }
 
     public function getUsers()
@@ -238,6 +231,8 @@ class UserController extends Controller
             $item->name = $item->first_name . ' ' . $item->last_name;
             $item->address = $item->address . ' ' . $item->zip_code . ' ' . $item->city;
             $item->is_active = $item->isActive;
+            $exploded_mail = explode("@", $item->email);
+            $item->email = $exploded_mail[0] . '&#8203;@' . $exploded_mail[1];
 
             unset($item->first_name, $item->last_name, $item->zip_code, $item->city, $item->isActive);
 

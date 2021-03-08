@@ -5,6 +5,7 @@
 @endsection
 
 @section('main')
+    <div class="messages"></div>
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gebruiker_toevoegen" id="gebruiker_toevoegen_knop">
         Gebruiker toevoegen
@@ -48,7 +49,7 @@
         </div>
     </div>
 
-    <table id="usersTable" class="stripe mb-5">
+    <table id="usersTable">
         <thead>
         <tr>
             <th>ID</th>
@@ -59,7 +60,7 @@
             <th>Telefoonnummer</th>
             <th>Aantal km</th>
             <th>Opleiding(en)</th>
-            <th>Geactiveerd</th>
+            <th>Actief</th>
             <th>Kostenplaats&#8203;verantwoordelijke</th>
             <th>Financieel medewerker</th>
             <th>Acties</th>
@@ -119,6 +120,7 @@
                         console.log(data);
                         // Hide the modal
                         $('#gebruiker_toevoegen').modal('hide');
+                        $("div.messages").html(data);
                         // Rebuild the table
                         buildTable();
                     })
@@ -146,6 +148,7 @@
                         console.log(data);
                         // Hide the modal
                         $('#gebruiker_bewerken').modal('hide');
+                        $("div.messages").html(data);
                         // Rebuild the table
                         buildTable();
                     })
@@ -220,7 +223,7 @@
                             value.name,
                             value.address,
                             value.IBAN,
-                            value.email,
+                            `<span class="email_table">${value.email}</span>`,
                             value.phone_number,
                             value.number_of_km,
                             opleidingen,
@@ -243,7 +246,8 @@
             };
             $.post(`/users/${id}`, pars, 'json')
                 .done(function (data) {
-                    console.log('data', data);
+                    console.log('message', data);
+                    $("div.messages").html(data);
                     // Rebuild the table
                     buildTable();
                 })
