@@ -30,8 +30,10 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::post('laptop', 'user\LaptopController@store');
 });
 
-//Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
-Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
-Route::resource('users', 'financial_employee\UserController');
-Route::resource('kostenplaats', 'financial_employee\Cost_center_controller');
+Route::middleware(['auth', 'financial_employee'])->group(function () {
+  Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
+  Route::get('/users/getProgrammes', 'financial_employee\UserController@getProgrammes');
+  Route::resource('users', 'financial_employee\UserController');
+});
 
+Route::resource('kostenplaats', 'financial_employee\Cost_center_controller');
