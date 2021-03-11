@@ -19,7 +19,7 @@
                         <a class="nav-link" href="/">Fietsvergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Laptopvergoeding aanvragen</a>
+                        <a class="nav-link" href="/user/laptop">Laptopvergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/">Diverse vergoeding aanvragen</a>
