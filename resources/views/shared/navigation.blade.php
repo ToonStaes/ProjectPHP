@@ -38,7 +38,7 @@
 
                         @if(auth()->user()->isFinancial_employee == true)
                             <a class="dropdown-item" href="/">Vergoedingen behandelen</a>
-                            <a class="dropdown-item" href="/">Gebruikers beheren</a>
+                            <a class="dropdown-item" href="/users">Gebruikers beheren</a>
                             <a class="dropdown-item" href="/">Kostenplaatsen beheren</a>
                             <a class="dropdown-item" href="/">Mailteksten beheren</a>
                             <a class="dropdown-item" href="/">Tarieven beheren</a>
