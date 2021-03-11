@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('test');
-});
 
 Auth::routes();
 
@@ -23,9 +20,17 @@ Auth::routes();
 Route::redirect('home', '/');
 Route::view('/', 'home');
 
+
+
 Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
     Route::post('password', 'User\PasswordController@update');
+
+});
+
+Route::middleware(['auth'])->group(function(){
+    Route::get('request_bike_reimbursement', 'User\BikerideController@index');
+    Route::post('save_bikerides', 'User\BikerideController@store');
 });
 
 //Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
