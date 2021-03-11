@@ -53,14 +53,11 @@ class BikerideController extends Controller
             $bikeride = new Bikeride();
             $bikeride->user_id = $user->id;
             $bikeride->date = $datum;
+            $bikeride->number_of_km = $user->number_of_km;
             $bikeride->save();
         }
         session()->flash('success', "De fietsritten <b>$melding</b> zijn toegevoegd.");
         return view('user.request_bike_reimbursement');
-//        return response()->json([
-//            'type' => 'success',
-//            'text' => "De fietsritten <b>$melding</b> zijn toegevoegd."
-//        ]);
     }
 
     /**

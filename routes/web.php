@@ -31,6 +31,7 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
 Route::middleware(['auth'])->group(function(){
     Route::get('request_bike_reimbursement', 'User\BikerideController@index');
     Route::post('save_bikerides', 'User\BikerideController@store');
+    Route::post('request_bikeReimbursement', 'User\BikeReimbursementController@store');
 });
 
 //Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');

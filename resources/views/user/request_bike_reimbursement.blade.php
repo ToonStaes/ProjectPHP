@@ -33,7 +33,10 @@
             <input id="fietsritten" name="fietsritten" type="hidden"/>
             <button type="submit" class="btn-primary">Ritten opslaan</button>
         </form>
-        <a href="#" class="btn-primary">Aanvraag indienen</a>
+        <form action="/request_bikeReimbursement" method="post">
+            @csrf
+            <button type="submit" class="btn-primary">Aanvraag indienen</button>
+        </form>
     </div>
 @endsection
 
