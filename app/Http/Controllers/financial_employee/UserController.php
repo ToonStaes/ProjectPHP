@@ -8,9 +8,11 @@ use App\Programme;
 use App\User;
 use App\UserProgramme;
 use Facades\App\Helpers\Json;
+use http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Validator;
 use View;
 
 class UserController extends Controller
@@ -49,13 +51,25 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'voornaam' => 'required|min:3',
-            'achternaam' => 'required|min:3',
+            'voornaam' => 'required|min:2',
+            'achternaam' => 'required|min:2',
             'adres' => 'required|min:3',
             'postcode' => 'required',
             'iban' => 'required',
             'email' => 'required|unique:users,email',
             'aantal_km' => 'required',
+        ], [
+            'voornaam.required' => 'Gelieve de voornaam in te vullen.',
+            'voornaam.min' => 'Gelieve minstens 2 karakters in te geven.',
+            'achternaam.required' => 'Gelieve de achternaam in te vullen.',
+            'achternaam.min' => 'Gelieve minstens 2 karakters in te geven.',
+            'adres.required' => 'Gelieve het adres in te vullen.',
+            'adres.min' => 'Gelieve minstens 3 karakters in te geven.',
+            'postcode.required' => 'Gelieve de postcode in te vullen.',
+            'iban.required' => 'Gelieve de rekeningnummer in te vullen.',
+            'email.required' => 'Gelieve het emailadres in te vullen.',
+            'email.unique' => 'Dit emailadres is al in gebruik!',
+            'aantal_km.required' => 'Gelieve het aantal kilometer in te vullen.',
         ]);
 
         $user = new User();
@@ -110,7 +124,7 @@ class UserController extends Controller
 
         Mail::to($user->email)->send(new SendPasswordMail($data));
 
-        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is aangemaakt");
+        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is aangemaakt.");
         return View::make('shared.alert');
     }
 
@@ -156,6 +170,18 @@ class UserController extends Controller
             'iban' => 'required',
             'email' => 'required|email|unique:users,email,'.$user->id,
             'aantal_km' => 'required',
+        ], [
+            'voornaam.required' => 'Gelieve de voornaam in te vullen.',
+            'voornaam.min' => 'Gelieve minstens 2 karakters in te geven.',
+            'achternaam.required' => 'Gelieve de achternaam in te vullen.',
+            'achternaam.min' => 'Gelieve minstens 2 karakters in te geven.',
+            'adres.required' => 'Gelieve het adres in te vullen.',
+            'adres.min' => 'Gelieve minstens 3 karakters in te geven.',
+            'postcode.required' => 'Gelieve de postcode in te vullen.',
+            'iban.required' => 'Gelieve de rekeningnummer in te vullen.',
+            'email.required' => 'Gelieve het emailadres in te vullen.',
+            'email.unique' => 'Dit emailadres is al in gebruik!',
+            'aantal_km.required' => 'Gelieve het aantal kilometer in te vullen.'
         ]);
 
         $user->first_name = $request->voornaam;
@@ -204,7 +230,7 @@ class UserController extends Controller
         $user->number_of_km = $request->aantal_km;
         $user->save();
 
-        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is geüpdate");
+        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is bijgewerkt.");
         return View::make('shared.alert');
     }
 

@@ -140,8 +140,11 @@
                         // Rebuild the table
                         buildTable();
                     })
-                    .fail(function (e) {
-                        console.log('error', e);
+                    .fail(function (data) {
+                        let errors = JSON.parse(data.responseText).errors;
+                        $.each(errors, function (key, val) {
+                            $("#" + key + "_error").text(val);
+                        });
                     });
             });
 
@@ -168,8 +171,11 @@
                         // Rebuild the table
                         buildTable();
                     })
-                    .fail(function (e) {
-                        console.log('error', e);
+                    .fail(function (data) {
+                        let errors = JSON.parse(data.responseText).errors;
+                        $.each(errors, function (key, val) {
+                            $("#" + key + "_error").text(val);
+                        });
                     });
             });
 
@@ -190,7 +196,14 @@
                 let id = $(".opleidingen option:selected").val();
                 let name = $(".opleidingen option:selected").text();
 
-                $(".geselecteerde_opleidingen").append(`<li data-id="${id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${name}</li>`);
+                let opleidingen = [];
+                $(this).parent().parent().find('.geselecteerde_opleidingen li').each(function () {
+                    opleidingen.push($(this).data('id'));
+                })
+
+                if (jQuery.inArray(parseInt(id), opleidingen) === -1) {
+                    $(".geselecteerde_opleidingen").append(`<li data-id="${id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${name}</li>`);
+                }
             });
 
             $("#gebruiker_toevoegen_knop").click(function () {
