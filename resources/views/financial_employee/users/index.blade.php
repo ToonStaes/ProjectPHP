@@ -193,13 +193,17 @@
             $(".opleiding_toevoegen").click(function (e) {
                 e.preventDefault();
 
-                let id = $(".opleidingen option:selected").val();
-                let name = $(".opleidingen option:selected").text();
+                let id = $(this).parent().prev('.opleidingen').find("option:selected").val();
+                let name = $(this).parent().prev('.opleidingen').find("option:selected").text();
 
                 let opleidingen = [];
                 $(this).parent().parent().find('.geselecteerde_opleidingen li').each(function () {
                     opleidingen.push($(this).data('id'));
                 })
+
+                console.log("Name", name);
+                console.log("Id", id);
+                console.log("Opleidingen", opleidingen);
 
                 if (jQuery.inArray(parseInt(id), opleidingen) === -1) {
                     $(".geselecteerde_opleidingen").append(`<li data-id="${id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${name}</li>`);
@@ -208,6 +212,7 @@
 
             $("#gebruiker_toevoegen_knop").click(function () {
                 $(".geselecteerde_opleidingen").empty();
+                $("#gebruiker_toevoegen form")[0].reset();
             })
 
             $('.geselecteerde_opleidingen').on('click', '.verwijder-li-opleiding', function () {
