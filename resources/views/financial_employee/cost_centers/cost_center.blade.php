@@ -12,7 +12,7 @@
             <th>Verwijderen</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="table_body">
         @foreach($cost_centers as $cost_center)
             <tr data-id="{{$cost_center->id}}">
                 <td>{{count($cost_center->programmes) ? $cost_center->programmes[0]->name : "Onbekend"}}</td>
@@ -160,7 +160,9 @@
 
         $("#cost_center_submit").on("click", function(){
             user_id = parseInt($("#responsible_list option[selected]").val(), 10);
+            user_name = $("#responsible_list option[selected]").text();
             programme_id = parseInt($("#programmes_list").val(), 10);
+            programme_name = $("#programmes_list option[selected]").text();
             cost_center_name = $("#cost_center_input").val();
             cost_center_id = $("#cost_centers_list option[selected]").data("id");
             description = $("#descr_input").val() ?? " ";
@@ -178,7 +180,9 @@
 
             formData = {
                 user_id: user_id,
+                user_name: user_name,
                 programme_id: programme_id,
+                programme_name: programme_name,
                 cost_center_name: cost_center_name,
                 cost_center_id: cost_center_id,
                 description: description,
@@ -189,15 +193,50 @@
             send_new_cost_center(formData);
         });
 
+        function reset_form(){
+            $("#responsible_list option[selected]").removeAttr("selected");
+            $("#responsible_list:first-child").attr("selected");
+
+            $("#programmes_list option[selected]").removeAttr("selected");
+            $("#programmes_list:first-child").attr("selected");
+
+            $("#cost_centers_list option[selected]").removeAttr("selected");
+            $("#cost_center_input").val("");
+
+            $("#descr_input").val("");
+
+            $("#budget_input").val("");
+
+            $("#active_input").prop("checked", false);
+        }
+
+        function add_cost_center(cost_center){
+            _datatable.row.add([
+                "<td>"+cost_center.programme_name+"</td>",
+                "<td class='cost_center_name'>"+cost_center.cost_center_name+"</td>",
+                "<td>"+cost_center.user_name+"</td>",
+                "<td>"+cost_center.description+"</td>",
+                "<td><input class=\"input-budget\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
+                "                           min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
+                "<td><button type=\"submit\" class=\"btn btn-outline-danger deleteCostCenter\">\n" +
+                "                        <i class=\"fas fa-trash-alt\"></i></button></td>"
+            ]);
+            _datatable.draw();
+            $("#table-cost_center tbody:last-child").data("id", cost_center.cost_center_id);
+        }
+
         function send_new_cost_center(cost_center){
             jQuery.ajax({
                 url: _query_url,
                 method: "POST",
                 tryCount: 0,
                 tryLimit: 2,
-                data: cost_center
+                data: cost_center,
+                context: {cost_center: cost_center}
             }).done(function(data){
-
+                reset_form();
+                this.cost_center.cost_center_id = data.id;
+                add_cost_center(this.cost_center);
             }).fail(function(jqXHR, statusText, errorText){
                 this.tryCount++;
                 if(this.tryCount > this.tryLimit) return;

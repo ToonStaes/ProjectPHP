@@ -122,6 +122,8 @@ class Cost_center_controller extends Controller
         $cost_center->save();
         $cost_center_budget->save();
         $programme_cost_center->save();
+
+        return response(['id'=>$request->cost_center_id]);
     }
 
     /**
