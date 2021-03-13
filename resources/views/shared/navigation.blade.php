@@ -19,7 +19,7 @@
                         <a class="nav-link" href="/">Fietsvergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Laptopvergoeding aanvragen</a>
+                        <a class="nav-link" href="/user/laptop">Laptopvergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/">Diverse vergoeding aanvragen</a>
@@ -38,7 +38,7 @@
 
                         @if(auth()->user()->isFinancial_employee == true)
                             <a class="dropdown-item" href="/">Vergoedingen behandelen</a>
-                            <a class="dropdown-item" href="/">Gebruikers beheren</a>
+                            <a class="dropdown-item" href="/users">Gebruikers beheren</a>
                             <a class="dropdown-item" href="/">Kostenplaatsen beheren</a>
                             <a class="dropdown-item" href="/">Mailteksten beheren</a>
                             <a class="dropdown-item" href="/">Tarieven beheren</a>

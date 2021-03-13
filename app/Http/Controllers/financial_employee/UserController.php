@@ -4,11 +4,16 @@ namespace App\Http\Controllers\financial_employee;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendPasswordMail;
+use App\Programme;
 use App\User;
+use App\UserProgramme;
 use Facades\App\Helpers\Json;
+use http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Validator;
+use View;
 
 class UserController extends Controller
 {
@@ -46,13 +51,25 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'voornaam' => 'required|min:3',
-            'achternaam' => 'required|min:3',
+            'voornaam' => 'required|min:2',
+            'achternaam' => 'required|min:2',
             'adres' => 'required|min:3',
             'postcode' => 'required',
             'iban' => 'required',
             'email' => 'required|unique:users,email',
             'aantal_km' => 'required',
+        ], [
+            'voornaam.required' => 'Gelieve de voornaam in te vullen.',
+            'voornaam.min' => 'Gelieve minstens 2 karakters in te geven.',
+            'achternaam.required' => 'Gelieve de achternaam in te vullen.',
+            'achternaam.min' => 'Gelieve minstens 2 karakters in te geven.',
+            'adres.required' => 'Gelieve het adres in te vullen.',
+            'adres.min' => 'Gelieve minstens 3 karakters in te geven.',
+            'postcode.required' => 'Gelieve de postcode in te vullen.',
+            'iban.required' => 'Gelieve de rekeningnummer in te vullen.',
+            'email.required' => 'Gelieve het emailadres in te vullen.',
+            'email.unique' => 'Dit emailadres is al in gebruik!',
+            'aantal_km.required' => 'Gelieve het aantal kilometer in te vullen.',
         ]);
 
         $user = new User();
@@ -90,6 +107,15 @@ class UserController extends Controller
         $user->number_of_km = $request->aantal_km;
         $user->save();
 
+        $programmes = explode(',', $request->opleidingen);
+
+        foreach ($programmes as $programme){
+            $newProgramme = new UserProgramme();
+            $newProgramme->user_id = $user->id;
+            $newProgramme->programme_id = $programme;
+            $newProgramme->save();
+        }
+
         $data = array(
             'naam' => $user->first_name,
             'email' => $user->email,
@@ -98,10 +124,8 @@ class UserController extends Controller
 
         Mail::to($user->email)->send(new SendPasswordMail($data));
 
-        return response()->json([
-            'type' => 'success',
-            'text' => "The user <b>$user->first_name $user->last_name</b> has been added"
-        ]);
+        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is aangemaakt.");
+        return View::make('shared.alert');
     }
 
     /**
@@ -112,6 +136,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $user = User::with('userProgrammes.programme')->findOrFail($user->id);
         $user->is_active = $user->isActive;
         unset($user->isActive);
         return $user;
@@ -145,6 +170,18 @@ class UserController extends Controller
             'iban' => 'required',
             'email' => 'required|email|unique:users,email,'.$user->id,
             'aantal_km' => 'required',
+        ], [
+            'voornaam.required' => 'Gelieve de voornaam in te vullen.',
+            'voornaam.min' => 'Gelieve minstens 2 karakters in te geven.',
+            'achternaam.required' => 'Gelieve de achternaam in te vullen.',
+            'achternaam.min' => 'Gelieve minstens 2 karakters in te geven.',
+            'adres.required' => 'Gelieve het adres in te vullen.',
+            'adres.min' => 'Gelieve minstens 3 karakters in te geven.',
+            'postcode.required' => 'Gelieve de postcode in te vullen.',
+            'iban.required' => 'Gelieve de rekeningnummer in te vullen.',
+            'email.required' => 'Gelieve het emailadres in te vullen.',
+            'email.unique' => 'Dit emailadres is al in gebruik!',
+            'aantal_km.required' => 'Gelieve het aantal kilometer in te vullen.'
         ]);
 
         $user->first_name = $request->voornaam;
@@ -174,12 +211,27 @@ class UserController extends Controller
             $user->isFinancial_employee = true;
         }
 
+        //Oude programmes verwijderen
+        UserProgramme::where('user_id', $user->id)->delete();
+
+        if ($request->opleidingen != null){
+
+            //Nieuwe programmes toevoegen
+            $programmes = explode(',', $request->opleidingen);
+
+            foreach ($programmes as $programme){
+                $newProgramme = new UserProgramme();
+                $newProgramme->user_id = $user->id;
+                $newProgramme->programme_id = $programme;
+                $newProgramme->save();
+            }
+        }
+
         $user->number_of_km = $request->aantal_km;
         $user->save();
-        return response()->json([
-            'type' => 'success',
-            'text' => "The user <b>$user->first_name $user->last_name</b> has been updated"
-        ]);
+
+        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is bijgewerkt.");
+        return View::make('shared.alert');
     }
 
     /**
@@ -192,27 +244,32 @@ class UserController extends Controller
     {
         $user->isActive = 0;
         $user->save();
-        session()->flash('success', "The user <b>$user->name</b> has been deleted");
 
-        $users = $this->getUsers();
-
-        $result = compact('users');
-        Json::dump($result);
-
-        return $result;
+        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is gedeactiveerd");
+        return View::make('shared.alert');
     }
 
     public function getUsers()
     {
-        return User::all()->transform(function ($item, $key) {
+        return User::with('userProgrammes.programme')
+            ->get()
+            ->transform(function ($item, $key) {
             $item->name = $item->first_name . ' ' . $item->last_name;
             $item->address = $item->address . ' ' . $item->zip_code . ' ' . $item->city;
             $item->is_active = $item->isActive;
+            $exploded_mail = explode("@", $item->email);
+            $item->email = $exploded_mail[0] . '&#8203;@' . $exploded_mail[1];
 
             unset($item->first_name, $item->last_name, $item->zip_code, $item->city, $item->isActive);
 
             return $item;
         });
+    }
+
+    public function getProgrammes(Request $request){
+        $filter = '%' . $request->filter . '%';
+        $programmes = Programme::where('name', 'like', $filter)->get();
+        return $programmes;
     }
 
     private function randomPassword() {
