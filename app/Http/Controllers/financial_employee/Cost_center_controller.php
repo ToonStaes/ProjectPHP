@@ -91,8 +91,7 @@ class Cost_center_controller extends Controller
             try {
                 //  We check if we can find the cost center
                 $cost_center = Cost_center::where('name', $request->cost_center_name)->firstOrFail();
-                $request->cost_center_id = $cost_center->id;
-                $cost_center_budget->cost_center_id = $request->cost_center_id;
+                abort(409, 'De kostenplaats met naam \"'.$request->cost_center_name.'\" bestaat al.');
             }
             catch (ModelNotFoundException $e) {
                 /*

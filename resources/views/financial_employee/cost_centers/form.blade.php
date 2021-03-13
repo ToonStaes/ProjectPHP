@@ -43,7 +43,7 @@
             </div>
             <div class="row">
                 <div class="col col-12"><label for="budget_input">Budget</label></div>
-                <div class="col col-12"><input type="number" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"
+                <div class="col col-12"><input type="number" step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"
                                                id="budget_input"></div>
             </div>
         </div>

@@ -21,7 +21,7 @@
                 <td>{{$cost_center->description}}</td>
                 <td><input class="input-budget" type="number"
                            value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"
-                           min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
+                           step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
                 <td>
                     <button type="submit" class="btn btn-outline-danger deleteCostCenter">
                         <i class="fas fa-trash-alt"></i>
@@ -103,6 +103,10 @@
                         this.tryCount++;
                         if(this.tryCount > this.tryLimit) return;
                         jQuery.ajax(this);
+                    }).always(function(){
+                        if(this.tryCount>this.tryLimit){
+                            alert("Er is een fout gebeurt bij het opslagen");
+                        }
                     });
                 }
             }
@@ -211,6 +215,7 @@
         }
 
         function add_cost_center(cost_center){
+            if(!cost_center.isActive) return;
             _datatable.row.add([
                 "<td>"+cost_center.programme_name+"</td>",
                 "<td class='cost_center_name'>"+cost_center.cost_center_name+"</td>",
@@ -238,6 +243,10 @@
                 this.cost_center.cost_center_id = data.id;
                 add_cost_center(this.cost_center);
             }).fail(function(jqXHR, statusText, errorText){
+                if(jqXHR.status == 409){
+                    alert(JSON.parse(jqXHR.responseText).message);
+                    return;
+                }
                 this.tryCount++;
                 if(this.tryCount > this.tryLimit) return;
                 jQuery.ajax(this);
