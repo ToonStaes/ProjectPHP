@@ -23,14 +23,16 @@ Auth::routes();
 Route::redirect('home', '/');
 Route::view('/', 'home');
 
-Route::middleware(['auth'])->prefix('user')->group(function () {
+Route::get('user/firstPassword', 'User\PasswordController@edit');
+Route::post('user/password', 'User\PasswordController@update');
+
+Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
-    Route::post('password', 'User\PasswordController@update');
     Route::view('laptop', 'user.laptop');
     Route::post('laptop', 'user\LaptopController@store');
 });
 
-Route::middleware(['auth', 'financial_employee'])->group(function () {
+Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(function () {
   Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
   Route::get('/users/getProgrammes', 'financial_employee\UserController@getProgrammes');
   Route::resource('users', 'financial_employee\UserController');
