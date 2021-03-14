@@ -1,25 +1,5 @@
 <form id="cost_center_form">
-    <div class="row flex-row-reverse">
-        <div class="col col-12 col-md-6">
-            <div class="row">
-                <div class="col col-12"><label for="responsible_list">Verantwoordelijke<sup>*</sup></label></div>
-                <div class="col col-12">
-                    <select name="responsible_list" required id="responsible_list">
-                        @foreach($users as $user)
-                            <option {{($loop->first) ? "selected" : ""}} value="{{$user->id}}">{{$user->first_name.' '.$user->last_name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col col-12"><label for="descr_input">Omschrijving</label></div>
-                <div class="col col-12"><textarea name="omschrijving" id="descr_input" cols="30" rows="5"></textarea></div>
-            </div>
-            <div class="row">
-                <label for="active_input">Actief</label>
-                <input type="checkbox" id="active_input">
-            </div>
-        </div>
+    <div class="row">
         <div class="col col-12 col-md-6">
             <div class="row">
                 <div class="col col-12"><label for="programmes_list">Unit<sup>*</sup></label></div>
@@ -43,10 +23,35 @@
             </div>
             <div class="row">
                 <div class="col col-12"><label for="budget_input">Budget</label></div>
-                <div class="col col-12"><input type="number" step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"
+                <div class="col col-12"><input class="form-control-range" type="number" step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"
                                                id="budget_input"></div>
             </div>
         </div>
+        <div class="col col-12 col-md-6">
+            <div class="row">
+                <div class="col col-12"><label for="responsible_list">Verantwoordelijke<sup>*</sup></label></div>
+                <div class="col col-12">
+                    <select name="responsible_list" required id="responsible_list">
+                        @foreach($users as $user)
+                            <option {{($loop->first) ? "selected" : ""}} value="{{$user->id}}">{{$user->first_name.' '.$user->last_name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-12"><label for="descr_input">Omschrijving</label></div>
+                <div class="col col-12"><textarea class="form-control-plaintext border" name="omschrijving" id="descr_input" cols="30" rows="5"></textarea></div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="active_input">
+                        <label class="form-check-label" for="active_input">Actief</label>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <button type="submit" class="btn btn-primary" id="cost_center_submit">Kostenplaats opslaan</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuleren</button>
 </form>
-<button class="btn btn-primary" id="cost_center_submit">Kostenplaats opslaan</button>

@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('main')
-    <table id="table-cost_center">
+    <table id="tabel">
         <thead>
         <tr>
             <th>Unit</th>
@@ -64,11 +64,16 @@
         let _datatable;
 
         $(document).ready( function () {
-            _datatable = $('#table-cost_center').DataTable();
+            _datatable = $('#tabel').DataTable();
             jQuery.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": _csrf
                 }
+            });
+
+            $("#form").addEventListener("submit", function(event){
+                event.preventDefault();
+                event.stopPropagation();
             });
         });
 
@@ -102,6 +107,10 @@
                             if (budgets_changed[budget] == this.toCheck) budgets_changed.splice(budget, 1);
                         }
                     }).fail(function(jqXHR, statusText, errorText){
+                        if(jqXHR.status == 500){
+                            alert("Er is een fout gebeurt bij het opslagen");
+                            return;
+                        }
                         this.tryCount++;
                         if(this.tryCount > this.tryLimit) return;
                         jQuery.ajax(this);
@@ -154,6 +163,10 @@
             }).done(function(data){
                 delete_cost_center_row(this.id);
             }).fail(function(jqXHR, statusText, errorText){
+                if(jqXHR.status == 500){
+                    alert("Er is een fout gebeurt bij het verwijderen");
+                    return;
+                }
                 this.tryCount++;
                 if(this.tryCount > this.tryLimit) return;
                 jQuery.ajax(this);
@@ -177,12 +190,6 @@
             if(isNaN(budget)) budget = 0;
 
             isActive = ($("#active_input").prop("checked")) ? 1 : 0;
-
-            if(user_id == "" || programme_id == "" || cost_center_name == "")
-            {
-                alert("Vul alle vereiste velden in");
-                return;
-            }
 
             formData = {
                 user_id: user_id,
@@ -230,7 +237,7 @@
                 "                        <i class=\"fas fa-trash-alt\"></i></button></td>"
             ]);
             _datatable.draw();
-            $("#table-cost_center tbody:last-child").data("id", cost_center.cost_center_id);
+            $("#tabel tbody:last-child").data("id", cost_center.cost_center_id);
         }
 
         function send_new_cost_center(cost_center){
