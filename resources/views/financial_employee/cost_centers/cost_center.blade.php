@@ -100,7 +100,7 @@
                 }
             });
 
-            $("#form").addEventListener("submit", function(event){
+            document.getElementById("cost_center_form").addEventListener("submit", function(event){
                 event.preventDefault();
                 event.stopPropagation();
             });
@@ -204,6 +204,7 @@
 
         function delete_cost_center_row(id){
             _datatable.row($("tr[data-id="+id+"]")).remove().draw();
+            $('#cost_centers_list option[data-id="'+id+'"]').remove();
         }
 
         $("#cost_center_submit").on("click", function(){
@@ -253,8 +254,7 @@
         }
 
         function add_cost_center(cost_center){
-            console.log(cost_center.isActive);
-            if(!cost_center.isActive) return;
+            if(cost_center.isActive == 0) return;
             _datatable.row.add([
                 "<td>"+cost_center.programme_name+"</td>",
                 "<td class='cost_center_name'>"+cost_center.cost_center_name+"</td>",
@@ -267,6 +267,8 @@
             ]);
             _datatable.draw();
             $("#tabel tbody:last-child").data("id", cost_center.cost_center_id);
+
+            $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
         }
 
         function send_new_cost_center(cost_center){
