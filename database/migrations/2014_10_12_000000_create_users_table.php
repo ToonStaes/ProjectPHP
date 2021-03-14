@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
             $table->string('password');
+            $table->boolean('changedPassword')->default(false);
             $table->boolean('isActive')->default(true);
             $table->boolean('isCost_Center_manager')->default(false);
             $table->boolean('isFinancial_employee')->default(false);
