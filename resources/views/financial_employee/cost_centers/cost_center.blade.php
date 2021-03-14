@@ -1,7 +1,12 @@
 @extends('layouts.template')
 
+@section('extra_css')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+@endsection
+
 @section('main')
-    <table id="tabel">
+    <table id="tabel" class="table">
         <thead>
         <tr>
             <th>Unit</th>
@@ -57,6 +62,7 @@
 @section('script_after')
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script>
         let budgets_changed = [];
         let _csrf = "{{csrf_token()}}";
@@ -64,7 +70,30 @@
         let _datatable;
 
         $(document).ready( function () {
-            _datatable = $('#tabel').DataTable();
+            _datatable = $('#tabel').DataTable({
+                "columns": [
+                    {"name": "Unit", "orderable": true},
+                    {"name": "Kostenplaats", "orderable": true},
+                    {"name": "Verantwoordelijke", "orderable": true},
+                    {"name": "Beschrijving", "orderable": true},
+                    {"name": "Budget", "orderable": true},
+                    {"name": "Verwijderen", "orderable": false},
+                ],
+                "language": {
+                    "lengthMenu": "_MENU_ kostenplaatsen per pagina",
+                    "zeroRecords": "Er zijn geen kostenplaatsen gevonden",
+                    "info": "Kostenplaatsen _START_ tot _END_ van _TOTAL_",
+                    "infoEmpty": "",
+                    "infoFiltered": "(gefilterd uit _MAX_ kostenplaatsen)",
+                    "search": "Filteren:",
+                    "paginate": {
+                        "next": "Volgende",
+                        "previous": "Vorige",
+                        "first": "Eerste",
+                        "last": "Laatste"
+                    }
+                }
+            });
             jQuery.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": _csrf
