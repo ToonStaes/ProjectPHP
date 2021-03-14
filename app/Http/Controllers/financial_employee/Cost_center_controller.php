@@ -74,8 +74,8 @@ class Cost_center_controller extends Controller
             'programme_id'=>'required|integer|min:0|exists:programmes,id',
             'user_id'=>'required|integer|exists:users,id',
             'budget'=>'integer|min:0',
-            'cost_center_name'=>'required_without:cost_center_id|string',
-            'description'=>'string',
+            'cost_center_name'=>'required_without:cost_center_id|string|max:256',
+            'description'=>'string|max:1024',
             'isActive'=>'boolean'
         ]);
 
@@ -91,7 +91,7 @@ class Cost_center_controller extends Controller
             try {
                 //  We check if we can find the cost center
                 $cost_center = Cost_center::where('name', $request->cost_center_name)->firstOrFail();
-                abort(409, 'De kostenplaats met naam \"'.$request->cost_center_name.'\" bestaat al.');
+                abort(409, 'De kostenplaats met naam "'.$request->cost_center_name.'" bestaat al.');
             }
             catch (ModelNotFoundException $e) {
                 /*
@@ -103,8 +103,11 @@ class Cost_center_controller extends Controller
                 $cost_center->name = $request->cost_center_name;
                 $cost_center->description = $request->description;
                 $cost_center->isActive = $request->isActive;
+                $cost_center->save();
 
                 $request->cost_center_id = $cost_center->id;
+                Log::debug($cost_center->id);
+                $cost_center_budget->cost_center_id = $cost_center->id;
             }
         }
         else{
@@ -118,7 +121,6 @@ class Cost_center_controller extends Controller
         $programme_cost_center->programme_id = $request->programme_id;
         $programme_cost_center->cost_center_id = $request->cost_center_id;
 
-        $cost_center->save();
         $cost_center_budget->save();
         $programme_cost_center->save();
 

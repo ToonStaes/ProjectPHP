@@ -14,20 +14,22 @@
         </thead>
         <tbody id="table_body">
         @foreach($cost_centers as $cost_center)
-            <tr data-id="{{$cost_center->id}}">
-                <td>{{count($cost_center->programmes) ? $cost_center->programmes[0]->name : "Onbekend"}}</td>
-                <td class="cost_center_name">{{$cost_center->name}}</td>
-                <td>{{$cost_center->user->first_name." ".$cost_center->user->last_name}}</td>
-                <td>{{$cost_center->description}}</td>
-                <td><input class="input-budget" type="number"
+            @if($cost_center->isActive)
+                <tr data-id="{{$cost_center->id}}">
+                    <td>{{count($cost_center->programmes) ? $cost_center->programmes[0]->name : "Onbekend"}}</td>
+                    <td class="cost_center_name">{{$cost_center->name}}</td>
+                    <td>{{$cost_center->user->first_name." ".$cost_center->user->last_name}}</td>
+                    <td>{{$cost_center->description}}</td>
+                    <td><input class="input-budget" type="number"
                            value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"
                            step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
-                <td>
-                    <button type="submit" class="btn btn-outline-danger deleteCostCenter">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </td>
-            </tr>
+                    <td>
+                        <button type="submit" class="btn btn-outline-danger deleteCostCenter">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            @endif
         @endforeach
         </tbody>
     </table>
@@ -163,7 +165,7 @@
         }
 
         $("#cost_center_submit").on("click", function(){
-            user_id = parseInt($("#responsible_list option[selected]").val(), 10);
+            user_id = parseInt($("#responsible_list").val(), 10);
             user_name = $("#responsible_list option[selected]").text();
             programme_id = parseInt($("#programmes_list").val(), 10);
             programme_name = $("#programmes_list option[selected]").text();
@@ -215,6 +217,7 @@
         }
 
         function add_cost_center(cost_center){
+            console.log(cost_center.isActive);
             if(!cost_center.isActive) return;
             _datatable.row.add([
                 "<td>"+cost_center.programme_name+"</td>",
