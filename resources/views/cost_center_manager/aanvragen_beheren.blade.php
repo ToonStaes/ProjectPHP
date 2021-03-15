@@ -58,5 +58,46 @@
                 }
             }
         });
+
+        $(document).ready(function () {
+            buildTable();
+        })
+
+        function buildTable() {
+
+            $.getJSON('/getRequests')
+                .done(function (data) {
+                    console.log('data', data);
+                    // Clear tbody tag
+                    table.clear();
+                    $.each(data, function (key, value) {
+                        let request_date = value.request_date;
+                        let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
+                        let cost_center_name = value.cost_center.name;
+                        let user_name = value.user.name;
+
+                        $.each(value.diverse_reimbursement_lines, function (key, value) {
+                            let evidence = '';
+                            $.each(value.diverse_reimbursement_evidences, function (key2, value2) {
+                                evidence += value2.filepath;
+                            })
+                            table.row.add([
+                                request_date,
+                                review_date_Cost_center_manager,
+                                cost_center_name,
+                                user_name,
+                                value.description,
+                                value.amount,
+                                evidence,
+                                "Status",
+                                "Status FM"
+                            ]).draw(false);
+                        })
+                    });
+                })
+                .fail(function (e) {
+                    console.log('error', e);
+                })
+        }
     </script>
 @endsection
