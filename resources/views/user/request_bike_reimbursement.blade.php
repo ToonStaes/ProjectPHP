@@ -22,7 +22,11 @@
                 <div>Za</div>
 
             </div>
-            <div class="days">
+            @if($fietsritten === "")
+                <div class="days">
+            @else
+                <div class="days" data-saved="{{$fietsritten}}">
+            @endif
             </div>
         </div>
     </div>
@@ -38,27 +42,14 @@
         </form>
     </div>
     <h2>Opgeslagen fietsritten</h2>
-    @if($bikerides != '')
-        @foreach($bikerides as $bikeride)
 
-            <p>{{$bikeride}}</p>
-
-        @endforeach
-        @endif
-    <h2>Aangevraagde fietsritten</h2>
-    @if($fietsritten !='')
-        @foreach($fietsritten as $fietsrit)
-
-            <p>{{$fietsrit->date}} {{$fietsrit->bike_reimbursement_id}}</p>
-
-        @endforeach
-    @endif
 @endsection
 
 @section('script_after')
     <script>
         const date = new Date();
         let selected_dates = [];
+        let saved_dates = document.querySelector(".days").getAttribute("data-saved").split(',');
         function selecteer(el){
             if(selected_dates.includes(el.getAttribute("data-value"))){
                 selected_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
@@ -79,9 +70,13 @@
                     if(selected_dates.includes(result[index].getAttribute('data-value'))){
                         result[index].classList.add("geselecteerd");
                     }
+                    if(saved_dates.includes(result[index].getAttribute('data-value'))){
+                        result[index].classList.add("opgeslaan");
+                    }
                 }
             }
-            console.log("Geselecteerde datums: " + selected_dates);
+            console.log(selected_dates);
+            console.log(saved_dates);
         }
         function renderCalender(){
 
@@ -122,27 +117,42 @@
             for (let j = firstDayIndex; j > 0; j--){
                 if(date.getMonth()===0){
 
-                    days += `<div class="prev-date" onloadeddata="selecteerDatums()" onclick="selecteer(this)" data-value="${prevLastDay -j -1}/12/${date.getFullYear()-1}">${prevLastDay -j +1}</div>`;
+                    days += `<div class="prev-date" onloadeddata="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()-1}-12-${prevLastDay -j +1}">${prevLastDay -j +1}</div>`;
+
+                }
+                else if(date.getMonth()<9){
+                        days += `<div class="prev-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-0${date.getMonth()}-0${prevLastDay -j +1}">${prevLastDay -j +1}</div>`;
 
                 }
                 else {
-                    days += `<div class="prev-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${prevLastDay -j +1}/${date.getMonth()}/${date.getFullYear()}">${prevLastDay -j +1}</div>`;
+                    days += `<div class="prev-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-${date.getMonth()}-0${prevLastDay -j +1}">${prevLastDay -j +1}</div>`;
                 }
             }
 
             for (let i= 1; i <= lastDay; i++){
-                days += `<div onload="selecteerDatums()" onclick="selecteer(this)" data-value="${i}/${date.getMonth()+1}/${date.getFullYear()}">${i}</div>`;
+                if(i<10 && date.getMonth()<9){
+                    days += `<div onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-0${date.getMonth()+1}-0${i}">${i}</div>`;
+                }
+                else if(i>=10 && date.getMonth()<9){
+                    days += `<div onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-0${date.getMonth()+1}-${i}">${i}</div>`;
+                }
+                else{
+                    days += `<div onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-${date.getMonth()+1}-${i}">${i}</div>`;
+                }
                 monthDays.innerHTML = days;
             }
 
             for (let x = 1; x <= nextDays; x++){
+                if(x<10 && date.getMonth()<8){
+                    days += `<div class="next-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-0${date.getMonth()+2}-0${x}">${x}</div>`;
+                }
+                else if(date.getMonth()===11){
+                    days += `<div class="next-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()+1}-01-0${x}">${x}</div>`;
+                }
+                else{
+                    days += `<div class="next-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-${date.getMonth()+2}-0${x}">${x}</div>`;
+                }
 
-                if(date.getMonth()===11){
-                    days += `<div class="next-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${x}/1/${date.getFullYear()+1}">${x}</div>`;
-                }
-                else {
-                    days += `<div class="next-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${x}/${date.getMonth()+2}/${date.getFullYear()}">${x}</div>`;
-                }
                 monthDays.innerHTML = days;
             }
             selecteerDatums();

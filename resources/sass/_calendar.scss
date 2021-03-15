@@ -5,9 +5,15 @@
     align-items: center;
     margin: 2rem;
 
-.test{
-    background-color: #009cab;
+.opgeslaan{
+    background-color: $blue;
+    pointer-events: none;
 }
+
+    .aangevraagd{
+        background-color: lighten($dark-grey, 30%);
+        pointer-events: none;
+    }
 .calendar{
     width: 75vw;
     height: 55vh;
