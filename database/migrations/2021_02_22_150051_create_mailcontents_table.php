@@ -24,17 +24,36 @@ class CreateMailcontentsTable extends Migration
             [
                 [
                     'mailtype' => 'Afwijzing',
-                    'content' => 'uw mail is afgewezen omdat ...',
+                    'content' => 'Beste NAAM
+
+Onze financieel medewerker NAAM FINANCIEEL MEDEWERKER heeft je vergoedingsaanvraag, AANVRAAG, afgekeurd omwille van de volgende reden: REDEN.
+
+MVG
+Onkostenportaal Thomas More',
                     'created_at' => now()
                 ],
                 [
                     'mailtype' => 'Nieuwe user',
-                    'content' => 'Welkom op onze website ...',
+                    'content' => 'Bedankt voor je registratie en welkom op onze website. In deze mail kan je je inloggegevens vinden.
+
+e-mail: EMAIL
+wachtwoord: WACHTWOORD
+
+MVG
+Onkostenportaal Thomas More',
                     'created_at' => now()
                 ],
                 [
                     'mailtype' => 'Wachtwoord vergeten',
-                    'content' => 'Ga naar deze link: ...',
+                    'content' => 'Beste NAAM
+
+Je hebt op onze applicatie op de knop wachtwoord vergeten gedrukt. Hieronder vind je je nieuwe inloggegevens.
+
+e-mail: EMAIL
+wachtwoord: WACHTWOORD
+
+MVG
+Onkostenportaal Thomas More',
                     'created_at' => now()
                 ]
             ]
