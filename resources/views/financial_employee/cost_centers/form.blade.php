@@ -6,7 +6,7 @@
                 <div class="col col-12">
                     <select name="programmes_list" required id="programmes_list">
                         @foreach($programmes as $programme)
-                            <option {{($loop->first) ? "selected" : ""}} value="{{$programme->id}}">{{$programme->name}}</option>
+                            <option value="{{$programme->id}}">{{$programme->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -33,7 +33,7 @@
                 <div class="col col-12">
                     <select name="responsible_list" required id="responsible_list">
                         @foreach($users as $user)
-                            <option {{($loop->first) ? "selected" : ""}} value="{{$user->id}}">{{$user->first_name.' '.$user->last_name}}</option>
+                            <option value="{{$user->id}}">{{$user->first_name.' '.$user->last_name}}</option>
                         @endforeach
                     </select>
                 </div>
