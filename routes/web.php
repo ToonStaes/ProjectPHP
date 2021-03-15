@@ -38,4 +38,4 @@ Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(fun
   Route::resource('users', 'financial_employee\UserController');
 });
 
-Route::resource('kostenplaats', 'financial_employee\Cost_center_controller');
+Route::resource('cost_centers', 'financial_employee\Cost_center_controller');
