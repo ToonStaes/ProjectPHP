@@ -46,7 +46,7 @@
                         @endif
 
                             @if(auth()->user()->isCost_Center_manager == true)
-                                <a class="dropdown-item" href="/">Aanvragen beheren</a>
+                                <a class="dropdown-item" href="/aanvragen_beheren">Aanvragen beheren</a>
                                 <a class="dropdown-item" href="/">Kostenplaatsen vergelijken</a>
                                 <div class="dropdown-divider"></div>
                             @endif
