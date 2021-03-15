@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Bikeride;
-use App\Helpers\Json;
+use Json;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
@@ -13,11 +13,24 @@ class BikerideController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function index()
     {
-        return view('user.request_bike_reimbursement');
+        $user = Auth::user();
+        $user_id = $user->id;
+        $bikerides = Bikeride::with('user')
+            ->where(function($query) use ($user_id){
+                $query->where('user_id', 'like', $user_id);
+            })
+            ->get();
+        $datums = array();
+        foreach ($bikerides as $bikeride) {
+            array_push($datums, $bikeride->date);
+        }
+        $result = compact('bikerides');
+        Json::dump($result);
+        return view('user.request_bike_reimbursement', $result);
     }
 
     /**
@@ -40,9 +53,9 @@ class BikerideController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $datums = explode(',', $request->fietsritten);
+        $bikerides = explode(',', $request->fietsritten);
         $melding="";
-        foreach ($datums as $datum) {
+        foreach ($bikerides as $datum) {
             if($melding===""){
                 $melding = $datum;
             }
@@ -57,7 +70,10 @@ class BikerideController extends Controller
             $bikeride->save();
         }
         session()->flash('success', "De fietsritten <b>$melding</b> zijn toegevoegd.");
-        return view('user.request_bike_reimbursement');
+        $fietsritten = "";
+        $result = compact('bikerides', 'fietsritten');
+        Json::dump($result);
+        return view('user.request_bike_reimbursement', $result);
     }
 
     /**

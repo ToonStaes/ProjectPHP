@@ -23,7 +23,6 @@
 
             </div>
             <div class="days">
-
             </div>
         </div>
     </div>
@@ -38,6 +37,22 @@
             <button type="submit" class="btn-primary">Aanvraag indienen</button>
         </form>
     </div>
+    <h2>Opgeslagen fietsritten</h2>
+    @if($bikerides != '')
+        @foreach($bikerides as $bikeride)
+
+            <p>{{$bikeride}}</p>
+
+        @endforeach
+        @endif
+    <h2>Aangevraagde fietsritten</h2>
+    @if($fietsritten !='')
+        @foreach($fietsritten as $fietsrit)
+
+            <p>{{$fietsrit->date}} {{$fietsrit->bike_reimbursement_id}}</p>
+
+        @endforeach
+    @endif
 @endsection
 
 @section('script_after')
@@ -45,10 +60,16 @@
         const date = new Date();
         let selected_dates = [];
         function selecteer(el){
-            selected_dates.push(el.getAttribute("data-value"));
-            selecteerDatums();
-            document.getElementById("fietsritten").value = selected_dates;
-            console.log(document.getElementById("fietsritten").valueOf());
+            if(selected_dates.includes(el.getAttribute("data-value"))){
+                selected_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
+                el.classList.remove("geselecteerd");
+            }
+            else{
+                selected_dates.push(el.getAttribute("data-value"));
+                selecteerDatums();
+                document.getElementById("fietsritten").value = selected_dates;
+            }
+
         }
 
         function selecteerDatums(){

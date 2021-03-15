@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use DateTime;
 use Illuminate\Http\Request;
+use Json;
 
 class BikeReimbursementController extends Controller
 {
@@ -18,7 +19,7 @@ class BikeReimbursementController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -42,25 +43,29 @@ class BikeReimbursementController extends Controller
         $user = Auth::user();
         $user_id = $user->id;
 
-        $bikerides = Bikeride::with('user')
+        $fietsritten = Bikeride::with('user')
             ->where(function($query) use ($user_id){
                 $query->where('user_id', 'like', $user_id);
             })
+            ->whereNull('bike_reimbursement_id')
             ->get();
 
         $bike_reimbursement = new Bike_reimbursement();
         $bike_reimbursement->request_date = now();
-        $bike_reimbursement->name = "Bike reimbursement " . $user->first_name . " " . $user->last_name;
+        $bike_reimbursement->name = "Bike reimbursement " . $user->first_name . " " . $user->last_name . " (" . $bike_reimbursement->id . ")";
         $bike_reimbursement->status_id = 1;
         $bike_reimbursement->save();
 
-        foreach ($bikerides as $bikeride) {
+        foreach ($fietsritten as $bikeride) {
             $bikeride->bike_reimbursement_id = $bike_reimbursement->id;
             $bikeride->save();
         }
 
         session()->flash('success', "De fietsvergoeding is succesvol aangevraagd.");
-        return view('user.request_bike_reimbursement');
+        $bikerides ="";
+        $result = compact('fietsritten','bikerides');
+        Json::dump($result);
+        return view('user.request_bike_reimbursement', $result);
     }
 
     /**
