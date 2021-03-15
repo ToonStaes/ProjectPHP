@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Mailcontent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use View;
 
 class MailcontentController extends Controller
 {
@@ -27,7 +28,7 @@ class MailcontentController extends Controller
      */
     public function create()
     {
-        //
+        return redirect('/Mailcontents');
     }
 
     /**
@@ -38,7 +39,7 @@ class MailcontentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return redirect('/Mailcontents');
     }
 
     /**
@@ -49,7 +50,7 @@ class MailcontentController extends Controller
      */
     public function show(Mailcontent $mailcontent)
     {
-
+        return redirect('/Mailcontents');
     }
 
     /**
@@ -60,7 +61,7 @@ class MailcontentController extends Controller
      */
     public function edit(Mailcontent $mailcontent)
     {
-        //
+        return redirect('/Mailcontents');
     }
 
     /**
@@ -72,17 +73,16 @@ class MailcontentController extends Controller
      */
     public function update(Request $request, Mailcontent $mailcontent)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'mailcontent' => 'required|min:10'
         ]);
 
         $mailcontent->content = $request->mailcontent;
         $mailcontent->mailtype = $request->mailtype;
         $mailcontent->save();
-        return response()->json([
-            'type' => 'success',
-            'text' => "The mail <b>$mailcontent->mailtype</b> has been updated"
-        ]);
+        session()->flash('success', "De mail voor <b>$mailcontent->mailtype</b> is bijgewerkt");
+        return View::make('shared.alert');
+            //view::make('shared.alert');
     }
 
     /**

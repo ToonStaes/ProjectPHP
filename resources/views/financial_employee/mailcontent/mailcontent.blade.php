@@ -3,6 +3,9 @@
 @section('title', 'Mailtekst beheren')
 
 @section('main')
+    <div id="Message">
+
+    </div>
     <h1>Mailtekst aanpassen</h1>
     <div class="table-responsive">
         <table class="table">
@@ -36,8 +39,8 @@
                 $.each(data, function (key, value) {
                     let tr = `<tr>
                             <td class="column1">${value.mailtype}</td>
-                            <td>${value.content}</td>
-                            <td data-id="${value.id}" data-type="${value.mailtype}" data-content="${value.content}">
+                            <td class="content">${value.content}</td>
+                            <td data-id="${value.id}" data-type="${value.mailtype}">
                                         <a href="#!" class="btn btn-outline-success btn-edit">
                                             <i class="fas fa-edit"></i>
                                         </a></td>`;
@@ -53,7 +56,7 @@
             // Get data attributes from td tag
             let id = $(this).closest('td').data('id');
             let type = $(this).closest('td').data('type');
-            let content = $(this).closest('td').data('content');
+            let content = $(this).closest('tr').find('.content').text(); // To prevent <br>-tag from appearing in edit-form
             // Update the modal
             $('.modal-title').text(`Edit ${type}`);
             $('form').attr('action', `/financial_employee/Mailcontent/${id}`);
@@ -78,27 +81,25 @@
             $.post(action, pars, 'json')
                 .done(function (data) {
                     console.log(data);
+                    $('#Message').html(data);
                     // Hide the modal
                     $('#modal-mailcontent').modal('hide');
                     // Rebuild the table
                     loadTable();
                 })
                 .fail(function (e) {
-                    console.log('error', e);
-                    console.log('log')
+                    // console.log('error', e);
+                    // console.log('log')
                     // e.responseJSON.errors contains an array of all the validation errors
-                    console.log('error message', e.responseJSON.errors);
+                    // console.log('error message', e.responseJSON.errors);
                     // Loop over the e.responseJSON.errors array and create an ul list with all the error messages
-                    let msg = '<ul>';
+                    let msg = '<p>Errors: <ul>';
                     $.each(e.responseJSON.errors, function (key, value) {
                         msg += `<li>${value}</li>`;
                     });
-                    msg += '</ul>';
-                    // // show the errors
-                    // VinylShop.toast({
-                    //     type: 'error',
-                    //     text: msg
-                    // });
+                    msg += '</ul></p>';
+                    $('#Message').html(msg);
+                    console.log(msg)
                 });
         });
     </script>
