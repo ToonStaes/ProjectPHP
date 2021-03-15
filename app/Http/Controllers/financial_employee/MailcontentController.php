@@ -6,6 +6,7 @@ use App\Helpers\Json;
 use App\Http\Controllers\Controller;
 use App\Mailcontent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MailcontentController extends Controller
 {
@@ -71,7 +72,18 @@ class MailcontentController extends Controller
      */
     public function update(Request $request, Mailcontent $mailcontent)
     {
-        //
+        $this->validate($request,[
+            'mailcontent' => 'required|min:10'
+        ]);
+
+        \Facades\App\Helpers\Json::dump($mailcontent);
+
+        $mailcontent->content = $request->mailcontent;
+        $mailcontent->save();
+        return response()->json([
+            'type' => 'success',
+            'text' => "The mail <b>$mailcontent->mailtype</b> has been updated"
+        ]);
     }
 
     /**
