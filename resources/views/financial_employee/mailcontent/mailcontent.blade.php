@@ -57,7 +57,9 @@
             // Update the modal
             $('.modal-title').text(`Edit ${type}`);
             $('form').attr('action', `/financial_employee/Mailcontent/${id}`);
+            $('form').attr('method','put');
             $('#mailcontent').val(content);
+            $('#mailtype').val(type);
             $('input[name="_method"]').val('put');
             // Show the modal
             $('#modal-mailcontent').modal('show');

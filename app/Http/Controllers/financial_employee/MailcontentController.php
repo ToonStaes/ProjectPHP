@@ -76,9 +76,8 @@ class MailcontentController extends Controller
             'mailcontent' => 'required|min:10'
         ]);
 
-        \Facades\App\Helpers\Json::dump($mailcontent);
-
         $mailcontent->content = $request->mailcontent;
+        $mailcontent->mailtype = $request->mailtype;
         $mailcontent->save();
         return response()->json([
             'type' => 'success',
@@ -103,6 +102,7 @@ class MailcontentController extends Controller
         $mailcontent = Mailcontent::get()
             ->transform(function ($item, $key) {
                 $item->ID = str_replace(' ', '', $item->mailtype);
+                $item->content = nl2br($item->content);
                 // unset unnecessary fields
                 unset($item->created_at, $item->updated_at);
                 return $item;

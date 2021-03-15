@@ -30,7 +30,7 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
 
 Route::middleware(['auth'])->prefix('financial_employee')->group(function(){
     Route::get('Mailcontent/qryMailcontents', 'financial_employee\MailcontentController@qryMailcontents');
-    Route::resource('Mailcontent', 'financial_employee\MailcontentController');
+    Route::resource('Mailcontent', 'financial_employee\MailcontentController',['parameters' => ['Mailcontent' => 'mailcontent']]);
 //    Route::put('Mailcontent/{id}', 'financial_employee\MailcontentController@update');
 });
 

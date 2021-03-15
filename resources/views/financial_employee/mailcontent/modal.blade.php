@@ -8,17 +8,25 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" method="put">
+                <form action="" method="post">
                     @method('')
                     @csrf
                     <div class="form-group">
                         <label for="mailcontent">Mailcontent</label>
-                        <input type="text" name="mailcontent" id="mailcontent"
-                               class="form-control"
-                               placeholder="content"
-                               minlength="10"
-                               required
-                               value="">
+                        <textarea name="mailcontent" id="mailcontent"
+                                  class="form-control"
+                                  placeholder="content"
+                                  minlength="10"
+                                  required
+                                  value="" rows="25">
+                        </textarea>
+{{--                        <input type="text" name="mailcontent" id="mailcontent"--}}
+{{--                               class="form-control"--}}
+{{--                               placeholder="content"--}}
+{{--                               minlength="10"--}}
+{{--                               required--}}
+{{--                               value="">--}}
+                        <input type="hidden" id="mailtype" name="mailtype">
                     </div>
                     <button type="submit" class="btn btn-success">Save mailcontent</button>
                 </form>
