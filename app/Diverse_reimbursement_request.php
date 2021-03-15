@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Diverse_reimbursement_request extends Model
 {
+    // R20
+    public function diverse_reimbursement_lines() {
+        return $this->hasMany('App\Diverse_reimbursement_line', 'DR_request_id');
+    }
+
     // R21
     public function status(){
         return $this->belongsTo('App\Status')->withDefault();

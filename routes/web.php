@@ -23,18 +23,20 @@ Auth::routes();
 Route::redirect('home', '/');
 Route::view('/', 'home');
 
-Route::middleware(['auth'])->prefix('user')->group(function () {
+Route::get('user/firstPassword', 'User\PasswordController@edit');
+Route::post('user/password', 'User\PasswordController@update');
+
+Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
-    Route::post('password', 'User\PasswordController@update');
+    Route::view('laptop', 'user.laptop');
+    Route::post('laptop', 'user\LaptopController@store');
 });
 
-Route::middleware(['auth'])->prefix('financial_employee')->group(function(){
-    Route::get('Mailcontent/qryMailcontents', 'financial_employee\MailcontentController@qryMailcontents');
-    Route::resource('Mailcontent', 'financial_employee\MailcontentController',['parameters' => ['Mailcontent' => 'mailcontent']]);
-//    Route::put('Mailcontent/{id}', 'financial_employee\MailcontentController@update');
+Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(function () {
+  Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
+  Route::get('/users/getProgrammes', 'financial_employee\UserController@getProgrammes');
+  Route::resource('users', 'financial_employee\UserController');
+  Route::resource('cost_centers', 'financial_employee\Cost_center_controller');
+  Route::get('Mailcontent/qryMailcontents', 'financial_employee\MailcontentController@qryMailcontents');
+  Route::resource('Mailcontent', 'financial_employee\MailcontentController',['parameters' => ['Mailcontent' => 'mailcontent']]);
 });
-
-//Route::get('/users/getUser/{$id}', 'financial_employee\UserController@getUser');
-Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
-Route::resource('users', 'financial_employee\UserController');
-Route::resource('kostenplaats', 'financial_employee\Cost_center_controller');
