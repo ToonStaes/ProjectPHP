@@ -70,7 +70,7 @@
                     console.log('data', data);
                     // Clear tbody tag
                     table.clear();
-                    $.each(data, function (key, value) {
+                    $.each(data.diverse_requests, function (key, value) {
                         let request_date = value.request_date;
                         let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
                         let cost_center_name = value.cost_center.name;
@@ -79,7 +79,7 @@
                         $.each(value.diverse_reimbursement_lines, function (key, value) {
                             let evidence = '';
                             $.each(value.diverse_reimbursement_evidences, function (key2, value2) {
-                                evidence += value2.filepath;
+                                evidence += `<a class="btn btn-outline-dark" href="${value2.filepath}"><nobr><img src='assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name}</nobr></a>`;
                             })
                             table.row.add([
                                 request_date,
@@ -87,12 +87,37 @@
                                 cost_center_name,
                                 user_name,
                                 value.description,
-                                value.amount,
+                                "€" + value.amount,
                                 evidence,
                                 "Status",
                                 "Status FM"
                             ]).draw(false);
                         })
+                    });
+
+                    $.each(data.laptop_requests, function (key, value) {
+                        let request_date = value.laptop_invoice.purchase_date;
+                        let review_date_Cost_center_manager = value.laptop_invoice.review_date_Cost_center_manager;
+                        let cost_center = '';
+                        $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
+                            if (value2.parameter.standard_Cost_center_id != null){
+                                cost_center = value2.parameter.cost_center_;
+                            }
+                        })
+                        let user_name = value.laptop_invoice.user.name;
+
+                        let evidence = `<a class="btn btn-outline-dark" href="${value.laptop_invoice.filepath}"><nobr><img src='assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name}</nobr></a>`;
+                        table.row.add([
+                            request_date,
+                            review_date_Cost_center_manager,
+                            cost_center,
+                            user_name,
+                            value.laptop_invoice.invoice_description,
+                            "€" + value.laptop_invoice.amount / 3,
+                            evidence,
+                            "Status",
+                            "Status FM"
+                        ]).draw(false);
                     });
                 })
                 .fail(function (e) {
