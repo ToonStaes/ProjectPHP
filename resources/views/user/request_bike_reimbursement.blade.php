@@ -22,11 +22,9 @@
                 <div>Za</div>
 
             </div>
-            @if($fietsritten === "")
-                <div class="days">
-            @else
-                <div class="days" data-saved="{{$fietsritten}}">
-            @endif
+
+                <div class="days" data-saved="{{$saved_fietsritten}}" data-requested="{{$requested_fietsritten}}">
+
             </div>
         </div>
     </div>
@@ -41,7 +39,6 @@
             <button type="submit" class="btn-primary">Aanvraag indienen</button>
         </form>
     </div>
-    <h2>Opgeslagen fietsritten</h2>
 
 @endsection
 
@@ -50,6 +47,8 @@
         const date = new Date();
         let selected_dates = [];
         let saved_dates = document.querySelector(".days").getAttribute("data-saved").split(',');
+        let requested_days = document.querySelector(".days").getAttribute("data-requested").split(',');
+        console.log(saved_dates, requested_days)
         function selecteer(el){
             if(selected_dates.includes(el.getAttribute("data-value"))){
                 selected_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
@@ -72,6 +71,9 @@
                     }
                     if(saved_dates.includes(result[index].getAttribute('data-value'))){
                         result[index].classList.add("opgeslaan");
+                    }
+                    if(requested_days.includes(result[index].getAttribute('data-value'))){
+                        result[index].classList.add("aangevraagd");
                     }
                 }
             }
