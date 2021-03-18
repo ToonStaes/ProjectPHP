@@ -43,7 +43,7 @@ class BikeReimbursementController extends Controller
         $user = Auth::user();
         $user_id = $user->id;
 
-        $fietsritten = Bikeride::with('user')
+        $saved_bikerides = Bikeride::with('user')
             ->where(function($query) use ($user_id){
                 $query->where('user_id', 'like', $user_id);
             })
@@ -52,18 +52,36 @@ class BikeReimbursementController extends Controller
 
         $bike_reimbursement = new Bike_reimbursement();
         $bike_reimbursement->request_date = now();
-        $bike_reimbursement->name = "Bike reimbursement " . $user->first_name . " " . $user->last_name . " (" . $bike_reimbursement->id . ")";
+        $bike_reimbursement->name = "Bike reimbursement " . $user->first_name . " " . $user->last_name;
         $bike_reimbursement->status_id = 1;
         $bike_reimbursement->save();
 
-        foreach ($fietsritten as $bikeride) {
+        foreach ($saved_bikerides as $bikeride) {
             $bikeride->bike_reimbursement_id = $bike_reimbursement->id;
             $bikeride->save();
         }
 
         session()->flash('success', "De fietsvergoeding is succesvol aangevraagd.");
-        $bikerides ="";
-        $result = compact('fietsritten','bikerides');
+
+        $requested_bikerides = Bikeride::with('user')
+            ->where(function($query) use ($user_id){
+                $query->where('user_id', 'like', $user_id);
+            })
+            ->whereNotNull('bike_reimbursement_id')
+            ->get();
+
+        $saved_fietsritten = "";
+        foreach ($saved_bikerides as $bikeride){
+            $saved_fietsritten = $saved_fietsritten . "," . $bikeride ->date;
+        }
+        $saved_fietsritten = substr($saved_fietsritten,1, strlen($saved_fietsritten)-1);
+
+        $requested_fietsritten = "";
+        foreach ($requested_bikerides as $bikeride){
+            $requested_fietsritten = $requested_fietsritten . "," . $bikeride ->date;
+        }
+        $requested_fietsritten = substr($requested_fietsritten,1, strlen($requested_fietsritten)-1);
+        $result = compact('saved_fietsritten', 'requested_fietsritten');
         Json::dump($result);
         return view('user.request_bike_reimbursement', $result);
     }

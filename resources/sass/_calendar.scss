@@ -5,15 +5,7 @@
     align-items: center;
     margin: 2rem;
 
-.opgeslaan{
-    background-color: $blue;
-    pointer-events: none;
-}
 
-    .aangevraagd{
-        background-color: lighten($dark-grey, 30%);
-        pointer-events: none;
-    }
 .calendar{
     width: 75vw;
     height: 55vh;
@@ -99,10 +91,25 @@
     .geselecteerd{
         background-color: $orange;
     }
+    .opgeslaan{
+        background-color: $blue;
+        pointer-events: none;
+    }
+
+    .aangevraagd{
+        background-color: lighten($dark-grey, 30%);
+        pointer-events: none;
+    }
 
 }
 }
 .knoppen{
-    margin: 2rem;
+    margin: 2rem 5rem;
     text-align: center;
+    justify-content: space-between;
+    width: 75vw;
+    #save:disabled, #request:disabled{
+        cursor: not-allowed;
+    }
+
 }

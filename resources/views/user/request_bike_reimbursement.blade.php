@@ -32,11 +32,11 @@
         <form action="/save_bikerides" method="post">
             @csrf
             <input id="fietsritten" name="fietsritten" type="hidden"/>
-            <button type="submit" class="btn-primary">Ritten opslaan</button>
+            <button id="save" type="submit" class="btn-primary" disabled>Ritten opslaan</button>
         </form>
         <form action="/request_bikeReimbursement" method="post">
             @csrf
-            <button type="submit" class="btn-primary">Aanvraag indienen</button>
+            <button id="request" type="submit" class="btn-secondary" disabled>Aanvraag indienen</button>
         </form>
     </div>
 
@@ -44,11 +44,13 @@
 
 @section('script_after')
     <script>
+
         const date = new Date();
         let selected_dates = [];
         let saved_dates = document.querySelector(".days").getAttribute("data-saved").split(',');
         let requested_days = document.querySelector(".days").getAttribute("data-requested").split(',');
-        console.log(saved_dates, requested_days)
+
+
         function selecteer(el){
             if(selected_dates.includes(el.getAttribute("data-value"))){
                 selected_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
@@ -63,6 +65,13 @@
         }
 
         function selecteerDatums(){
+            console.log(saved_dates);
+            if(selected_dates.length > 0){
+                document.getElementById("save").disabled = false;
+            }
+            if(saved_dates[0] !== ""){
+                document.getElementById("request").disabled = false;
+            }
             let result=document.querySelectorAll('[data-value]');
             for (let index in result){
                 if (result.hasOwnProperty(index)){
@@ -77,8 +86,7 @@
                     }
                 }
             }
-            console.log(selected_dates);
-            console.log(saved_dates);
+
         }
         function renderCalender(){
 
@@ -169,8 +177,6 @@
             date.setMonth(date.getMonth()+1);
             renderCalender();
         });
-
-
 
         renderCalender();
 
