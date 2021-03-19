@@ -8,7 +8,7 @@ class Cost_center extends Model
 {
     // R7
     public function user() {
-        return $this->belongsTo('App\User')->withDefault(); // a cost_center has one user
+        return $this->belongsTo('App\User', 'user_id_Cost_center_manager')->withDefault(); // a cost_center has one user
     }
 
     // R8
@@ -17,7 +17,7 @@ class Cost_center extends Model
     }
 
     // R23
-    public function programmeCost_centers(){
+    public function programme_cost_centers(){
         return $this->hasMany('App\ProgrammeCost_center'); // a cost_center has many programmeCost_centers
     }
 
@@ -29,5 +29,9 @@ class Cost_center extends Model
     // R22
     public function diverse_reimbursement_requests(){
         return $this->hasMany('App\Diverse_reimbursement_request'); // a cost_center has many diverse_reimbursement_requests
+    }
+
+    public function programmes() {
+        return $this->belongsToMany('App\Programme', 'programme_cost_centers');
     }
 }
