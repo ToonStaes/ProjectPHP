@@ -40,13 +40,13 @@
                             <a class="dropdown-item" href="/">Vergoedingen behandelen</a>
                             <a class="dropdown-item" href="/users">Gebruikers beheren</a>
                             <a class="dropdown-item" href="/cost_centers">Kostenplaatsen beheren</a>
-                            <a class="dropdown-item" href="/">Mailteksten beheren</a>
+                            <a class="dropdown-item" href="/financial_employee/Mailcontent">Mailteksten beheren</a>
                             <a class="dropdown-item" href="/">Tarieven beheren</a>
                             <div class="dropdown-divider"></div>
                         @endif
 
                             @if(auth()->user()->isCost_Center_manager == true)
-                                <a class="dropdown-item" href="/">Aanvragen beheren</a>
+                                <a class="dropdown-item" href="/aanvragen_beheren">Aanvragen beheren</a>
                                 <a class="dropdown-item" href="/">Kostenplaatsen vergelijken</a>
                                 <div class="dropdown-divider"></div>
                             @endif

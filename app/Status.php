@@ -15,4 +15,8 @@ class Status extends Model
     public function bike_reimbursements() {
         return $this->hasMany('App/Bike_reimbursement');
     }
+
+    public function laptop_reimbursements() {
+        return $this->hasMany('App/Laptop_reimbursement');
+    }
 }
