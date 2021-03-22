@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Diverse_reimbursement_line;
+use App\Diverse_reimbursement_request;
 use App\Http\Controllers\Controller;
 use App\Laptop_invoice;
 use DateTime;

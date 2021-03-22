@@ -25,6 +25,7 @@ class CreateDiverseReimbursementRequestsTable extends Migration
             $table->date('review_date_Financial_employee')->nullable();
             $table->string('comment_Cost_center_manager')->nullable();
             $table->string('comment_Financial_employee')->nullable();
+            $table->timestamps();
 
             // Foreign key relation
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
