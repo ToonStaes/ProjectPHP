@@ -30,6 +30,7 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::get('password', 'User\PasswordController@edit');
     Route::view('laptop', 'user.laptop');
     Route::post('laptop', 'user\LaptopController@store');
+    Route::get('mijnaanvragen', 'user\AanvraagController@index');
 });
 
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(function () {
