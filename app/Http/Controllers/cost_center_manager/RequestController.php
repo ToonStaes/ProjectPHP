@@ -6,6 +6,7 @@ use App\Cost_center;
 use App\Diverse_reimbursement_request;
 use App\Http\Controllers\Controller;
 use App\Laptop_reimbursement;
+use App\Status;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class RequestController extends Controller
 
     public function getRequests()
     {
-        $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences'])
+        $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'diverse_reimbursement_lines.status_cc_manager', 'diverse_reimbursement_lines.status_fe'])
             ->get()
             ->transform(function ($item, $key){
                 unset($item['user_id'], $item['cost_center_id']);
@@ -66,7 +67,7 @@ class RequestController extends Controller
                 return $item;
             });
 
-        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter'])
+        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_cc_manager', 'status_fe'])
             ->get()
             ->transform(function ($item, $key){
 
@@ -109,7 +110,8 @@ class RequestController extends Controller
 
                 return $item;
             });
-        $result = compact('diverse_requests', 'laptop_requests');
+        $statuses = Status::all();
+        $result = compact('diverse_requests', 'laptop_requests', 'statuses');
         JSON::dump($result);
 
         return $result;

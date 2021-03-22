@@ -68,38 +68,47 @@
             $.getJSON('/getRequests')
                 .done(function (data) {
                     console.log('data', data);
-                    // Clear tbody tag
+                    // tbody leeg maken
                     table.clear();
+
+                    //Status dropdown maken
+                    let select = `<select class="form-control w-auto">`;
+                    $.each(data.statuses, function (key, value) {
+                        select += `<option>${value.name}</option>`;
+                    })
+                    select += `</select>`;
+
                     $.each(data.diverse_requests, function (key, value) {
                         let request_date = value.request_date;
-                        let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
                         let cost_center_name = value.cost_center.name;
                         let user_name = value.user.name;
 
+                        //Loopen over elke diverse aanvraag lijn
                         $.each(value.diverse_reimbursement_lines, function (key, value) {
+
+                            //Alle bewijsstukken achter elkaar zetten
                             let evidence = '';
                             $.each(value.diverse_reimbursement_evidences, function (key2, value2) {
                                 evidence += `<a class="btn btn-outline-dark" href="${value2.filepath}"><nobr><img src='assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name}</nobr></a>`;
-                            })
+                            });
+
+                            //Alle data toevoegen aan tabel
                             table.row.add([
                                 request_date,
-                                review_date_Cost_center_manager,
+                                value.review_date_Cost_center_manager,
                                 cost_center_name,
                                 user_name,
                                 value.description,
                                 "€" + value.amount,
                                 evidence,
-                                `<select>
-                                    <option></option>
-                                </select>`,
-                                "Status FM"
+                                select,
+                                value.status_fe.name
                             ]).draw(false);
                         })
                     });
 
                     $.each(data.laptop_requests, function (key, value) {
                         let request_date = value.laptop_invoice.purchase_date;
-                        let review_date_Cost_center_manager = value.laptop_invoice.review_date_Cost_center_manager;
                         let cost_center = '';
                         $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
                             if (value2.parameter.standard_Cost_center_id != null){
@@ -111,14 +120,14 @@
                         let evidence = `<a class="btn btn-outline-dark" href="${value.laptop_invoice.filepath}"><nobr><img src='assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name}</nobr></a>`;
                         table.row.add([
                             request_date,
-                            review_date_Cost_center_manager,
+                            value.review_date_Cost_center_manager,
                             cost_center,
                             user_name,
                             value.laptop_invoice.invoice_description,
                             "€" + value.laptop_invoice.amount / 4,
                             evidence,
-                            "Status",
-                            "Status FM"
+                            select,
+                            value.status_fe.name
                         ]).draw(false);
                     });
                 })

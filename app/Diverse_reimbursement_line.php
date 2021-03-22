@@ -20,4 +20,17 @@ class Diverse_reimbursement_line extends Model
     public function parameter() {
         return $this->belongsTo('App\Parameter')->withDefault();
     }
+
+    public function status_cc_manager() {
+        return $this->belongsTo('App\Status', 'status_CC_manager')->withDefault();
+    }
+
+    public function status_fe() {
+        return $this->belongsTo('App\Status', 'status_FE')->withDefault();
+    }
+
+    // R9
+    public function financial_employee() {
+        return $this->belongsTo('App\User')->withDefault();
+    }
 }
