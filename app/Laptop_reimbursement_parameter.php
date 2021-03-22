@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Laptop_reimbursementParameter extends Model
+class Laptop_reimbursement_parameter extends Model
 {
     // R6
     public function laptop_reimbursement() {

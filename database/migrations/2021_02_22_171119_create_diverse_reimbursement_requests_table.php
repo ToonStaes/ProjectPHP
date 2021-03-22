@@ -17,19 +17,12 @@ class CreateDiverseReimbursementRequestsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('cost_center_id');
-            $table->string('invoice_description')->nullable();
-            $table->date('request_date');
             $table->foreignId('user_id_CC_manager');
-            $table->foreignId('user_id_Fin_employee')->nullable();
-            $table->date('review_date_Cost_center_manager')->nullable();
-            $table->date('review_date_Financial_employee')->nullable();
-            $table->string('comment_Cost_center_manager')->nullable();
-            $table->string('comment_Financial_employee')->nullable();
+            $table->date('request_date');
 
             // Foreign key relation
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id_CC_manager')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('user_id_Fin_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
             $table->foreign('cost_center_id')->references('id')->on('cost_centers')->onDelete('restrict')->onUpdate('cascade');
         });
 
