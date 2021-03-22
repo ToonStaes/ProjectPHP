@@ -89,7 +89,9 @@
                                 value.description,
                                 "€" + value.amount,
                                 evidence,
-                                "Status",
+                                `<select>
+                                    <option></option>
+                                </select>`,
                                 "Status FM"
                             ]).draw(false);
                         })
@@ -101,7 +103,7 @@
                         let cost_center = '';
                         $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
                             if (value2.parameter.standard_Cost_center_id != null){
-                                cost_center = value2.parameter.cost_center_;
+                                cost_center = value2.parameter.cost_center_name;
                             }
                         })
                         let user_name = value.laptop_invoice.user.name;
@@ -113,7 +115,7 @@
                             cost_center,
                             user_name,
                             value.laptop_invoice.invoice_description,
-                            "€" + value.laptop_invoice.amount / 3,
+                            "€" + value.laptop_invoice.amount / 4,
                             evidence,
                             "Status",
                             "Status FM"

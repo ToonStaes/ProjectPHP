@@ -15,4 +15,8 @@ class Laptop_reimbursement extends Model
     public function laptop_reimbursement_parameters() {
         return $this->hasMany('App\Laptop_reimbursement_parameter');
     }
+
+    public function status() {
+        return $this->belongsTo('App\Status')->withDefault();
+    }
 }
