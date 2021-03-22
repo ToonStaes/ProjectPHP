@@ -20,4 +20,14 @@ class Diverse_reimbursement_line extends Model
     public function parameter() {
         return $this->belongsTo('App\Parameter')->withDefault();
     }
+
+    // R21
+    public function status(){
+        return $this->belongsTo('App\Status')->withDefault();
+    }
+
+    // R9
+    public function financialEmployee() {
+        return $this->belongsTo('App\User')->withDefault();
+    }
 }

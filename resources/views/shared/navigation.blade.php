@@ -22,10 +22,10 @@
                         <a class="nav-link" href="/user/laptop">Laptopvergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/user/mijnaanvragen">Diverse vergoeding aanvragen</a>
+                        <a class="nav-link" href="/">Diverse vergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Mijn aanvragen</a>
+                        <a class="nav-link" href="/user/mijnaanvragen">Mijn aanvragen</a>
                     </li>
                 <li class="nav-item dropdown">
 

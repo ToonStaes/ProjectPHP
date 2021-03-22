@@ -17,7 +17,7 @@ class AanvraagController extends Controller
 
     public function qryRequests() {
         // get all diverse_reimbursement_requests with linked tables included
-        $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences'])
+        $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'diverse_reimbursement_lines.status'])
             ->get()
             ->transform(function ($item, $key){
                 unset($item['user_id'], $item['cost_center_id']);
@@ -38,26 +38,27 @@ class AanvraagController extends Controller
                         $line['amount'] = $line['number_of_km'] * $line['parameter']['amount_per_km'];
                     }
                     unset($line['parameter']);
+                    unset($line->status->created_at);
 
                     foreach ($line['diverse_reimbursement_evidences'] as $evidence){
-                        $exploded_path = explode('/', $evidence['filepath']);
-                        if (!empty($exploded_path)){
-                            $evidence['name'] = end($exploded_path);
-                            $extension = explode(".", $evidence['name']);
-                            $extension = end($extension);
-                            $extension = strtolower($extension);
-
-                            $extensions = ["doc", "docx", "gif", "jpg", "jpeg", "mkv", "mov", "mp3", "mp4", "mpg", "pdf", "png", "ppt", "rar", "tiff", "txt", "xls", "xlsx", "zip"];
-                            if (in_array($extension, $extensions)){
-                                if ($extension == "jpeg"){
-                                    $evidence['icon'] = "jpg.png";
-                                } else {
-                                    $evidence['icon'] = $extension . ".png";
-                                }
-                            } else {
-                                $evidence['icon'] = "unknown.png";
-                            }
-                        }
+//                        $exploded_path = explode('/', $evidence['filepath']);
+//                        if (!empty($exploded_path)){
+//                            $evidence['name'] = end($exploded_path);
+//                            $extension = explode(".", $evidence['name']);
+//                            $extension = end($extension);
+//                            $extension = strtolower($extension);
+//
+//                            $extensions = ["doc", "docx", "gif", "jpg", "jpeg", "mkv", "mov", "mp3", "mp4", "mpg", "pdf", "png", "ppt", "rar", "tiff", "txt", "xls", "xlsx", "zip"];
+//                            if (in_array($extension, $extensions)){
+//                                if ($extension == "jpeg"){
+//                                    $evidence['icon'] = "jpg.png";
+//                                } else {
+//                                    $evidence['icon'] = $extension . ".png";
+//                                }
+//                            } else {
+//                                $evidence['icon'] = "unknown.png";
+//                            }
+//                        }
                         unset($evidence['DR_line_id'], $evidence['created_at'], $evidence['updated_at']);
                     }
                 }
@@ -88,24 +89,24 @@ class AanvraagController extends Controller
                     }
                 }
 
-                $exploded_path = explode('/', $item['laptop_invoice']['filepath']);
-                if (!empty($exploded_path)){
-                    $item['laptop_invoice']['file_name'] = end($exploded_path);
-                    $extension = explode(".", $item['laptop_invoice']['file_name']);
-                    $extension = end($extension);
-                    $extension = strtolower($extension);
-
-                    $extensions = ["doc", "docx", "gif", "jpg", "jpeg", "mkv", "mov", "mp3", "mp4", "mpg", "pdf", "png", "ppt", "rar", "tiff", "txt", "xls", "xlsx", "zip"];
-                    if (in_array($extension, $extensions)){
-                        if ($extension == "jpeg"){
-                            $item['laptop_invoice']['file_icon'] = "jpg.png";
-                        } else {
-                            $item['laptop_invoice']['file_icon'] = $extension . ".png";
-                        }
-                    } else {
-                        $item['laptop_invoice']['file_icon'] = "unknown.png";
-                    }
-                }
+//                $exploded_path = explode('/', $item['laptop_invoice']['filepath']);
+//                if (!empty($exploded_path)){
+//                    $item['laptop_invoice']['file_name'] = end($exploded_path);
+//                    $extension = explode(".", $item['laptop_invoice']['file_name']);
+//                    $extension = end($extension);
+//                    $extension = strtolower($extension);
+//
+//                    $extensions = ["doc", "docx", "gif", "jpg", "jpeg", "mkv", "mov", "mp3", "mp4", "mpg", "pdf", "png", "ppt", "rar", "tiff", "txt", "xls", "xlsx", "zip"];
+//                    if (in_array($extension, $extensions)){
+//                        if ($extension == "jpeg"){
+//                            $item['laptop_invoice']['file_icon'] = "jpg.png";
+//                        } else {
+//                            $item['laptop_invoice']['file_icon'] = $extension . ".png";
+//                        }
+//                    } else {
+//                        $item['laptop_invoice']['file_icon'] = "unknown.png";
+//                    }
+//                }
 
                 return $item;
             });
