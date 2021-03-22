@@ -19,5 +19,8 @@
         $('#back').click(function(){
             window.history.back();
         });
+
+        $('ul.navbar-nav').hide();
+        $('button.navbar-toggler').hide();
     </script>
 @endsection
