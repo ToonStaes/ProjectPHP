@@ -36,6 +36,5 @@ Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(fun
   Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
   Route::get('/users/getProgrammes', 'financial_employee\UserController@getProgrammes');
   Route::resource('users', 'financial_employee\UserController');
+  Route::resource('cost_centers', 'financial_employee\Cost_center_controller');
 });
-
-Route::resource('cost_centers', 'financial_employee\Cost_center_controller');
