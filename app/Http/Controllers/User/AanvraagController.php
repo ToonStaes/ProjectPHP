@@ -17,7 +17,7 @@ class AanvraagController extends Controller
 
     public function qryRequests() {
         // get all diverse_reimbursement_requests with linked tables included
-        $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'diverse_reimbursement_lines.status'])
+        $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'diverse_reimbursement_lines.status_fe', 'diverse_reimbursement_lines.status_cc_manager'])
             ->get()
             ->transform(function ($item, $key){
                 unset($item['user_id'], $item['cost_center_id']);
@@ -38,7 +38,6 @@ class AanvraagController extends Controller
                         $line['amount'] = $line['number_of_km'] * $line['parameter']['amount_per_km'];
                     }
                     unset($line['parameter']);
-                    unset($line->status->created_at);
 
                     foreach ($line['diverse_reimbursement_evidences'] as $evidence){
 //                        $exploded_path = explode('/', $evidence['filepath']);
@@ -67,7 +66,7 @@ class AanvraagController extends Controller
             });
 
         // get all laptop_requests
-        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter'])
+        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_fe', 'status_cc_manager'])
             ->get()
             ->transform(function ($item, $key){
 

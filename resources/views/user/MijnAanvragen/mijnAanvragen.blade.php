@@ -2,7 +2,6 @@
 
 @section('title', 'Mijn aanvragen')
 @section('extra_css')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
 @endsection
 
@@ -36,14 +35,15 @@
             buildTable();
         })
 
-        let table = $('#requestsTable').DataTable({
+        let table = $('#mijnAanvragen').DataTable({
             "columns": [
                 {"name": "Aanvraagdatum", "orderable": true},
                 {"name": "Datum beoordeling", "orderable": true},
                 {"name": "Datum terugbetaling", "orderable": true},
                 {"name": "Naam kostenplaats", "orderable": true},
                 {"name": "Beschrijving", "orderable": true},
-                {"name": "Status", "orderable": true},
+                {"name": "Status Kostenplaatsverantwoordelijke", "orderable": true},
+                {"name": "Status Financieel Medewerker", "orderable": true},
             ],
             "language": {
                 "lengthMenu": "_MENU_ aanvragen per pagina",
@@ -65,25 +65,66 @@
             $.getJSON('/user/mijnaanvragen/qryRequests')
                 .done(function (data) {
                     console.log('data', data);
-                    table.clear()
+                    table.clear();
+                    // diverse reimbursements
                     $.each(data.diverse_requests, function (key, value) {
                         let request_date = value.request_date;
-                        let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
                         let cost_center_name = value.cost_center.name;
 
                         $.each(value.diverse_reimbursement_lines, function (key, value) {
-                            let beschrijving = value.desription;
-                            let statusFE = value.status_FE;
-                            let statusCCM = value.status_CC_Manager;
+                            let beschrijving = value.description;
+                            let statusFE = value.status_fe.name;
+                            let statusCCM = value.status_cc_manager.name;
+                            let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
+                            if (review_date_Cost_center_manager == null) {
+                                review_date_Cost_center_manager = 'NVT'
+                            }
+                            let review_date_Financial_employee = value.review_date_Financial_employee;
+                            if (review_date_Financial_employee == null) {
+                                review_date_Financial_employee = 'NVT'
+                            }
                             table.row.add([
                                 request_date,
                                 review_date_Cost_center_manager,
+                                review_date_Financial_employee,
                                 cost_center_name,
                                 beschrijving,
                                 statusCCM,
                                 statusFE
                             ]).draw(false);
                         })
+                    });
+
+                    // laptop reimbursements
+                    $.each(data.laptop_requests, function (key, value) {
+                        let request_date = value.laptop_invoice.purchase_date;
+                        let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
+                        if (review_date_Cost_center_manager == null) {
+                            review_date_Cost_center_manager = 'NVT'
+                        }
+                        let review_date_Financial_employee = value.review_date_Financial_employee;
+                        if (review_date_Financial_employee == null) {
+                            review_date_Financial_employee = 'NVT'
+                        }
+                        let cost_center = '';
+                        $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
+                            if (value2.parameter.standard_Cost_center_id != null){
+                                cost_center = value2.parameter.cost_center_name;
+                            }
+                        })
+                        let description = value.laptop_invoice.invoice_description;
+                        let statusFE = value.status_fe.name;
+                        let statusCCM = value.status_cc_manager.name;
+                        table.row.add([
+                            request_date,
+                            review_date_Cost_center_manager,
+                            review_date_Financial_employee,
+                            cost_center,
+                            description,
+                            statusCCM,
+                            statusFE
+
+                        ]).draw(false);
                     });
                 })
 
