@@ -12,7 +12,7 @@ class Laptop_reimbursement extends Model
     }
 
     // R6
-    public function laptop_reimbursementParameters() {
+    public function laptop_reimbursement_parameters() {
         return $this->hasMany('App\Laptop_reimbursementParameter');
     }
 }

@@ -110,6 +110,6 @@ class MailcontentController extends Controller
 //        $mailcontent->ID = trim($mailcontent->mailtype, ' ');
         $result = compact('mailcontent');
         \Facades\App\Helpers\Json::dump($result);
-        return $mailcontent;
+        return $result;
     }
 }

@@ -4,16 +4,45 @@
 
 @section('main')
     <div class="container">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aperiam fuga, magni modi rem saepe suscipit.
-        Debitis earum quam rem ut velit. Adipisci aliquid aperiam assumenda atque delectus distinctio dolor dolores
-        ducimus fuga, ipsum libero magnam molestiae neque nihil obcaecati quaerat, quidem, quis tenetur unde voluptas?
-        Alias at commodi cupiditate distinctio doloribus eum harum modi nam nostrum optio placeat, porro veniam
-        voluptatum. Beatae deleniti dolorem eligendi eos, excepturi mollitia quo? Ad debitis ducimus facilis sint ut. A
-        ab alias aliquid assumenda culpa dolore eum ex explicabo fuga, iure laudantium minima natus nihil quasi
-        quibusdam, rem sed tempore, ullam vel veniam!
+        <table id="mijnAanvragen">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
     </div>
 @endsection
 
 @section('script_after')
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        let table = $('#requestsTable').DataTable({
+            "columns": [
+                {"name": "Aanvraagdatum", "orderable": true},
+                {"name": "Datum beoordeling", "orderable": true},
+                {"name": "Datum terugbetaling", "orderable": true},
+                {"name": "Personeelslid", "orderable": true},
+                {"name": "Beschrijving", "orderable": true},
+                {"name": "Bedrag", "orderable": true},
+                {"name": "Bewijsstuk(en)", "orderable": true},
+                {"name": "Status", "orderable": true},
+                {"name": "Status financieel medewerker", "orderable": true},
+            ],
+            "language": {
+                "lengthMenu": "_MENU_ aanvragen per pagina",
+                "zeroRecords": "Er zijn geen aanvragen gevonden",
+                "info": "Aanvragen _START_ tot _END_ van _TOTAL_",
+                "infoEmpty": "",
+                "infoFiltered": "(gefilterd uit _MAX_ aanvragen)",
+                "search": "Filteren:",
+                "paginate": {
+                    "next": "Volgende",
+                    "previous": "Vorige",
+                    "first": "Eerste",
+                    "last": "Laatste"
+                }
+            }
+        });
+    </script>
 
 @endsection

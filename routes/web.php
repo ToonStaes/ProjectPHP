@@ -31,6 +31,7 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::view('laptop', 'user.laptop');
     Route::post('laptop', 'user\LaptopController@store');
     Route::get('mijnaanvragen', 'user\AanvraagController@index');
+    Route::get('mijnaanvragen/qryRequests', 'user\AanvraagController@qryRequests');
 });
 
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(function () {
