@@ -19,7 +19,13 @@ class ParameterController extends Controller
     public function index()
     {
         $cost_centers = Cost_center::orderBy('name')->get();
-        $result = compact('cost_centers');
+        $bike_reimbursement = Parameter::whereNull('valid_until')->where('name', 'Fietsvergoeding')->get();
+        $car_reimbursement = Parameter::whereNull('valid_until')->where('name', 'Autovergoeding')->get();
+        $laptop = Parameter::whereNull('valid_until')->where('name', 'Maximum schijfgrootte laptop')->get();
+        $cost_center_laptopreimbursement = Parameter::whereNull('valid_until')->where('name', 'Standaard kostenplaats laptopvergoeding')->get();
+        $cost_center_bikereimbursement = Parameter::whereNull('valid_until')->where('name', 'Standaard kostenplaats fietsvergoeding')->get();
+        $result = compact('cost_centers', 'bike_reimbursement', 'car_reimbursement', 'laptop', 'cost_center_laptopreimbursement', 'cost_center_bikereimbursement');
+
         Json::dump($result);
         return view('financial_employee.parameters', $result);
     }

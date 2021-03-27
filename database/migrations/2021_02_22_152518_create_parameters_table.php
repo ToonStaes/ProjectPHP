@@ -64,6 +64,14 @@ class CreateParametersTable extends Migration
                 'description' => 'Maximale schijfgrootte voor terugbetaling van laptop'
             ]
         );
+        DB::table('parameters')->insert(
+            [
+                'name' => 'Standaard kostenplaats fietsvergoeding',
+                'valid_from' => now(),
+                'standard_Cost_center_id' => 2,
+                'description' => 'Maximale schijfgrootte voor terugbetaling van laptop'
+            ]
+        );
     }
 
     /**
