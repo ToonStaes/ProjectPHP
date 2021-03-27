@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Bike_reimbursement;
+use App\Bike_reimbursementParameter;
 use App\Bikeride;
 use App\Http\Controllers\Controller;
+use App\Parameter;
 use Auth;
 use DateTime;
 use Illuminate\Http\Request;
@@ -12,25 +14,6 @@ use Json;
 
 class BikeReimbursementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -82,52 +65,17 @@ class BikeReimbursementController extends Controller
         }
         $requested_fietsritten = substr($requested_fietsritten,1, strlen($requested_fietsritten)-1);
         $result = compact('saved_fietsritten', 'requested_fietsritten');
+
+        //fietsvergoedingparameter aanmaken
+        $bike_parameter = new Bike_reimbursementParameter();
+        $parameter =  Parameter::whereNull('valid_until')->where('name', 'Fietsvergoeding')->get();
+        $bike_parameter->parameter_id = $parameter[0]->id;
+        $bike_parameter->bike_reimbursement_id = $bike_reimbursement->id;
+        $bike_parameter->save();
+
+
         Json::dump($result);
         return view('user.request_bike_reimbursement', $result);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Bike_reimbursement  $bike_reimbursement
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Bike_reimbursement $bike_reimbursement)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Bike_reimbursement  $bike_reimbursement
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Bike_reimbursement $bike_reimbursement)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Bike_reimbursement  $bike_reimbursement
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Bike_reimbursement $bike_reimbursement)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Bike_reimbursement  $bike_reimbursement
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Bike_reimbursement $bike_reimbursement)
-    {
-        //
-    }
 }
