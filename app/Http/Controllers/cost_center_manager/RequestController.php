@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\cost_center_manager;
 
 use App\Cost_center;
+use App\Diverse_reimbursement_line;
 use App\Diverse_reimbursement_request;
 use App\Http\Controllers\Controller;
 use App\Laptop_reimbursement;
+use App\Status;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
 
@@ -18,7 +20,7 @@ class RequestController extends Controller
 
     public function getRequests()
     {
-        $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences'])
+        $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'diverse_reimbursement_lines.status_cc_manager', 'diverse_reimbursement_lines.status_fe', 'diverse_reimbursement_lines.financial_employee'])
             ->get()
             ->transform(function ($item, $key){
                 unset($item['user_id'], $item['cost_center_id']);
@@ -39,6 +41,8 @@ class RequestController extends Controller
                         $line['amount'] = $line['number_of_km'] * $line['parameter']['amount_per_km'];
                     }
                     unset($line['parameter']);
+
+                    $line->fe_name = $line["financial_employee"]["first_name"] . " " . $line["financial_employee"]["last_name"];
 
                     foreach ($line['diverse_reimbursement_evidences'] as $evidence){
                         $exploded_path = explode('/', $evidence['filepath']);
@@ -66,7 +70,7 @@ class RequestController extends Controller
                 return $item;
             });
 
-        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter'])
+        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_cc_manager', 'status_fe', 'financial_employee'])
             ->get()
             ->transform(function ($item, $key){
 
@@ -78,6 +82,8 @@ class RequestController extends Controller
                     $item['laptop_invoice']['user']['number_of_km'], $item['laptop_invoice']['user']['created_at'], $item['laptop_invoice']['user']['updated_at']);
 
                 unset($item['laptop_invoice']['created_at'], $item['laptop_invoice']['updated_at']);
+
+                $item['fe_name'] = $item['financial_employee']['first_name'] . " " . $item['financial_employee']['last_name'];
 
                 $parameters = $item['laptop_reimbursement_parameters'];
                 foreach ($parameters as $parameter){
@@ -109,9 +115,31 @@ class RequestController extends Controller
 
                 return $item;
             });
-        $result = compact('diverse_requests', 'laptop_requests');
+        $statuses = Status::all();
+        $result = compact('diverse_requests', 'laptop_requests', 'statuses');
         JSON::dump($result);
 
         return $result;
+    }
+
+    public function saveComment(Request $request){
+        $status = Status::where("name", "=", $request->keuring)->first()->id;
+        $type = $request->type;
+        if ($type == "divers"){
+            $diverse_reimbursement = Diverse_reimbursement_line::find($request->id);
+            $diverse_reimbursement->comment_Cost_center_manager = $request->commentaar;
+            $diverse_reimbursement->review_date_Cost_center_manager = now();
+            $diverse_reimbursement->status_CC_manager = $status;
+
+            $diverse_reimbursement->save();
+        }
+        elseif($type == "laptop"){
+            $laptop_reimbursement = Laptop_reimbursement::find($request->id);
+            $laptop_reimbursement->comment_Cost_center_manager = $request->commentaar;
+            $laptop_reimbursement->review_date_Cost_center_manager = now();
+            $laptop_reimbursement->status_CC_manager = $status;
+
+            $laptop_reimbursement->save();
+        }
     }
 }

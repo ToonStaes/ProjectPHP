@@ -11,19 +11,9 @@ class Diverse_reimbursement_request extends Model
         return $this->hasMany('App\Diverse_reimbursement_line', 'DR_request_id');
     }
 
-    // R21
-    public function status(){
-        return $this->belongsTo('App\Status')->withDefault();
-    }
-
     // R22
     public function cost_center(){
         return $this->belongsTo('App\Cost_center')->withDefault();
-    }
-
-    // R9
-    public function financialEmployee() {
-        return $this->belongsTo('App\User')->withDefault();
     }
 
     // R10
