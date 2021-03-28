@@ -41,7 +41,7 @@
                             <a class="dropdown-item" href="/users">Gebruikers beheren</a>
                             <a class="dropdown-item" href="/cost_centers">Kostenplaatsen beheren</a>
                             <a class="dropdown-item" href="/financial_employee/Mailcontent">Mailteksten beheren</a>
-                            <a class="dropdown-item" href="/">Tarieven beheren</a>
+                            <a class="dropdown-item" href="/parameters">Parameters beheren</a>
                             <div class="dropdown-divider"></div>
                         @endif
 
