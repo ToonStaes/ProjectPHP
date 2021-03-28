@@ -16,7 +16,7 @@
             @endguest
             @auth
                     <li class="nav-item">
-                        <a class="nav-link" href="request_bike_reimbursement">Fietsvergoeding aanvragen</a>
+                        <a class="nav-link" href="/user/request_bike_reimbursement">Fietsvergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/user/laptop">Laptopvergoeding aanvragen</a>
