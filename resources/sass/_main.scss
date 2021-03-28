@@ -11,10 +11,32 @@ html{
             max-width: 85vw;
         }
 
+        .btn-primary{
+            background-color: $blue;
+            color: $dark-grey;
+            padding: 1rem;
+            transition: 0.3s;
+            font-weight: bold;
+            font-size: 1rem;
+            border: 1px solid darken($blue, 20%);
+        }
+      
+        .btn-secondary{
+            background-color: lighten($dark-grey, 30%);
+            color: $dark-grey;
+            padding: 1rem;
+            transition: 0.3s;
+            font-weight: bold;
+            font-size: 1rem;
+            border: 1px solid darken($dark-grey, 20%);
+        }
+
         .no-bullet {
             list-style-type: none;
         }
     }
+
+
 }
 
 .form-error {

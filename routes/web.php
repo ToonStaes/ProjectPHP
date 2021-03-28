@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('test');
-});
 
 Auth::routes();
 
@@ -30,6 +27,9 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::get('password', 'User\PasswordController@edit');
     Route::view('laptop', 'user.laptop');
     Route::post('laptop', 'user\LaptopController@store');
+    Route::get('request_bike_reimbursement', 'User\BikerideController@index');
+    Route::post('save_bikerides', 'User\BikerideController@store');
+    Route::post('request_bikeReimbursement', 'User\BikeReimbursementController@store');
 });
 
 Route::get('/aanvragen_beheren', 'cost_center_manager\RequestController@index');
