@@ -29,12 +29,12 @@
         </div>
     </div>
     <div class="row knoppen justify-content-between">
-        <form action="/save_bikerides" method="post">
+        <form action="/user/save_bikerides" method="post">
             @csrf
             <input id="fietsritten" name="fietsritten" type="hidden"/>
             <button id="save" type="submit" class="btn-primary" disabled>Ritten opslaan</button>
         </form>
-        <form action="/request_bikeReimbursement" method="post">
+        <form action="/user/request_bikeReimbursement" method="post">
             @csrf
             <button id="request" type="submit" class="btn-secondary" disabled>Aanvraag indienen</button>
         </form>
