@@ -18,7 +18,7 @@ class Parameter extends Model
 
     // R29
     public function cost_center() {
-        return $this->belongsTo('App\Cost_center')->withDefault();
+        return $this->belongsTo('App\Cost_center', 'standard_Cost_center_id')->withDefault();
     }
 
     // R18

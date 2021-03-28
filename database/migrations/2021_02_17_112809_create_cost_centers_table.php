@@ -45,6 +45,12 @@ class CreateCostCentersTable extends Migration
                     'user_id_Cost_center_manager' => 2,
                     'description' => 'laptopvergoedingen',
                     'created_at' => now()
+                ],
+                [
+                    'name' => 'WU3TIGB01002',
+                    'user_id_Cost_center_manager' => 2,
+                    'description' => 'fietsvergoedingen',
+                    'created_at' => now()
                 ]
             ]
         );

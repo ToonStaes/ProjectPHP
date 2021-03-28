@@ -31,12 +31,12 @@ class CreateBikeReimbursementsTable extends Migration
 
 
 
-        for ($i = 0; $i <= 20; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             DB::table('bike_reimbursements')->insert(
                 [
                     'status_id' => 1,
                     'request_date' => now(),
-                    'name' => "reimbursement $i",
+                    'name' => "fietsvergoeding $i",
                     'created_at' => now()
                 ]
             );

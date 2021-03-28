@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Bike_reimbursement;
+use App\Bikeride;
 use App\Cost_center;
 use App\Diverse_reimbursement_request;
 use App\Http\Controllers\Controller;
 use App\Laptop_reimbursement;
 use Facades\App\Helpers\Json;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 
 class AanvraagController extends Controller
@@ -18,6 +21,7 @@ class AanvraagController extends Controller
     public function qryRequests() {
         // get all diverse_reimbursement_requests with linked tables included
         $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'diverse_reimbursement_lines.status_fe', 'diverse_reimbursement_lines.status_cc_manager'])
+            ->where('user_id', '=', auth()->user()->id)
             ->get()
             ->transform(function ($item, $key){
                 unset($item['user_id'], $item['cost_center_id']);
@@ -66,7 +70,9 @@ class AanvraagController extends Controller
             });
 
         // get all laptop_requests
-        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_fe', 'status_cc_manager'])
+        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user'
+//        =>function($q) {$q->where('laptop_invoices.user_id', '=', auth()->user()->id);}
+        , 'laptop_reimbursement_parameters.parameter', 'status_fe', 'status_cc_manager'])
             ->get()
             ->transform(function ($item, $key){
 
@@ -110,7 +116,16 @@ class AanvraagController extends Controller
                 return $item;
             });
 
-        $result = compact('diverse_requests', 'laptop_requests');
+//        $bike_requests = Bikeride::with(['user', 'bike_reimbursement.bike_reimbursementParameters.parameter', 'status'])
+//            ->get()
+//            ->transform(function ($item, $key) {
+//                return $item;
+//            });
+        $bike_requests = Bike_reimbursement::with(['bikerides', 'bike_reimbursementParameters.parameter.cost_center', 'status'])
+            ->where('bikeride.user_id', '=', auth()->user()->id)
+            ->get();
+
+        $result = compact('diverse_requests', 'laptop_requests', 'bike_requests');
         Json::dump($result);
         return $result;
     }

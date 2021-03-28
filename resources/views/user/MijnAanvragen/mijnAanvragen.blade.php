@@ -77,11 +77,11 @@
                             let statusCCM = value.status_cc_manager.name;
                             let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
                             if (review_date_Cost_center_manager == null) {
-                                review_date_Cost_center_manager = 'NVT'
+                                review_date_Cost_center_manager = 'TBD'
                             }
                             let review_date_Financial_employee = value.review_date_Financial_employee;
                             if (review_date_Financial_employee == null) {
-                                review_date_Financial_employee = 'NVT'
+                                review_date_Financial_employee = 'TBD'
                             }
                             table.row.add([
                                 request_date,
@@ -100,11 +100,11 @@
                         let request_date = value.laptop_invoice.purchase_date;
                         let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
                         if (review_date_Cost_center_manager == null) {
-                            review_date_Cost_center_manager = 'NVT'
+                            review_date_Cost_center_manager = 'TBD'
                         }
                         let review_date_Financial_employee = value.review_date_Financial_employee;
                         if (review_date_Financial_employee == null) {
-                            review_date_Financial_employee = 'NVT'
+                            review_date_Financial_employee = 'TBD'
                         }
                         let cost_center = '';
                         $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
@@ -123,14 +123,48 @@
                             description,
                             statusCCM,
                             statusFE
-
                         ]).draw(false);
                     });
+
+                    // bike reimbursements
+                    $.each(data.bike_requests, function (key, value) {
+                        let request_date = value.request_date;
+                        let review_date_Cost_center_manager = 'NVT';
+                        let review_date_Financial_employee = value.review_date_Financial_employee;
+                        if (review_date_Financial_employee == null) {
+                            review_date_Financial_employee = 'TBD'
+                        }
+                        let cost_center = '';
+                        $.each(value.bike_reimbursement_parameters, function (key2, value2) {
+                            if (value2.parameter.standard_Cost_center_id != null){
+                                cost_center = value2.parameter.cost_center.name;
+                            }
+                            else{
+                                cost_center = 'niet in database'
+                            }
+                        })
+                        let description = value.name;
+                        let statusFE = 'niet gelinkt';
+                        let statusCCM = 'NVT';
+                        table.row.add([
+                            request_date,
+                            review_date_Cost_center_manager,
+                            review_date_Financial_employee,
+                            cost_center,
+                            description,
+                            statusCCM,
+                            statusFE
+                        ]).draw(false)
+                    })
                 })
 
 
         }
 
+        // bootstrap tooltips
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
 
 @endsection
