@@ -31,6 +31,6 @@ class Diverse_reimbursement_line extends Model
 
     // R9
     public function financial_employee() {
-        return $this->belongsTo('App\User')->withDefault();
+        return $this->belongsTo('App\User', 'user_id_Fin_employee')->withDefault();
     }
 }
