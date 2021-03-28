@@ -19,8 +19,8 @@ html{
             font-weight: bold;
             font-size: 1rem;
             border: 1px solid darken($blue, 20%);
-
         }
+      
         .btn-secondary{
             background-color: lighten($dark-grey, 30%);
             color: $dark-grey;
@@ -29,9 +29,16 @@ html{
             font-weight: bold;
             font-size: 1rem;
             border: 1px solid darken($dark-grey, 20%);
+        }
 
+        .no-bullet {
+            list-style-type: none;
         }
     }
 
 
+}
+
+.form-error {
+    color: red;
 }

@@ -19,7 +19,7 @@
                         <a class="nav-link" href="request_bike_reimbursement">Fietsvergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Laptopvergoeding aanvragen</a>
+                        <a class="nav-link" href="/user/laptop">Laptopvergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/">Diverse vergoeding aanvragen</a>
@@ -38,15 +38,15 @@
 
                         @if(auth()->user()->isFinancial_employee == true)
                             <a class="dropdown-item" href="/">Vergoedingen behandelen</a>
-                            <a class="dropdown-item" href="/">Gebruikers beheren</a>
-                            <a class="dropdown-item" href="/">Kostenplaatsen beheren</a>
-                            <a class="dropdown-item" href="/">Mailteksten beheren</a>
+                            <a class="dropdown-item" href="/users">Gebruikers beheren</a>
+                            <a class="dropdown-item" href="/cost_centers">Kostenplaatsen beheren</a>
+                            <a class="dropdown-item" href="/financial_employee/Mailcontent">Mailteksten beheren</a>
                             <a class="dropdown-item" href="/">Tarieven beheren</a>
                             <div class="dropdown-divider"></div>
                         @endif
 
                             @if(auth()->user()->isCost_Center_manager == true)
-                                <a class="dropdown-item" href="/">Aanvragen beheren</a>
+                                <a class="dropdown-item" href="/aanvragen_beheren">Aanvragen beheren</a>
                                 <a class="dropdown-item" href="/">Kostenplaatsen vergelijken</a>
                                 <div class="dropdown-divider"></div>
                             @endif
