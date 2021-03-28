@@ -18,10 +18,12 @@ class CreateLaptopReimbursementsTable extends Migration
             $table->foreignId('user_id_Financial_employee');
             $table->foreignId('laptop_invoice_id');
             $table->date('payment_date');
+            $table->foreignId('status_id')->default(1);
 
             // Foreign key relation
             $table->foreign('user_id_Financial_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
             $table->foreign('laptop_invoice_id')->references('id')->on('laptop_invoices')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('restrict')->onUpdate('cascade');
         });
 
         // insert for testing

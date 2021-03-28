@@ -20,11 +20,17 @@ class CreateDiverseReimbursementLinesTable extends Migration
             $table->string('description');
             $table->float('number_of_km')->nullable();
             $table->foreignId('parameter_id')->nullable();
+            $table->foreignId('user_id_Fin_employee')->nullable();
+            $table->date('review_date_Cost_center_manager')->nullable();
+            $table->date('review_date_Financial_employee')->nullable();
+            $table->string('comment_Cost_center_manager')->nullable();
+            $table->string('comment_Financial_employee')->nullable();
             $table->timestamps();
 
             // Foreign key relation
             $table->foreign('DR_request_id')->references('id')->on('diverse_reimbursement_requests')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('parameter_id')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('user_id_Fin_employee')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
         });
 
         DB::table('diverse_reimbursement_lines')->insert(
