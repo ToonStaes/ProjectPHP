@@ -32,9 +32,11 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::post('laptop', 'user\LaptopController@store');
 });
 
-Route::get('/aanvragen_beheren', 'cost_center_manager\RequestController@index');
-Route::get('/getRequests', 'cost_center_manager\RequestController@getRequests');
-Route::put('/saveComment', 'cost_center_manager\RequestController@saveComment');
+Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->group(function () {
+    Route::get('/aanvragen_beheren', 'cost_center_manager\RequestController@index');
+    Route::get('/getRequests', 'cost_center_manager\RequestController@getRequests');
+    Route::put('/saveComment', 'cost_center_manager\RequestController@saveComment');
+});
 
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(function () {
   Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
