@@ -21,7 +21,6 @@ class CreateBikeReimbursementsTable extends Migration
             $table->date('review_date_Financial_employee')->nullable();
             $table->date('request_date');
             $table->string('name');
-            $table->boolean('isPaid')->default(false);
             $table->timestamps();
 
             // Foreign key relation

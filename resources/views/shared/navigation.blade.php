@@ -16,7 +16,7 @@
             @endguest
             @auth
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Fietsvergoeding aanvragen</a>
+                        <a class="nav-link" href="/user/request_bike_reimbursement">Fietsvergoeding aanvragen</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/user/laptop">Laptopvergoeding aanvragen</a>
@@ -40,8 +40,8 @@
                             <a class="dropdown-item" href="/">Vergoedingen behandelen</a>
                             <a class="dropdown-item" href="/users">Gebruikers beheren</a>
                             <a class="dropdown-item" href="/cost_centers">Kostenplaatsen beheren</a>
-                            <a class="dropdown-item" href="/financial_employee/Mailcontent">Mailteksten beheren</a>
-                            <a class="dropdown-item" href="/">Tarieven beheren</a>
+                            <a class="dropdown-item" href="/Mailcontent">Mailteksten beheren</a>
+                            <a class="dropdown-item" href="/parameters">Parameters beheren</a>
                             <div class="dropdown-divider"></div>
                         @endif
 

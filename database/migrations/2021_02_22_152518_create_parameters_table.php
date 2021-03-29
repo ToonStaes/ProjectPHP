@@ -58,6 +58,7 @@ class CreateParametersTable extends Migration
 
         DB::table('parameters')->insert(
             [
+<<<<<<< HEAD
                 [
                     'name' => 'Standaard kostenplaats laptopvergoeding',
                     'valid_from' => now(),
@@ -71,6 +72,12 @@ class CreateParametersTable extends Migration
                     'description' => 'Standaard kostenplaats fietsvergoeding'
                 ]
 
+=======
+                'name' => 'Standaard kostenplaats laptopvergoeding',
+                'valid_from' => now(),
+                'standard_Cost_center_id' => 3,
+                'description' => 'Standaard kostenplaats voor terugbetaling van laptop'
+>>>>>>> origin/main
             ]
         );
     }

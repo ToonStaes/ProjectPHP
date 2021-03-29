@@ -31,7 +31,7 @@
         // load mailcontents with AJAX
         // buttons die er moeten zijn: afwijzing aanvraag, nieuwe user aangemaakt met wachtwoord in, nieuw paswoord aanvragen
         function loadTable() {
-            $.getJSON('/financial_employee/Mailcontent/qryMailcontents').done(function (data) {
+            $.getJSON('/Mailcontent/qryMailcontents').done(function (data) {
                 // console.log('data', data);
 
                 $('tbody').empty();
