@@ -30,7 +30,7 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::get('password', 'User\PasswordController@edit');
     Route::view('laptop', 'user.laptop');
     Route::post('laptop', 'user\LaptopController@store');
-    Route::view('divers', 'user.diverse');
+    Route::get('divers', 'user\DiverseController@diverseindex');
     Route::post('divers', 'user\DiverseController@store');
 });
 

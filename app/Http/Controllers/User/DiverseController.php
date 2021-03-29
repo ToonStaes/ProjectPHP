@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\user;
 
+use App\Cost_center;
 use App\Diverse_reimbursement_evidence;
 use App\Diverse_reimbursement_line;
 use App\Diverse_reimbursement_request;
+use App\Helpers\Json;
 use App\Http\Controllers\Controller;
 use App\Laptop_invoice;
 use DateTime;
@@ -13,8 +15,20 @@ use Illuminate\Support\Facades\Storage;
 
 class DiverseController extends Controller
 {
+
+    public function diverseindex()
+    {
+        $kostenplaatsen = Cost_center::get();
+        $result = compact('kostenplaatsen');
+        \Facades\App\Helpers\Json::dump($result);
+        return view('user.diverse', $result);
+    }
+
     public function store(Request $request)
     {
+        $cterID = $request->kostenplaats;
+        $cter = Cost_center::whereid($cterID)->first();
+
         $date_current = new DateTime();
         $date_given    = new DateTime($request->datum);
 
@@ -50,8 +64,8 @@ class DiverseController extends Controller
                 $NewRequest->user_id = \Auth::user()->id;
                 $NewRequest->invoice_description = $request->reden;
                 $NewRequest->request_date = $date_current;
-                $NewRequest->user_id_CC_manager = 2; //NOG AANPASSEN ADHV DROPDOWN
-                $NewRequest->cost_center_id = 2; //NOG AANPASSEN ADHV DROPDOW
+                $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager; //NOG AANPASSEN ADHV DROPDOWN
+                $NewRequest->cost_center_id = $cterID; //NOG AANPASSEN ADHV DROPDOW
                 $NewRequest->save();
 
                 $NewLine = new Diverse_reimbursement_line();
@@ -68,8 +82,8 @@ class DiverseController extends Controller
                 $NewRequest->user_id = \Auth::user()->id;
                 $NewRequest->invoice_description = $request->reden;
                 $NewRequest->request_date = $request->datum;
-                $NewRequest->user_id_CC_manager = 2; //NOG AANPASSEN ADHV DROPDOWN
-                $NewRequest->cost_center_id = 2; //NOG AANPASSEN ADHV DROPDOW
+                $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager; //NOG AANPASSEN ADHV DROPDOWN
+                $NewRequest->cost_center_id = $cterID; //NOG AANPASSEN ADHV DROPDOW
                 $NewRequest->save();
 
                 $NewLine = new Diverse_reimbursement_line();
