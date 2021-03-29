@@ -12,7 +12,7 @@
                     @method('')
                     @csrf
                     <div class="form-group">
-                        <label for="mailcontent">Mailcontent</label>
+                        <label for="mailcontent">Mailtekst</label>
                         <textarea name="mailcontent" id="mailcontent"
                                   class="form-control"
                                   placeholder="content"
@@ -28,7 +28,7 @@
 {{--                               value="">--}}
                         <input type="hidden" id="mailtype" name="mailtype">
                     </div>
-                    <button type="submit" class="btn btn-success">Save mailcontent</button>
+                    <button type="submit" class="btn btn-primary">Sla mailtekst op</button>
                 </form>
             </div>
         </div>
