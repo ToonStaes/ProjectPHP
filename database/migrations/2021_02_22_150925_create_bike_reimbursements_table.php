@@ -21,7 +21,6 @@ class CreateBikeReimbursementsTable extends Migration
             $table->date('review_date_Financial_employee')->nullable();
             $table->date('request_date');
             $table->string('name');
-            $table->boolean('isPaid')->default(false);
             $table->timestamps();
 
             // Foreign key relation
@@ -31,7 +30,7 @@ class CreateBikeReimbursementsTable extends Migration
 
 
 
-        for ($i = 0; $i <= 20; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             DB::table('bike_reimbursements')->insert(
                 [
                     'status_id' => 1,
