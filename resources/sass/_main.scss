@@ -9,6 +9,7 @@ html{
 
         .container{
             max-width: 85vw;
+            margin-bottom: 2rem;
         }
 
         .btn-primary{
@@ -20,7 +21,7 @@ html{
             font-size: 1rem;
             border: 1px solid darken($blue, 20%);
         }
-      
+
         .btn-secondary{
             background-color: lighten($dark-grey, 30%);
             color: $dark-grey;
