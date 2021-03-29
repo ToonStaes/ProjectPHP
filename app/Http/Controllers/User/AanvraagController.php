@@ -7,6 +7,7 @@ use App\Bikeride;
 use App\Cost_center;
 use App\Diverse_reimbursement_request;
 use App\Http\Controllers\Controller;
+use App\Laptop_invoice;
 use App\Laptop_reimbursement;
 use Facades\App\Helpers\Json;
 use http\Client\Curl\User;
@@ -70,10 +71,10 @@ class AanvraagController extends Controller
             });
 
         // get all laptop_requests
-        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user'
-//        =>function($q) {$q->where('laptop_invoices.user_id', '=', auth()->user()->id);}
-        , 'laptop_reimbursement_parameters.parameter', 'status_fe', 'status_cc_manager'])
-            ->get()
+        $laptop_requests = Laptop_reimbursement::whereHas('laptop_invoice.user', function ($q) {
+                $q->where('user_id', '=', auth()->user()->id);
+            })
+            ->with(['laptop_reimbursement_parameters', 'status_fe', 'status_cc_manager'])->get()
             ->transform(function ($item, $key){
 
                 $item['laptop_invoice']['user']['name'] = $item['laptop_invoice']['user']['first_name'] . ' ' . $item['laptop_invoice']['user']['last_name'];
@@ -116,13 +117,10 @@ class AanvraagController extends Controller
                 return $item;
             });
 
-//        $bike_requests = Bikeride::with(['user', 'bike_reimbursement.bike_reimbursementParameters.parameter', 'status'])
-//            ->get()
-//            ->transform(function ($item, $key) {
-//                return $item;
-//            });
-        $bike_requests = Bike_reimbursement::with(['bikerides', 'bike_reimbursementParameters.parameter.cost_center', 'status'])
-            ->where('bikeride.user_id', '=', auth()->user()->id)
+        // get all bike_requests
+        $bike_requests = Bike_reimbursement::whereHas('bikerides.user', function ($q) {
+            $q->where('user_id', '=', auth()->user()->id);
+        })->with(['bike_reimbursementParameters.parameter.cost_center', 'status'])
             ->get();
 
         $result = compact('diverse_requests', 'laptop_requests', 'bike_requests');

@@ -26,6 +26,17 @@ class CreateLaptopInvoicesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
 
+        DB::table('laptop_invoices')->insert(
+            [
+                'filepath' => "/map/map/map/laptopaanvraag.docx",
+                'user_id' => 3,
+                'amount' => 600,
+                'invoice_description' => "aanschaf laptop",
+                'purchase_date' => now(),
+                'created_at' => now()
+            ]
+        );
+
         for ($i = 1; $i <= 10; $i++) {
             DB::table('laptop_invoices')->insert(
                 [
@@ -38,6 +49,7 @@ class CreateLaptopInvoicesTable extends Migration
                 ]
             );
         }
+
     }
 
     /**
