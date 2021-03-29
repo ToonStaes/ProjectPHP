@@ -14,10 +14,9 @@ html{
 
         .btn-primary{
             background-color: $blue;
-            color: $dark-grey;
-            padding: 1rem;
+            color: $white;
+            padding: 0.25rem 0.5rem;
             transition: 0.3s;
-            font-weight: bold;
             font-size: 1rem;
             border: 1px solid darken($blue, 20%);
         }
@@ -25,11 +24,10 @@ html{
         .btn-secondary{
             background-color: lighten($dark-grey, 30%);
             color: $dark-grey;
-            padding: 1rem;
+            padding: 0.25rem 0.5rem;
             transition: 0.3s;
-            font-weight: bold;
             font-size: 1rem;
-            border: 1px solid darken($dark-grey, 20%);
+            border: 1px solid $dark-grey;
         }
 
         .no-bullet {
