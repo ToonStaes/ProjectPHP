@@ -60,6 +60,7 @@ class CreateUsersTable extends Migration
                     'email' => 'cost_center.manager@mailinator.com',
                     'changedPassword' => true,
                     'password' => Hash::make('costcenter1234'),
+                    'changedPassword' => true,
                     'isCost_Center_manager' => true,
                     'isFinancial_employee' => false,
                     'number_of_km' => 17.5,

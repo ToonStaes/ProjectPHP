@@ -9,7 +9,7 @@
     <table id="tabel" class="table">
         <thead>
         <tr>
-            <th>Unit</th>
+            <th>Opleiding</th>
             <th>Kostenplaats</th>
             <th>Verantwoordelijke</th>
             <th>Beschrijving</th>
@@ -60,7 +60,6 @@
 @endsection
 
 @section('script_after')
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script>
@@ -72,7 +71,7 @@
         $(document).ready( function () {
             _datatable = $('#tabel').DataTable({
                 "columns": [
-                    {"name": "Unit", "orderable": true},
+                    {"name": "Opleiding", "orderable": true},
                     {"name": "Kostenplaats", "orderable": true},
                     {"name": "Verantwoordelijke", "orderable": true},
                     {"name": "Beschrijving", "orderable": true},
@@ -171,10 +170,13 @@
             }
         }
 
-        $(".deleteCostCenter").on("click", function(){
-            id = parseInt($(this).parent().parent().data("id"), 10);
-            send_deletion(id);
-        });
+        $(".deleteCostCenter").on("click", $.proxy(cost_center_delete_click));
+
+        function cost_center_delete_click(event){
+            name = $(this).parent().parent().children(".cost_center_name").text();
+            id = parseInt($("#cost_centers_list option:contains("+name+")").data("id"));
+            send_deletion(id, name);
+        }
 
         /*  Because at this point in time we
         *   probably won't have more than 1
@@ -182,15 +184,15 @@
         *   grouping failed requests is not that
         *   useful
         **/
-        function send_deletion(center_id){
+        function send_deletion(center_id, center_name){
             jQuery.ajax({
                 url: _query_url+center_id,
                 method: "DELETE",
                 tryCount: 0,
                 tryLimit: 2,
-                context: {id: center_id}
+                context: {id: center_id, name: center_name}
             }).done(function(data){
-                delete_cost_center_row(this.id);
+                delete_cost_center_row(this.id, this.name);
             }).fail(function(jqXHR, statusText, errorText){
                 if(jqXHR.status == 500){
                     alert("Er is een fout gebeurt bij het verwijderen");
@@ -202,18 +204,18 @@
             });
         }
 
-        function delete_cost_center_row(id){
-            _datatable.row($("tr[data-id="+id+"]")).remove().draw();
+        function delete_cost_center_row(id, name){
+            _datatable.row($("tr td.cost_center_name:contains("+name+")")).remove().draw();
             $('#cost_centers_list option[data-id="'+id+'"]').remove();
         }
 
         $("#cost_center_submit").on("click", function(){
             user_id = parseInt($("#responsible_list").val(), 10);
-            user_name = $("#responsible_list option[selected]").text();
+            user_name = $("#responsible_list option:selected").text();
             programme_id = parseInt($("#programmes_list").val(), 10);
-            programme_name = $("#programmes_list option[selected]").text();
+            programme_name = $("#programmes_list option:selected").text();
             cost_center_name = $("#cost_center_input").val();
-            cost_center_id = $("#cost_centers_list option[selected]").data("id");
+            cost_center_id = $("#cost_centers_list option:selected").data("id");
             description = $("#descr_input").val() ?? " ";
 
             budget = parseInt($("#budget_input").val(), 10);
@@ -238,36 +240,36 @@
 
         function reset_form(){
             $("#responsible_list option[selected]").removeAttr("selected");
-            $("#responsible_list:first-child").attr("selected");
 
             $("#programmes_list option[selected]").removeAttr("selected");
-            $("#programmes_list:first-child").attr("selected");
 
             $("#cost_centers_list option[selected]").removeAttr("selected");
-            $("#cost_center_input").val("");
 
             $("#descr_input").val("");
 
             $("#budget_input").val("");
 
             $("#active_input").prop("checked", false);
+
+            $("#cost_center_form_modal").modal('hide');
         }
 
         function add_cost_center(cost_center){
             if(cost_center.isActive == 0) return;
-            _datatable.row.add([
+            newrow = _datatable.row.add([
                 "<td>"+cost_center.programme_name+"</td>",
-                "<td class='cost_center_name'>"+cost_center.cost_center_name+"</td>",
+                "<td class=\"cost_center_name\">"+cost_center.cost_center_name+"</td>",
                 "<td>"+cost_center.user_name+"</td>",
                 "<td>"+cost_center.description+"</td>",
                 "<td><input class=\"input-budget\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
                 "                           min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
                 "<td><button type=\"submit\" class=\"btn btn-outline-danger deleteCostCenter\">\n" +
                 "                        <i class=\"fas fa-trash-alt\"></i></button></td>"
-            ]);
+            ]).draw().node();
             _datatable.draw();
-            $("#tabel tbody:last-child").data("id", cost_center.cost_center_id);
-
+            _datatable.sort();
+            $("td:nth-child(2)").addClass("cost_center_name");
+            $(newrow).on('click','.deleteCostCenter', cost_center_delete_click);
             $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
         }
 
@@ -291,7 +293,7 @@
                 this.tryCount++;
                 if(this.tryCount > this.tryLimit) return;
                 jQuery.ajax(this);
-            })
+            });
         }
     </script>
 @endsection
