@@ -4,10 +4,10 @@
 
 @section('main')
     <div class="container">
+        <h1>Wachtwoord aanpassen</h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Wachtwoord aanpassen') }}</div>
                     <div class="card-body">
                         @include('shared.alert')
                         <form action="/user/password" method="post">
@@ -19,6 +19,7 @@
                                        placeholder="Huidig wachtwoord"
                                        value="{{ old('current_password') }}"
                                        required>
+                                <i class="far fa-eye" id="togglePasswordCurrent"></i>
                                 @error('current_password')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -31,6 +32,7 @@
                                        value="{{ old('password') }}"
                                        minlength="8"
                                        required>
+                                <i class="far fa-eye" id="togglePasswordNew1"></i>
                                 @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -43,12 +45,46 @@
                                        value="{{ old('password_confirmation') }}"
                                        minlength="8"
                                        required>
+                                <i class="far fa-eye" id="togglePasswordNew2"></i>
                             </div>
-                            <button type="submit" class="btn btn-success">Toepassen</button>
+                            <button type="submit" class="btn btn-primary">Opslaan</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('script_after')
+    <script>
+            //current password
+            document.querySelector('#togglePasswordCurrent').addEventListener('click', function (e) {
+                // toggle the type attribute
+                const type = document.querySelector('#current_password').getAttribute('type') === 'password' ? 'text' : 'password';
+                document.querySelector('#current_password').setAttribute('type', type);
+                // toggle the eye slash icon
+                this.classList.toggle('fa-eye-slash');
+            });
+
+            //new password 1
+            document.querySelector('#togglePasswordNew1').addEventListener('click', function (e) {
+                // toggle the type attribute
+                const type = document.querySelector('#password').getAttribute('type') === 'password' ? 'text' : 'password';
+                document.querySelector('#password').setAttribute('type', type);
+                // toggle the eye slash icon
+                this.classList.toggle('fa-eye-slash');
+            });
+
+            //new password 2
+            document.querySelector('#togglePasswordNew2').addEventListener('click', function (e) {
+                // toggle the type attribute
+                const type = document.querySelector('#password_confirmation').getAttribute('type') === 'password' ? 'text' : 'password';
+                document.querySelector('#password_confirmation').setAttribute('type', type);
+                // toggle the eye slash icon
+                this.classList.toggle('fa-eye-slash');
+            });
+
+
+    </script>
 @endsection
