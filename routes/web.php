@@ -22,6 +22,7 @@ Route::view('/', 'home');
 
 Route::get('user/firstPassword', 'User\PasswordController@edit');
 Route::post('user/password', 'User\PasswordController@update');
+Route::post('password/reset', 'User\PasswordController@reset');
 
 Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
