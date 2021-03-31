@@ -27,6 +27,7 @@ class CreateDiverseReimbursementRequestsTable extends Migration
             $table->string('comment_Financial_employee')->nullable();
             $table->foreignId('status_CC_manager')->default(1);
             $table->foreignId('status_FE')->default(1);
+            $table->timestamps();
 
             // Foreign key relation
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
