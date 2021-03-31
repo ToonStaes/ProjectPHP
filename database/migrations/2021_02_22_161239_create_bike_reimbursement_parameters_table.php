@@ -24,7 +24,7 @@ class CreateBikeReimbursementParametersTable extends Migration
             $table->foreign('parameter_id')->references('id')->on('parameters')->onDelete('restrict')->onUpdate('cascade');
         });
 
-        for ($i = 1; $i <= 21; $i++) {
+        for ($i = 1; $i <= 6; $i++) {
             DB::table('bike_reimbursement_parameters')->insert(
                 [
                     'bike_reimbursement_id' => "$i",

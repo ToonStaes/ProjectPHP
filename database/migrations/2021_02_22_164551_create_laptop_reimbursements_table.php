@@ -25,6 +25,7 @@ class CreateLaptopReimbursementsTable extends Migration
             $table->date('review_date_Financial_employee')->nullable();
             $table->string('comment_Cost_center_manager')->nullable();
             $table->string('comment_Financial_employee')->nullable();
+            $table->timestamps();
 
             // Foreign key relation
             $table->foreign('laptop_invoice_id')->references('id')->on('laptop_invoices')->onDelete('restrict')->onUpdate('cascade');

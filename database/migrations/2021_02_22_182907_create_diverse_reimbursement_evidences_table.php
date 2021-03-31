@@ -33,6 +33,14 @@ class CreateDiverseReimbursementEvidencesTable extends Migration
                     'filepath' => '/map/map/map/stagebezoekOmeta.docx',
                     'DR_line_id' => 2
                 ],
+                [
+                    'filepath' => '/map/map/map/tankbon.jpg',
+                    'DR_line_id' => 3,
+                ],
+                [
+                    'filepath' => '/map/map/map/factuur_cadeau.pdf',
+                    'DR_line_id' => 4
+                ],
             ]
         );
     }
