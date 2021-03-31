@@ -11,10 +11,11 @@
             <thead>
             <tr>
                 <th>Aanvraagdatum</th>
-                <th>Datum beoordeling</th>
+                <th>Datum beoordeling Kostenplaatsverantwoordelijke</th>
                 <th>Datum terugbetaling</th>
                 <th>Naam kostenplaats</th>
                 <th>Beschrijving</th>
+                <th>Bedrag</th>
                 <th>Status Kostenplaatsverantwoordelijke</th>
                 <th>Status Financieel Medewerker</th>
             </tr>
@@ -38,10 +39,11 @@
         let table = $('#mijnAanvragen').DataTable({
             "columns": [
                 {"name": "Aanvraagdatum", "orderable": true},
-                {"name": "Datum beoordeling", "orderable": true},
+                {"name": "Datum beoordeling Kostenplaatsverantwoordelijke", "orderable": true},
                 {"name": "Datum terugbetaling", "orderable": true},
                 {"name": "Naam kostenplaats", "orderable": true},
                 {"name": "Beschrijving", "orderable": true},
+                {"name": "Bedrag", "orderable": true},
                 {"name": "Status Kostenplaatsverantwoordelijke", "orderable": true},
                 {"name": "Status Financieel Medewerker", "orderable": true},
             ],
@@ -69,30 +71,37 @@
                     // diverse reimbursements
                     $.each(data.diverse_requests, function (key, value) {
                         let request_date = value.request_date;
-                        let cost_center_name = value.cost_center.name;
-
-                        $.each(value.diverse_reimbursement_lines, function (key, value) {
-                            let beschrijving = value.description;
-                            let statusFE = value.status_fe.name;
-                            let statusCCM = value.status_cc_manager.name;
-                            let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
-                            if (review_date_Cost_center_manager == null) {
-                                review_date_Cost_center_manager = 'TBD'
-                            }
-                            let review_date_Financial_employee = value.review_date_Financial_employee;
+                        let cost_center_name = value.cost_center_name;
+                        let beschrijving = value.description;
+                        let amount = value.amount;
+                        amount = '€ ' + amount;
+                        let statusFE = value.status_FE;
+                        let statusCCM = value.status_CC_manager;
+                        let review_date_Financial_employee = null;
+                        if (statusFE === "afgekeurd") {
+                            review_date_Financial_employee = null
+                        }
+                        else {
+                            review_date_Financial_employee = value.review_date_Financial_employee;
                             if (review_date_Financial_employee == null) {
-                                review_date_Financial_employee = 'TBD'
+                                review_date_Financial_employee = null
                             }
-                            table.row.add([
-                                request_date,
-                                review_date_Cost_center_manager,
-                                review_date_Financial_employee,
-                                cost_center_name,
-                                beschrijving,
-                                statusCCM,
-                                statusFE
-                            ]).draw(false);
-                        })
+                        }
+                        let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
+                        if (review_date_Cost_center_manager == null) {
+                            review_date_Cost_center_manager = null
+                        }
+
+                        table.row.add([
+                            request_date,
+                            review_date_Cost_center_manager,
+                            review_date_Financial_employee,
+                            cost_center_name,
+                            beschrijving,
+                            amount,
+                            statusCCM,
+                            statusFE
+                        ]).draw(false);
                     });
 
                     // laptop reimbursements
@@ -100,11 +109,11 @@
                         let request_date = value.laptop_invoice.purchase_date;
                         let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
                         if (review_date_Cost_center_manager == null) {
-                            review_date_Cost_center_manager = 'TBD'
+                            review_date_Cost_center_manager = null
                         }
                         let review_date_Financial_employee = value.review_date_Financial_employee;
                         if (review_date_Financial_employee == null) {
-                            review_date_Financial_employee = 'TBD'
+                            review_date_Financial_employee = null
                         }
                         let cost_center = '';
                         $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
@@ -113,14 +122,17 @@
                             }
                         })
                         let description = value.laptop_invoice.invoice_description;
-                        let statusFE = value.status_fe.name;
-                        let statusCCM = value.status_cc_manager.name;
+                        let statusFE = value.status_FE;
+                        let statusCCM = value.status_CC_manager;
+                        let amount = value.amount;
+                        amount = '€ ' + amount;
                         table.row.add([
                             request_date,
                             review_date_Cost_center_manager,
                             review_date_Financial_employee,
                             cost_center,
                             description,
+                            amount,
                             statusCCM,
                             statusFE
                         ]).draw(false);
@@ -129,36 +141,29 @@
                     // bike reimbursements
                     $.each(data.bike_requests, function (key, value) {
                         let request_date = value.request_date;
-                        let review_date_Cost_center_manager = 'NVT';
+                        let review_date_Cost_center_manager = null;
                         let review_date_Financial_employee = value.review_date_Financial_employee;
                         if (review_date_Financial_employee == null) {
-                            review_date_Financial_employee = 'TBD'
+                            review_date_Financial_employee = null
                         }
-                        let cost_center = '';
-                        $.each(value.bike_reimbursement_parameters, function (key2, value2) {
-                            if (value2.parameter.standard_Cost_center_id != null){
-                                cost_center = value2.parameter.cost_center.name;
-                            }
-                            else{
-                                cost_center = 'niet in database'
-                            }
-                        })
+                        let cost_center = value.cost_center_name;
                         let description = value.name;
-                        let statusFE = 'niet gelinkt';
-                        let statusCCM = 'NVT';
+                        let statusFE = value.status_FE;
+                        let statusCCM = null;
+                        let amount = value.amount;
+                        amount = '€ ' + amount;
                         table.row.add([
                             request_date,
                             review_date_Cost_center_manager,
                             review_date_Financial_employee,
                             cost_center,
                             description,
+                            amount,
                             statusCCM,
                             statusFE
                         ]).draw(false)
                     })
                 })
-
-
         }
 
         // bootstrap tooltips

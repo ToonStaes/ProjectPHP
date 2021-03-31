@@ -23,7 +23,7 @@ class Diverse_reimbursement_request extends Model
 
     // R11
     public function user() {
-        return $this->belongsTo('App\User')->withDefault();
+        return $this->belongsTo('App\User', 'user_id')->withDefault();
     }
 
     //R21

@@ -12,7 +12,7 @@ class Bike_reimbursement extends Model
     }
 
     // R16
-    public function bike_reimbursementParameters(){
+    public function bike_reimbursement_parameters(){
         return $this->hasMany('App\bike_reimbursementParameter'); // a bike_reimbursement has many bike_reimbursementParameters
     }
 
