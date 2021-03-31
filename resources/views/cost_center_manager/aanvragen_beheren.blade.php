@@ -11,7 +11,7 @@
         <table id="requestsTable" class="table">
             <thead>
             <tr>
-                <th>Aanvraagdatum</th>
+                <th>Aanvraag&#8203;datum</th>
                 <th>Datum beoordeling</th>
                 <th>Kostenplaats</th>
                 <th>Personeelslid</th>
@@ -139,56 +139,63 @@
                     $.each(data.diverse_requests, function (key, value) {
 
                         let request_date = value.request_date;
-                        let cost_center_name = value.cost_center.name;
-                        let user_name = value.user.name;
+                        let cost_center_name = value.cost_center_name;
+                        let user_name = value.username;
 
+                        //Status dropdown maken
+                        if (value.comment_Cost_center_manager == null){
+                            value.comment_Cost_center_manager = "";
+                        }
+
+                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
+                        if (value.status_FE !== "in afwachting"){
+                            select += `disabled style="pointer-events: none;"`;
+                        }
+                        select += `>`;
+                        $.each(data.statuses, function (key, value2) {
+                            select += `<option`;
+                            if (value2.name === value.status_CC_manager){
+                                select += ` selected`;
+                            }
+                            select +=  `>${value2.name}</option>`;
+                        })
+                        select += `</select></span>`;
+
+                        let status_fe = value.status_FE;
+                        if (value.comment_Financial_employee != null){
+                            status_fe = `<p>${value.status_FE} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
+                        }
+
+                        let evidence = '';
                         //Loopen over elke diverse aanvraag lijn
                         $.each(value.diverse_reimbursement_lines, function (key, value) {
-
-                            //Status dropdown maken
-                            let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
-                            if (value.status_fe.name !== "in afwachting"){
-                                select += `disabled style="pointer-events: none;"`;
-                            }
-                            select += `>`;
-                            $.each(data.statuses, function (key, value2) {
-                                select += `<option`;
-                                if (value2.name === value.status_cc_manager.name){
-                                    select += ` selected`;
-                                }
-                                select +=  `>${value2.name}</option>`;
-                            })
-                            select += `</select></span>`;
-
                             //Alle bewijsstukken achter elkaar zetten
-                            let evidence = '';
                             $.each(value.diverse_reimbursement_evidences, function (key2, value2) {
                                 evidence += `<a class="btn btn-outline-dark" href="${value2.filepath}"><nobr><img src='assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name}</nobr></a>`;
                             });
-
-                            let status_fe = value.status_fe.name;
-                            if (value.comment_Financial_employee != null){
-                                status_fe = `<p>${value.status_fe.name} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
-                            }
-
-                            //Alle data toevoegen aan tabel
-                            table.row.add([
-                                request_date,
-                                value.review_date_Cost_center_manager,
-                                cost_center_name,
-                                user_name,
-                                value.description,
-                                "€" + value.amount,
-                                evidence,
-                                select,
-                                status_fe
-                            ]).draw(false);
                         })
+
+                        //Alle data toevoegen aan tabel
+                        table.row.add([
+                            request_date,
+                            value.review_date_Cost_center_manager,
+                            cost_center_name,
+                            user_name,
+                            value.description,
+                            "€" + value.amount,
+                            evidence,
+                            select,
+                            status_fe
+                        ]).draw(false);
                     });
 
                     $.each(data.laptop_requests, function (key, value) {
                         //Status dropdown maken
-                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop' style="pointer-events: none;"`;
+                        if (value.comment_Cost_center_manager == null){
+                            value.comment_Cost_center_manager = "";
+                        }
+
+                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'"`;
                         if (value.status_fe.name !== "in afwachting"){
                             select += `disabled style="pointer-events: none;"`;
                         }
@@ -238,7 +245,6 @@
 
         function makeTooltipsVisible()
         {
-            console.log("tooltips visible")
             $('[data-toggle="tooltip"]').tooltip()
         }
     </script>
