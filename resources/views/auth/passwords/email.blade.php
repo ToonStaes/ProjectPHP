@@ -2,10 +2,10 @@
 
 @section('main')
     <div class="container">
+        <h1>Reset wachtwoord</h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Reset wachtwoord</div>
                     <div class="card-body">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
