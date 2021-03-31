@@ -2,11 +2,11 @@
 
 @section('main')
     <div class="container">
-        <h1>Reset wachtwoord</h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
+                    <h1>Wachtwoord opnieuw instellen</h1>
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('status') }}
@@ -21,7 +21,6 @@
                                     <input type="email" id="email"
                                            class="form-control @error('email') is-invalid @enderror"
                                            name="email" required autofocus>
-
                                     @error('email')
                                     <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

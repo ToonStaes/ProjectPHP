@@ -58,6 +58,7 @@ class CreateUsersTable extends Migration
                     'zip_code' => '2300',
                     'IBAN' => 'BE12345678912346',
                     'email' => 'cost_center.manager@mailinator.com',
+                    'changedPassword' => true,
                     'password' => Hash::make('costcenter1234'),
                     'changedPassword' => true,
                     'isCost_Center_manager' => true,

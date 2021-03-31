@@ -29,7 +29,7 @@
     <div class="modal fade" id="commentaar-modal" tabindex="-1" role="dialog" aria-labelledby="Commentaar" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <form action="/saveComment">
+                <form action="/financial_employee/saveComment">
                     @method("put")
                     @csrf
                     <div class="modal-header">
@@ -130,7 +130,7 @@
 
         function buildTable() {
 
-            $.getJSON('/getRequests')
+            $.getJSON('/financial_employee/getRequests')
                 .done(function (data) {
                     console.log('data', data);
                     // tbody leeg maken
@@ -142,28 +142,27 @@
                         let cost_center_name = value.cost_center_name;
                         let user_name = value.username;
 
-                        //Status dropdown maken
-                        if (value.comment_Cost_center_manager == null){
-                            value.comment_Cost_center_manager = "";
+                        if (value.comment_Financial_employee == null){
+                            value.comment_Financial_employee = "";
                         }
 
-                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
-                        if (value.status_FE !== "in afwachting"){
+                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Financial_employee}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
+                        if (value.status_FE === "betaald"){
                             select += `disabled style="pointer-events: none;"`;
                         }
                         select += `>`;
                         $.each(data.statuses, function (key, value2) {
                             select += `<option`;
-                            if (value2.name === value.status_CC_manager){
+                            if (value2.name === value.status_FE){
                                 select += ` selected`;
                             }
                             select +=  `>${value2.name}</option>`;
                         })
                         select += `</select></span>`;
 
-                        let status_fe = value.status_FE;
-                        if (value.comment_Financial_employee != null){
-                            status_fe = `<p>${value.status_FE} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
+                        let status_cc_manager = value.status_CC_manager;
+                        if (value.comment_Cost_center_manager != null){
+                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Cost_center_manager}</p><p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
                         }
 
                         let evidence = '';
@@ -171,43 +170,43 @@
                         $.each(value.diverse_reimbursement_lines, function (key, value) {
                             //Alle bewijsstukken achter elkaar zetten
                             $.each(value.diverse_reimbursement_evidences, function (key2, value2) {
-                                evidence += `<a class="btn btn-outline-dark" href="${value2.filepath}"><nobr><img src='assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name}</nobr></a>`;
+                                evidence += `<a class="btn btn-outline-dark" href="${value2.filepath}"><nobr><img src='/assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name}</nobr></a>`;
                             });
                         })
 
                         //Alle data toevoegen aan tabel
                         table.row.add([
                             request_date,
-                            value.review_date_Cost_center_manager,
+                            value.review_date_Financial_employee,
                             cost_center_name,
                             user_name,
                             value.description,
                             "€" + value.amount,
                             evidence,
-                            select,
-                            status_fe
+                            status_cc_manager,
+                            select
                         ]).draw(false);
                     });
 
                     $.each(data.laptop_requests, function (key, value) {
                         //Status dropdown maken
-                        if (value.comment_Cost_center_manager == null){
-                            value.comment_Cost_center_manager = "";
+                        if (value.comment_Financial_employee == null){
+                            value.comment_Financial_employee = "";
                         }
 
-                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'"`;
-                        if (value.status_fe.name !== "in afwachting"){
+                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Financial_employee}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'`;
+                        if (value.status_FE === "betaald" || value.status_FE === "afgekeurd"){
                             select += `disabled style="pointer-events: none;"`;
                         }
                         select += `>`;
                         $.each(data.statuses, function (key, value2) {
                             select += `<option`;
-                            if (value2.name === value.status_cc_manager.name){
+                            if (value2.name === value.status_FE){
                                 select += ` selected`;
                             }
                             select +=  `>${value2.name}</option>`;
                         })
-                        select += `</select></span>`;
+                        select += `</select></span>`;;
 
                         let request_date = value.laptop_invoice.purchase_date;
                         let cost_center = '';
@@ -218,22 +217,22 @@
                         })
                         let user_name = value.laptop_invoice.user.name;
 
-                        let status_fe = value.status_fe.name;
-                        if (value.comment_Financial_employee != null){
-                            status_fe = `<p>${value.status_fe.name} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
+                        let status_cc_manager = value.status_CC_manager;
+                        if (value.comment_Cost_center_manager != null){
+                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Cost_center_manager}</p><p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
                         }
 
-                        let evidence = `<a class="btn btn-outline-dark" href="${value.laptop_invoice.filepath}"><nobr><img src='assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name}</nobr></a>`;
+                        let evidence = `<a class="btn btn-outline-dark" href="${value.laptop_invoice.filepath}"><nobr><img src='/assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name}</nobr></a>`;
                         table.row.add([
                             request_date,
-                            value.review_date_Cost_center_manager,
+                            value.review_date_Financial_employee,
                             cost_center,
                             user_name,
                             value.laptop_invoice.invoice_description,
                             "€" + value.laptop_invoice.amount / 4,
                             evidence,
-                            select,
-                            status_fe
+                            status_cc_manager,
+                            select
                         ]).draw(false);
                     });
                     makeTooltipsVisible();

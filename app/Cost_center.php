@@ -31,6 +31,7 @@ class Cost_center extends Model
         return $this->hasMany('App\Diverse_reimbursement_request'); // a cost_center has many diverse_reimbursement_requests
     }
 
+    //R23
     public function programmes() {
         return $this->belongsToMany('App\Programme', 'programme_cost_centers');
     }

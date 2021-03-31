@@ -29,7 +29,10 @@ class CreateStatusesTable extends Migration
                 ],
                 [
                     'name' => 'afgekeurd'
-                ]
+                ],
+                [
+                    'name' => 'betaald'
+                ],
             ]
         );
     }

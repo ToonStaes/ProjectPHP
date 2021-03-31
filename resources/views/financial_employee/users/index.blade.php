@@ -5,10 +5,11 @@
 @endsection
 
 @section('main')
+    <h1>Gebruikers beheren</h1>
     <div class="messages"></div>
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gebruiker_toevoegen" id="gebruiker_toevoegen_knop">
-        Gebruiker toevoegen
+        <i class="fas fa-plus"></i> Gebruiker toevoegen
     </button>
 
 

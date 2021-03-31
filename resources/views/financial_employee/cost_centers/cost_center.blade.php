@@ -6,6 +6,9 @@
 @endsection
 
 @section('main')
+    <h1>Kostenplaatsen beheren</h1>
+    <button class="btn btn-primary mb-4" id="button-cost_center-add" data-toggle="modal" data-target="#cost_center_form_modal"> <i class="fas fa-plus"></i> Kostenplaats toevoegen</button>
+    <button class="btn btn-primary float-right" id="button-save">Opslaan</button>
     <table id="tabel" class="table">
         <thead>
         <tr>
@@ -28,8 +31,8 @@
                     <td><input class="input-budget" type="number"
                            value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"
                            step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
-                    <td>
-                        <button type="submit" class="btn btn-outline-danger deleteCostCenter">
+                    <td class="text-center">
+                        <button type="submit" class="deleteCostCenter">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
@@ -38,8 +41,8 @@
         @endforeach
         </tbody>
     </table>
-    <button class="btn btn-primary" id="button-save">opslaan</button>
-    <button class="btn btn-primary" id="button-cost_center-add" data-toggle="modal" data-target="#cost_center_form_modal">Nieuwe kostenplaats</button>
+
+
     <div class="modal" id="cost_center_form_modal" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
