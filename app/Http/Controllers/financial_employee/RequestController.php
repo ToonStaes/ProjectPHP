@@ -21,33 +21,45 @@ class RequestController extends Controller
 
     public function getRequests()
     {
-        $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'diverse_reimbursement_lines.status_cc_manager' => function($q)
-            {$q->where('id', '!=', 3);}, 'diverse_reimbursement_lines.status_fe', 'diverse_reimbursement_lines.financial_employee'])
+        $diverse_requests = Diverse_reimbursement_request::whereHas('status_cc_manager', function ($innerQuery){
+            $innerQuery->where('id', '=', '2');
+        })
+            ->with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'status_fe', 'financial_employee', 'cost_center_manager'])
             ->get()
             ->transform(function ($item, $key){
-                unset($item['user_id'], $item['cost_center_id']);
+                unset($item->user_id, $item->cost_center_id);
 
-                $item->user->name = $item->user->first_name . ' ' . $item->user->last_name;
-                unset($item['user']['address'], $item['user']['city'], $item['user']['zip_code'], $item['user']['IBAN'],
-                    $item['user']['email'], $item['user']['phone_number'], $item['user']['changedPassword'],
-                    $item['user']['isActive'], $item['user']['isCost_Center_manager'], $item['user']['isFinancial_employee'],
-                    $item['user']['number_of_km'], $item['user']['created_at'], $item['user']['updated_at'],
-                    $item['user']['first_name'], $item['user']['last_name']);
+                $item->username = $item->user->first_name . ' ' . $item->user->last_name;
+                unset($item->user);
 
-                unset($item['cost_center']['user_id_Cost_center_manager'], $item['cost_center']['isActive'],
-                    $item['cost_center']['created_at'], $item['cost_center']['updated_at']);
+                $item->cost_center_name = $item->cost_center->name;
+                unset($item->cost_center);
 
-                foreach ($item['diverse_reimbursement_lines'] as $line){
-                    unset($line['created_at'], $line['updated_at']);
-                    if ($line['amount'] == null){
-                        $line['amount'] = $line['number_of_km'] * $line['parameter']['amount_per_km'];
+                $item->status_CC_manager = $item->status_cc_manager->name;
+                unset($item->status_cc_manager);
+
+                $item->status_FE = $item->status_fe->name;
+                unset($item->status_fe);
+
+                $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
+                unset($item->financial_employee);
+
+                $item->ccm_name = $item->cost_center_manager->first_name . " " . $item->cost_center_manager->last_name;
+                unset($item->cost_center_manager);
+
+                $item->amount = 0;
+                foreach ($item->diverse_reimbursement_lines as $line){
+
+                    unset($line->created_at, $line->updated_at);
+                    if ($line->amount == null){
+                        $item->amount += $line->number_of_km * $line->parameter->amount_per_km;
+                    }else {
+                        $item->amount += $line->amount;
                     }
-                    unset($line['parameter']);
+                    unset($line->parameter, $line->parameter_id, $line->number_of_km, $line->id, $line->DR_request_id);
 
-                    $line->fe_name = $line["financial_employee"]["first_name"] . " " . $line["financial_employee"]["last_name"];
-
-                    foreach ($line['diverse_reimbursement_evidences'] as $evidence){
-                        $exploded_path = explode('/', $evidence['filepath']);
+                    foreach ($line->diverse_reimbursement_evidences as $evidence){
+                        $exploded_path = explode('/', $evidence->filepath);
                         if (!empty($exploded_path)){
                             $evidence['name'] = end($exploded_path);
                             $extension = explode(".", $evidence['name']);
@@ -72,7 +84,10 @@ class RequestController extends Controller
                 return $item;
             });
 
-        $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_cc_manager', 'status_fe', 'financial_employee'])
+        $laptop_requests = Laptop_reimbursement::whereHas('status_cc_manager', function ($innerQuery){
+            $innerQuery->where('id', '=', 2);
+        })
+            ->with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_fe', 'financial_employee', 'cost_center_manager'])
             ->get()
             ->transform(function ($item, $key){
 
@@ -86,6 +101,15 @@ class RequestController extends Controller
                 unset($item['laptop_invoice']['created_at'], $item['laptop_invoice']['updated_at']);
 
                 $item['fe_name'] = $item['financial_employee']['first_name'] . " " . $item['financial_employee']['last_name'];
+
+                $item->status_FE = $item->status_fe->name;
+                unset($item->status_fe);
+
+                $item->status_CC_manager = $item->status_cc_manager->name;
+                unset($item->status_cc_manager);
+
+                $item->ccm_name = $item->cost_center_manager->first_name . " " . $item->cost_center_manager->last_name;
+                unset($item->cost_center_manager);
 
                 $parameters = $item['laptop_reimbursement_parameters'];
                 foreach ($parameters as $parameter){
@@ -118,10 +142,7 @@ class RequestController extends Controller
                 return $item;
             });
         $statuses = Status::all();
-
-        $bike_reimbursements = Bike_reimbursement::with('bikerides')->get();
-
-        $result = compact('diverse_requests', 'laptop_requests', 'statuses', 'bike_reimbursements');
+        $result = compact('diverse_requests', 'laptop_requests', 'statuses');
         JSON::dump($result);
 
         return $result;
@@ -131,18 +152,20 @@ class RequestController extends Controller
         $status = Status::where("name", "=", $request->keuring)->first()->id;
         $type = $request->type;
         if ($type == "divers"){
-            $diverse_reimbursement = Diverse_reimbursement_line::find($request->id);
-            $diverse_reimbursement->comment_Cost_center_manager = $request->commentaar;
-            $diverse_reimbursement->review_date_Cost_center_manager = now();
-            $diverse_reimbursement->status_CC_manager = $status;
+            $diverse_reimbursement = Diverse_reimbursement_request::find($request->id);
+            $diverse_reimbursement->comment_Financial_employee = $request->commentaar;
+            $diverse_reimbursement->review_date_Financial_employee = now();
+            $diverse_reimbursement->status_FE = $status;
+            $diverse_reimbursement->user_id_Fin_employee = Auth()->user()->id;
 
             $diverse_reimbursement->save();
         }
         elseif($type == "laptop"){
             $laptop_reimbursement = Laptop_reimbursement::find($request->id);
-            $laptop_reimbursement->comment_Cost_center_manager = $request->commentaar;
-            $laptop_reimbursement->review_date_Cost_center_manager = now();
-            $laptop_reimbursement->status_CC_manager = $status;
+            $laptop_reimbursement->comment_Financial_employee = $request->commentaar;
+            $laptop_reimbursement->review_date_Financial_employee = now();
+            $laptop_reimbursement->status_FE = $status;
+            $laptop_reimbursement->user_id_Financial_employee = Auth()->user()->id;
 
             $laptop_reimbursement->save();
         }
