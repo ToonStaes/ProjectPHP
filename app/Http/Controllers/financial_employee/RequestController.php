@@ -49,6 +49,16 @@ class RequestController extends Controller
                 $item->ccm_name = $item->cost_center_manager->first_name . " " . $item->cost_center_manager->last_name;
                 unset($item->cost_center_manager);
 
+                if ($item->review_date_Cost_center_manager != null){
+                    $item->review_date_Cost_center_manager = date("d/m/Y", strtotime($item->review_date_Cost_center_manager));
+                }
+                if ($item->review_date_Financial_employee != null){
+                    $item->review_date_Financial_employee = date("d/m/Y", strtotime($item->review_date_Financial_employee));
+                }
+                if ($item->request_date != null){
+                    $item->request_date = date("d/m/Y", strtotime($item->request_date));
+                }
+
                 $item->amount = 0;
                 foreach ($item->diverse_reimbursement_lines as $line){
 
@@ -96,16 +106,12 @@ class RequestController extends Controller
             ->get()
             ->transform(function ($item, $key) use (&$total_open_payments){
 
-                $item['laptop_invoice']['user']['name'] = $item['laptop_invoice']['user']['first_name'] . ' ' . $item['laptop_invoice']['user']['last_name'];
+                $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
+                unset($item->laptop_invoice->user);
 
-                unset($item['laptop_invoice']['user']['address'], $item['laptop_invoice']['user']['city'], $item['laptop_invoice']['user']['zip_code'], $item['laptop_invoice']['user']['IBAN'],
-                    $item['laptop_invoice']['user']['email'], $item['laptop_invoice']['user']['phone_number'], $item['laptop_invoice']['user']['changedPassword'],
-                    $item['laptop_invoice']['user']['isActive'], $item['laptop_invoice']['user']['isCost_Center_manager'], $item['laptop_invoice']['user']['isFinancial_employee'],
-                    $item['laptop_invoice']['user']['number_of_km'], $item['laptop_invoice']['user']['created_at'], $item['laptop_invoice']['user']['updated_at']);
+                unset($item->laptop_invoice->created_at, $item->laptop_invoice->updated_at);
 
-                unset($item['laptop_invoice']['created_at'], $item['laptop_invoice']['updated_at']);
-
-                $item['fe_name'] = $item['financial_employee']['first_name'] . " " . $item['financial_employee']['last_name'];
+                $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
 
                 $item->status_FE = $item->status_fe->name;
                 unset($item->status_fe);
@@ -116,31 +122,41 @@ class RequestController extends Controller
                 $item->ccm_name = $item->cost_center_manager->first_name . " " . $item->cost_center_manager->last_name;
                 unset($item->cost_center_manager);
 
-                $parameters = $item['laptop_reimbursement_parameters'];
+                if ($item->review_date_Cost_center_manager != null){
+                    $item->review_date_Cost_center_manager = date("d/m/Y", strtotime($item->review_date_Cost_center_manager));
+                }
+                if ($item->review_date_Financial_employee != null){
+                    $item->review_date_Financial_employee = date("d/m/Y", strtotime($item->review_date_Financial_employee));
+                }
+                if ($item->laptop_invoice->purchase_date != null){
+                    $item->laptop_invoice->purchasedate = date("d/m/Y", strtotime($item->laptop_invoice->purchase_date));
+                }
+
+                $parameters = $item->laptop_reimbursement_parameters;
                 foreach ($parameters as $parameter){
                     $cost_center_id = $parameter->parameter->standard_Cost_center_id;
                     if ($cost_center_id != null){
                         $cost_center = Cost_center::find($cost_center_id);
-                        $parameter->parameter['cost_center_name'] = $cost_center->name;
+                        $parameter->parameter->cost_center_name = $cost_center->name;
                     }
                 }
 
-                $exploded_path = explode('/', $item['laptop_invoice']['filepath']);
+                $exploded_path = explode('/', $item->laptop_invoice->filepath);
                 if (!empty($exploded_path)){
-                    $item['laptop_invoice']['file_name'] = end($exploded_path);
-                    $extension = explode(".", $item['laptop_invoice']['file_name']);
+                    $item->laptop_invoice->file_name = end($exploded_path);
+                    $extension = explode(".", $item->laptop_invoice->file_name);
                     $extension = end($extension);
                     $extension = strtolower($extension);
 
                     $extensions = ["doc", "docx", "gif", "jpg", "jpeg", "mkv", "mov", "mp3", "mp4", "mpg", "pdf", "png", "ppt", "rar", "tiff", "txt", "xls", "xlsx", "zip"];
                     if (in_array($extension, $extensions)){
                         if ($extension == "jpeg"){
-                            $item['laptop_invoice']['file_icon'] = "jpg.png";
+                            $item->laptop_invoice->file_icon = "jpg.png";
                         } else {
-                            $item['laptop_invoice']['file_icon'] = $extension . ".png";
+                            $item->laptop_invoice->file_icon = $extension . ".png";
                         }
                     } else {
-                        $item['laptop_invoice']['file_icon'] = "unknown.png";
+                        $item->laptop_invoice->file_icon = "unknown.png";
                     }
                 }
 
@@ -180,5 +196,9 @@ class RequestController extends Controller
 
             $laptop_reimbursement->save();
         }
+    }
+
+    public function getOpenPayments(){
+
     }
 }

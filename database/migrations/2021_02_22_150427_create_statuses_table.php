@@ -33,6 +33,9 @@ class CreateStatusesTable extends Migration
                 [
                     'name' => 'betaald'
                 ],
+                [
+                    'name' => 'niet van toepassing'
+                ],
             ]
         );
     }
