@@ -47,3 +47,9 @@ Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(fun
   Route::resource('Mailcontent', 'financial_employee\MailcontentController',['parameters' => ['Mailcontent' => 'mailcontent']]);
   Route::resource('parameters', 'financial_employee\ParameterController');
 });
+
+Route::middleware(['auth', 'changed_password' ,'financial_employee'])->prefix('financial_employee')->group(function () {
+    Route::get('/aanvragen_beheren', 'financial_employee\RequestController@index');
+    Route::get('/getRequests', 'financial_employee\RequestController@getRequests');
+    Route::put('/saveComment', 'financial_employee\RequestController@saveComment');
+});
