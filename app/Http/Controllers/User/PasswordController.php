@@ -45,7 +45,7 @@ class PasswordController extends Controller
         }
     }
 
-    public function Reset(Request $request)
+    public function reset(Request $request)
     {
         $this->validate($request, [
             'email' => 'required|email|exists:users,email',
@@ -54,17 +54,17 @@ class PasswordController extends Controller
         $newPass = $this->randomPassword();
 
         $user = User::where('email', $request->email)->firstOrFail();
-        $user->update(['password'=>Hash::make($newPass),'changedPassword'=>false]);
-
-        $userGet = $user->get();
+        $user->update(['password'=>Hash::make($newPass)]);
+        $user->update(['changedPassword'=>false]);
 
         $data = array(
-            'naam'=>$userGet->first_name,
-            'email'=>$userGet->email,
-            'wachtwoord'=>$newPass
+            'naam'=>$user->first_name,
+            'email'=>$user->email,
+            'paswoord'=>$newPass
         );
 
-        Mail::to($userGet->email)->send(new SendPasswordReset($data));
+        Mail::to($user->email)->send(new SendPasswordReset($data));
+        return view('auth.login');
     }
 
     private function randomPassword() {
