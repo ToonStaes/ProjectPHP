@@ -11,7 +11,7 @@
         <table id="requestsTable" class="table">
             <thead>
             <tr>
-                <th>Aanvraagdatum</th>
+                <th>Aanvraag&#8203;datum</th>
                 <th>Datum beoordeling</th>
                 <th>Kostenplaats</th>
                 <th>Personeelslid</th>
@@ -143,6 +143,10 @@
                         let user_name = value.username;
 
                         //Status dropdown maken
+                        if (value.comment_Cost_center_manager == null){
+                            value.comment_Cost_center_manager = "";
+                        }
+
                         let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
                         if (value.status_FE !== "in afwachting"){
                             select += `disabled style="pointer-events: none;"`;
@@ -187,7 +191,11 @@
 
                     $.each(data.laptop_requests, function (key, value) {
                         //Status dropdown maken
-                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop' style="pointer-events: none;"`;
+                        if (value.comment_Cost_center_manager == null){
+                            value.comment_Cost_center_manager = "";
+                        }
+
+                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'"`;
                         if (value.status_fe.name !== "in afwachting"){
                             select += `disabled style="pointer-events: none;"`;
                         }
@@ -237,7 +245,6 @@
 
         function makeTooltipsVisible()
         {
-            console.log("tooltips visible")
             $('[data-toggle="tooltip"]').tooltip()
         }
     </script>

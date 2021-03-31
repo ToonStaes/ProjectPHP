@@ -145,6 +145,7 @@ class RequestController extends Controller
             $laptop_reimbursement->comment_Cost_center_manager = $request->commentaar;
             $laptop_reimbursement->review_date_Cost_center_manager = now();
             $laptop_reimbursement->status_CC_manager = $status;
+            $laptop_reimbursement->user_id_Cost_center_manager = Auth()->user()->id;
 
             $laptop_reimbursement->save();
         }
