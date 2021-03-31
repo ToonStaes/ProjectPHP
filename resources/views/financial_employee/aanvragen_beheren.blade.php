@@ -6,6 +6,7 @@
 
 @section('main')
     <div class="messages"></div>
+    <p class="text-right"><button class="btn-primary mb-5" id="openstaande_betalingen">Openstaande betalingen uitbetalen (€)</button></p>
 
     <div id="tabel">
         <table id="requestsTable" class="table">
@@ -146,7 +147,7 @@
                             value.comment_Financial_employee = "";
                         }
 
-                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Financial_employee}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
+                        let select = `<span data-toggle="tooltip" data-placement="top" data-html="true" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
                         if (value.status_FE === "betaald"){
                             select += `disabled style="pointer-events: none;"`;
                         }
@@ -194,7 +195,7 @@
                             value.comment_Financial_employee = "";
                         }
 
-                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Financial_employee}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'`;
+                        let select = `<span data-toggle="tooltip" data-placement="top" data-html="true" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'`;
                         if (value.status_FE === "betaald" || value.status_FE === "afgekeurd"){
                             select += `disabled style="pointer-events: none;"`;
                         }
@@ -229,12 +230,13 @@
                             cost_center,
                             user_name,
                             value.laptop_invoice.invoice_description,
-                            "€" + value.laptop_invoice.amount / 4,
+                            "€" + value.amount,
                             evidence,
                             status_cc_manager,
                             select
                         ]).draw(false);
                     });
+                    $("#openstaande_betalingen").text(`Openstaande betalingen uitbetalen (€${data.total_open_payments})`);
                     makeTooltipsVisible();
                 })
                 .fail(function (e) {

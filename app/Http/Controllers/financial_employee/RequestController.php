@@ -21,12 +21,14 @@ class RequestController extends Controller
 
     public function getRequests()
     {
+        $total_open_payments = 0;
+
         $diverse_requests = Diverse_reimbursement_request::whereHas('status_cc_manager', function ($innerQuery){
             $innerQuery->where('id', '=', '2');
         })
             ->with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'status_fe', 'financial_employee', 'cost_center_manager'])
             ->get()
-            ->transform(function ($item, $key){
+            ->transform(function ($item, $key) use (&$total_open_payments){
                 unset($item->user_id, $item->cost_center_id);
 
                 $item->username = $item->user->first_name . ' ' . $item->user->last_name;
@@ -81,6 +83,9 @@ class RequestController extends Controller
                     }
                 }
 
+                if ($item->status_FE == "goedgekeurd"){
+                    $total_open_payments += $item->amount;
+                }
                 return $item;
             });
 
@@ -89,7 +94,7 @@ class RequestController extends Controller
         })
             ->with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_fe', 'financial_employee', 'cost_center_manager'])
             ->get()
-            ->transform(function ($item, $key){
+            ->transform(function ($item, $key) use (&$total_open_payments){
 
                 $item['laptop_invoice']['user']['name'] = $item['laptop_invoice']['user']['first_name'] . ' ' . $item['laptop_invoice']['user']['last_name'];
 
@@ -139,10 +144,16 @@ class RequestController extends Controller
                     }
                 }
 
+                $item->amount = $item->laptop_invoice->amount / 4;
+
+                if ($item->status_FE == "goedgekeurd"){
+                    $total_open_payments += $item->amount;
+                }
+
                 return $item;
             });
         $statuses = Status::all();
-        $result = compact('diverse_requests', 'laptop_requests', 'statuses');
+        $result = compact('diverse_requests', 'laptop_requests', 'statuses', 'total_open_payments');
         JSON::dump($result);
 
         return $result;
