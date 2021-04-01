@@ -201,7 +201,7 @@
                             value.comment_Cost_center_manager = "";
                         }
 
-                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'"`;
+                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'`;
                         if (value.status_fe.name !== "in afwachting"){
                             select += `disabled style="pointer-events: none;"`;
                         }

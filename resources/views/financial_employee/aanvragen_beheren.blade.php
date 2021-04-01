@@ -143,11 +143,14 @@
                         let cost_center_name = value.cost_center_name;
                         let user_name = value.username;
 
+                        let select = '';
                         if (value.comment_Financial_employee == null){
                             value.comment_Financial_employee = "";
+                            select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Financial_employee}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
+                        } else {
+                            select = `<span data-toggle="tooltip" data-placement="top" data-html="true" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
                         }
 
-                        let select = `<span data-toggle="tooltip" data-placement="top" data-html="true" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
                         if (value.status_FE === "betaald"){
                             select += `disabled style="pointer-events: none;"`;
                         }
@@ -197,11 +200,14 @@
 
                     $.each(data.laptop_requests, function (key, value) {
                         //Status dropdown maken
+                        let select = '';
                         if (value.comment_Financial_employee == null){
                             value.comment_Financial_employee = "";
+                            select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Financial_employee}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'`;
+                        } else {
+                            select = `<span data-toggle="tooltip" data-placement="top" data-html="true" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'`;
                         }
 
-                        let select = `<span data-toggle="tooltip" data-placement="top" data-html="true" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'`;
                         if (value.status_FE === "betaald" || value.status_FE === "afgekeurd"){
                             select += `disabled style="pointer-events: none;"`;
                         }
@@ -248,6 +254,49 @@
                             select
                         ]).draw(false);
                     });
+
+                    $.each(data.bike_reimbursements, function (key, value) {
+                        //Status dropdown maken
+                        let select = '';
+                        if (value.comment_Financial_employee == null){
+                            value.comment_Financial_employee = "";
+                            select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Financial_employee}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='fiets'`;
+                        } else {
+                            select = `<span data-toggle="tooltip" data-placement="top" data-html="true" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='fiets'`;
+                        }
+
+                        if (value.status_FE === "betaald" || value.status_FE === "afgekeurd"){
+                            select += `disabled style="pointer-events: none;"`;
+                        }
+                        select += `>`;
+
+                        let status_counter = 0;
+                        $.each(data.statuses, function (key, value2) {
+                            status_counter += 1;
+
+                            if (status_counter <= 3){
+                                select += `<option`;
+                                if (value2.name === value.status_FE){
+                                    select += ` selected`;
+                                }
+                                select +=  `>${value2.name}</option>`;
+                            }
+                        })
+                        select += `</select></span>`;;
+
+                        table.row.add([
+                            value.request_date,
+                            value.review_date_Financial_employee,
+                            value.costcenter,
+                            value.username,
+                            value.name,
+                            "€" + value.amount,
+                            "Fietsvergoeding",
+                            "",
+                            select
+                        ]).draw(false);
+                    });
+
                     $("#openstaande_betalingen").text(`Openstaande betalingen uitbetalen (€${data.total_open_payments})`);
                     makeTooltipsVisible();
                 })

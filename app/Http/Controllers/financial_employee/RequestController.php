@@ -168,8 +168,44 @@ class RequestController extends Controller
 
                 return $item;
             });
+        $bike_reimbursements = Bike_reimbursement::whereIn('status_id', [1, 2, 3])
+            ->with('status', 'bikerides', 'bikerides.user', 'bike_reimbursement_parameters.parameter', 'financial_employee')
+            ->get()
+            ->transform(function ($item, $key) use (&$total_open_payments){
+                $item->username = $item->bikerides[0]->user->first_name . ' ' . $item->bikerides[0]->user->last_name;
+                $item->costcenter = Cost_center::where('id', '=', $item->bike_reimbursement_parameters[1]->parameter->standard_Cost_center_id)->first()->name;
+                $item->status_FE = $item->status->name;
+                if ($item->financial_employee != null){
+                    $item->fe_name = $item->financial_employee->first_name . ' ' . $item->financial_employee->last_name;
+                }
+                $item->amount = 0;
+
+                foreach ($item->bikerides as $bikeride){
+                    if ($bikeride->number_of_km == null){
+                        $item->amount += $bikeride->user->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
+                    }
+                }
+
+                unset($item->bikerides, $item->bike_reimbursement_parameters, $item->status, $item->financial_employee);
+
+                $item->amount = round($item->amount, 2);
+
+
+                if ($item->review_date_Financial_employee != null){
+                    $item->review_date_Financial_employee = date("d/m/Y", strtotime($item->review_date_Financial_employee));
+                }
+                if ($item->request_date != null){
+                    $item->request_date = date("d/m/Y", strtotime($item->request_date));
+                }
+
+                if ($item->status_id == 2){
+                    $total_open_payments += $item->amount;
+                }
+
+                return $item;
+            });
         $statuses = Status::all();
-        $result = compact('diverse_requests', 'laptop_requests', 'statuses', 'total_open_payments');
+        $result = compact('diverse_requests', 'laptop_requests', 'bike_reimbursements', 'statuses', 'total_open_payments');
         JSON::dump($result);
 
         return $result;
@@ -195,10 +231,91 @@ class RequestController extends Controller
             $laptop_reimbursement->user_id_Financial_employee = Auth()->user()->id;
 
             $laptop_reimbursement->save();
+        } else {
+            $bike_reimbursement = Bike_reimbursement::find($request->id);
+            $bike_reimbursement->comment_Financial_employee = $request->commentaar;
+            $bike_reimbursement->review_date_Financial_employee = now();
+            $bike_reimbursement->status_id = $status;
+            $bike_reimbursement->user_id_Financial_employee = Auth()->user()->id;
+
+            $bike_reimbursement->save();
         }
     }
 
     public function getOpenPayments(){
+        $total_open_payments = 0;
 
+        $diverse_requests = Diverse_reimbursement_request::whereHas('status_FE', function ($innerQuery){
+            $innerQuery->where('id', '=', '2');
+        })
+            ->with(['user', 'diverse_reimbursement_lines.parameter'])
+            ->get()
+            ->transform(function ($item, $key) use (&$total_open_payments){
+                unset($item->user_id, $item->cost_center_id);
+
+                $item->username = $item->user->first_name . ' ' . $item->user->last_name;
+                $item->iban = $item->user->IBAN;
+                unset($item->user);
+
+                $item->amount = 0;
+                foreach ($item->diverse_reimbursement_lines as $line){
+
+                    unset($line->created_at, $line->updated_at);
+                    if ($line->amount == null){
+                        $item->amount += $line->number_of_km * $line->parameter->amount_per_km;
+                    }else {
+                        $item->amount += $line->amount;
+                    }
+                    unset($line->parameter, $line->parameter_id, $line->number_of_km, $line->id, $line->DR_request_id);
+                }
+
+                $total_open_payments += $item->amount;
+                return $item;
+            });
+
+        $laptop_requests = Laptop_reimbursement::whereHas('status_FE', function ($innerQuery){
+            $innerQuery->where('id', '=', 2);
+        })
+            ->with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter'])
+            ->get()
+            ->transform(function ($item, $key) use (&$total_open_payments){
+
+                $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
+                $item->laptop_invoice->iban = $item->laptop_invoice->user->IBAN;
+                unset($item->laptop_invoice->user, $item->laptop_invoice->created_at, $item->laptop_invoice->updated_at);
+
+                $item->amount = $item->laptop_invoice->amount / 4;
+
+                $total_open_payments += $item->amount;
+
+                return $item;
+            });
+
+        $bike_reimbursements = Bike_reimbursement::where('status_id', '=', '1')
+            ->with('bikerides', 'bikerides.user', 'bike_reimbursement_parameters.parameter')
+            ->get()
+            ->transform(function ($item, $key) use (&$total_open_payments){
+                $item->username = $item->bikerides[0]->user->first_name . ' ' . $item->bikerides[0]->user->last_name;
+                $item->iban = $item->bikerides[0]->user->IBAN;
+                $item->amount = 0;
+
+                foreach ($item->bikerides as $bikeride){
+                    if ($bikeride->number_of_km == null){
+                        $item->amount += $bikeride->user->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
+                    }
+                }
+
+                unset($item->bikerides, $item->bike_reimbursement_parameters);
+
+                $item->amount = round($item->amount, 2);
+                $total_open_payments += $item->amount;
+
+                return $item;
+            });
+
+        $result = compact('diverse_requests', 'laptop_requests', 'bike_reimbursements','total_open_payments');
+        JSON::dump($result);
+
+        return $result;
     }
 }
