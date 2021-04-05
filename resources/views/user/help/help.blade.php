@@ -8,7 +8,7 @@
         <div class="container row justify-content-between">
             @auth
                 <div class="col-md-6">
-                    <a class="card" href="https://google.com">
+                    <a class="card" href="help/fietsvergoeding">
                         <div class="card-body container row">
                             <div class="col-sm-3 col-md-12 col-lg-3" >
                                 <i style="font-size: 50px;" class="fas fa-biking card-img col-6"></i>
@@ -21,7 +21,7 @@
                     </a>
                 </div>
                 <div class="col-md-6">
-                    <a class="card" href="https://google.com">
+                    <a class="card" href="help/laptopvergoeding">
                         <div class="card-body container row">
                             <div class="col-sm-3 col-md-12 col-lg-3">
                                 <i style="font-size: 50px;" class="fas fa-laptop card-img col-6"></i>
@@ -35,7 +35,7 @@
                     </a>
                 </div>
                 <div class="col-md-6">
-                    <a class="card" href="https://google.com">
+                    <a class="card" href="help/diverseAanvragen">
                         <div class="card-body container row">
                             <div class="col-sm-3 col-md-12 col-lg-3">
                                 <i style="font-size: 50px;" class="fas fa-receipt card-img col-6"></i>
@@ -49,7 +49,7 @@
                     </a>
                 </div>
                 <div class="col-md-6">
-                    <a class="card" href="https://google.com">
+                    <a class="card" href="help/mijnAanvragen">
                         <div class="card-body container row">
                             <div class="col-sm-3 col-md-12 col-lg-3">
                                 <i style="font-size: 50px;" class="fas fa-wallet card-img col-6"></i>

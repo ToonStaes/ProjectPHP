@@ -1,10 +1,10 @@
 @extends('layouts.template')
 
-@section('title', 'Help - fietsvergoeding')
+@section('title', 'Help - diverse aanvragen')
 
 @section('main')
     <div class="help container">
-        <h1>Help - fietsvergoeding</h1>
+        <h1>Help - diverse aanvragen</h1>
         <a href="#!" class="btn btn-primary m-0 mt-2" id="back">Terug</a>
     </div>
 @endsection
