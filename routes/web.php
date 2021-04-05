@@ -45,6 +45,12 @@ Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->group(fu
     Route::put('/saveComment', 'cost_center_manager\RequestController@saveComment');
 });
 
+Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->prefix('cost_center_manager')->group(function () {
+    Route::get('/help/aanvragenBeheren', 'HelpController@manageRequestsCC');
+    Route::get('/help/kostenplaatsenVergelijken', 'HelpController@compareCostcenters');
+});
+
+
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(function () {
   Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
   Route::get('/users/getProgrammes', 'financial_employee\UserController@getProgrammes');

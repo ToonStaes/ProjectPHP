@@ -136,7 +136,7 @@
 
                 @if(auth()->user()->isCost_Center_manager == true)
                     <div class="col-md-6">
-                        <a class="card" href="https://google.com">
+                        <a class="card" href="/cost_center_manager/help/aanvragenBeheren">
                             <div class="card-body container row">
                                 <div class="col-sm-3 col-md-12 col-lg-3">
                                     <i style="font-size: 50px;" class="fas fa-comments card-img col-6"></i>
@@ -150,7 +150,7 @@
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <a class="card" href="https://google.com">
+                        <a class="card" href="/cost_center_manager/help/kostenplaatsenVergelijken">
                             <div class="card-body container row">
                                 <div class="col-sm-3 col-md-12 col-lg-3">
                                     <i style="font-size: 50px;" class="fas fa-balance-scale card-img col-6"></i>
