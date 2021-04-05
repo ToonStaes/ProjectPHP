@@ -26,4 +26,24 @@ class HelpController extends Controller
         return view('user.help.myrequests');
     }
 
+    public function manageRequests(){
+        return view('financial_employee.help.manageRequest');
+    }
+
+    public function manageUsers(){
+        return view('financial_employee.help.manageUsers');
+    }
+
+    public function manageCostcenters(){
+        return view('financial_employee.help.manageCostcenters');
+    }
+
+    public function manageMail(){
+        return view('financial_employee.help.manageMail');
+    }
+
+    public function manageParameters(){
+        return view('financial_employee.help.manageParameters');
+    }
+
 }

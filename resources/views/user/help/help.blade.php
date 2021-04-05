@@ -64,7 +64,7 @@
                 </div>
                 @if(auth()->user()->isFinancial_employee == true)
                     <div class="col-md-6">
-                        <a class="card" href="https://google.com">
+                        <a class="card" href="/financial_employee/help/vergoedingenBeheren">
                             <div class="card-body container row">
                                 <div class="col-sm-3 col-md-12 col-lg-3">
                                     <i style="font-size: 50px;" class="fas fa-comments-dollar card-img col-6"></i>
@@ -78,7 +78,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <a class="card" href="https://google.com">
+                        <a class="card" href="/financial_employee/help/gebruikersBeheren">
                             <div class="card-body container row">
                                 <div class="col-sm-3 col-md-12 col-lg-3">
                                     <i style="font-size: 50px;" class="fas fa-users card-img col-6"></i>
@@ -92,7 +92,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <a class="card" href="https://google.com">
+                        <a class="card" href="/financial_employee/help/kostenplaatsenBeheren">
                             <div class="card-body container row">
                                 <div class="col-sm-3 col-md-12 col-lg-3">
                                     <i style="font-size: 50px;" class="fas fa-donate card-img col-6"></i>
@@ -106,7 +106,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <a class="card" href="https://google.com">
+                        <a class="card" href="/financial_employee/help/mailtekstenBeheren">
                             <div class="card-body container row">
                                 <div class="col-sm-3 col-md-12 col-lg-3">
                                     <i style="font-size: 50px;" class="fas fa-mail-bulk card-img col-6"></i>
@@ -120,7 +120,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <a class="card" href="https://google.com">
+                        <a class="card" href="/financial_employee/help/parametersBeheren">
                             <div class="card-body container row">
                                 <div class="col-sm-3 col-md-12 col-lg-3">
                                     <i style="font-size: 50px;" class="fas fa-edit card-img col-6"></i>

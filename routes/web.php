@@ -36,6 +36,7 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::get('help/laptopvergoeding', 'HelpController@laptopreimbursement');
     Route::get('help/diverseAanvragen', 'HelpController@diversrequests');
     Route::get('help/mijnAanvragen', 'HelpController@myrequests');
+
 });
 
 Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->group(function () {
@@ -52,10 +53,16 @@ Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(fun
   Route::get('Mailcontent/qryMailcontents', 'financial_employee\MailcontentController@qryMailcontents');
   Route::resource('Mailcontent', 'financial_employee\MailcontentController',['parameters' => ['Mailcontent' => 'mailcontent']]);
   Route::resource('parameters', 'financial_employee\ParameterController');
+
 });
 
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->prefix('financial_employee')->group(function () {
     Route::get('/aanvragen_beheren', 'financial_employee\RequestController@index');
     Route::get('/getRequests', 'financial_employee\RequestController@getRequests');
     Route::put('/saveComment', 'financial_employee\RequestController@saveComment');
+    Route::get('/help/vergoedingenBeheren', 'HelpController@manageRequests');
+    Route::get('/help/gebruikersBeheren', 'HelpController@manageUsers');
+    Route::get('/help/kostenplaatsenBeheren', 'HelpController@manageCostcenters');
+    Route::get('/help/mailtekstenBeheren', 'HelpController@manageMail');
+    Route::get('/help/parametersBeheren', 'HelpController@manageParameters');
 });
