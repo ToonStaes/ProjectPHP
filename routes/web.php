@@ -32,7 +32,7 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::post('save_bikerides', 'User\BikerideController@store');
     Route::post('request_bikeReimbursement', 'User\BikeReimbursementController@store');
     Route::get('help', 'HelpController@index');
-    Route::get('help/fietsvergoeding', 'HelpController@fietsvergoeding');
+    Route::get('help/fietsvergoeding', 'HelpController@bikereimbursement');
 });
 
 Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->group(function () {
