@@ -25,7 +25,7 @@ class AanvraagController extends Controller
             ->where('user_id', '=', auth()->user()->id)
             ->get()
             ->transform(function ($item, $key){
-                unset($item->user_id, $item->cost_center_id, $item->user_id_Fin_employee, $item->user_id_CC_manager, $item->id, $item->created_at, $item->updated_at, $item->user);
+                unset($item->user_id, $item->cost_center_id, $item->user_id_Fin_employee, $item->user_id_CC_manager, $item->created_at, $item->updated_at, $item->user);
                 $item->cost_center_name = $item->cost_center->name;
 
                 $item->status_CC_manager = $item->status_cc_manager->name;
@@ -85,7 +85,7 @@ class AanvraagController extends Controller
             ->with(['laptop_reimbursement_parameters', 'status_fe', 'status_cc_manager', 'cost_center_manager', 'financial_employee'])->get()
             ->transform(function ($item, $key){
                 $item->user_name = $item->laptop_invoice->user->first_name . " " . $item->laptop_invoice->user->last_name;
-                $item->cost_center_manager_name = $item->cost_center_manager->first_name . " " . $item->cost_center_manager->last_name;
+                $item->cc_manager_name = $item->cost_center_manager->first_name . " " . $item->cost_center_manager->last_name;
 
                 if($item->financial_employee == []){
                     $item->financial_employee_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;

@@ -11,13 +11,14 @@
             <thead>
             <tr>
                 <th>Aanvraagdatum</th>
-                <th>Datum beoordeling Kostenplaatsverantwoordelijke</th>
+                <th>Datum beoordeling kostenplaats-verantwoordelijke</th>
                 <th>Datum terugbetaling</th>
                 <th>Naam kostenplaats</th>
                 <th>Beschrijving</th>
                 <th>Bedrag</th>
-                <th>Status Kostenplaatsverantwoordelijke</th>
+                <th>Status kostenplaatsverantwoordelijke</th>
                 <th>Status Financieel Medewerker</th>
+                <th>Aanvraag aanpassen</th>
             </tr>
             </thead>
 
@@ -46,6 +47,7 @@
                 {"name": "Bedrag", "orderable": true},
                 {"name": "Status Kostenplaatsverantwoordelijke", "orderable": true},
                 {"name": "Status Financieel Medewerker", "orderable": true},
+                {"name": "Aanvraag aanpassen", "orderable": true}
             ],
             "language": {
                 "lengthMenu": "_MENU_ aanvragen per pagina",
@@ -78,30 +80,64 @@
                         let statusFE = value.status_FE;
                         let statusCCM = value.status_CC_manager;
                         let review_date_Financial_employee = null;
+                        let CCMName = value.cc_manager_name;
+                        let CCMComment = value.comment_Cost_center_manager;
+                        let FEName = value.fe_name;
+                        let FEComment = value.comment_Financial_employee;
                         if (statusFE === "afgekeurd") {
-                            review_date_Financial_employee = null
+                            review_date_Financial_employee = null;
                         }
                         else {
                             review_date_Financial_employee = value.review_date_Financial_employee;
-                            if (review_date_Financial_employee == null) {
-                                review_date_Financial_employee = null
-                            }
                         }
                         let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
-                        if (review_date_Cost_center_manager == null) {
-                            review_date_Cost_center_manager = null
+
+                        let CCM;
+                        let FE;
+
+                        if (CCMComment == null) {
+                            CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `" data-placement="top">` + statusCCM + `</p>`
+                        }
+                        else {
+                            CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + `</p>`
                         }
 
-                        table.row.add([
-                            request_date,
-                            review_date_Cost_center_manager,
-                            review_date_Financial_employee,
-                            cost_center_name,
-                            beschrijving,
-                            amount,
-                            statusCCM,
-                            statusFE
-                        ]).draw(false);
+                        if (FEComment == null && FEName == null) {
+                            FE = statusFE;
+                        }
+                        else if (FEComment == null && FEName !== " ") {
+                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
+                        }
+                        else {
+                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
+                        }
+
+                        if ((statusCCM === "in afwachting") || (statusFE === "afgekeurd")) {
+                            table.row.add([
+                                request_date,
+                                review_date_Cost_center_manager,
+                                review_date_Financial_employee,
+                                cost_center_name,
+                                beschrijving,
+                                amount,
+                                CCM,
+                                FE,
+                                `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
+                            ]).draw(false);
+                        }
+                        else{
+                            table.row.add([
+                                request_date,
+                                review_date_Cost_center_manager,
+                                review_date_Financial_employee,
+                                cost_center_name,
+                                beschrijving,
+                                amount,
+                                statusCCM,
+                                statusFE
+                            ]).draw(false);
+                        }
+
                     });
 
                     // laptop reimbursements
@@ -126,6 +162,32 @@
                         let statusCCM = value.status_CC_manager;
                         let amount = value.amount;
                         amount = '€ ' + amount;
+
+
+                        let CCMName = value.cc_manager_name;
+                        let CCMComment = value.comment_Cost_center_manager;
+                        let FEName = value.fe_name;
+                        let FEComment = value.comment_Financial_employee;
+                        let CCM;
+                        let FE;
+
+                        if (CCMComment == null) {
+                            CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `" data-placement="top">` + statusCCM + `</p>`
+                        }
+                        else {
+                            CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + `</p>`
+                        }
+
+                        if (FEComment == null && FEName == null) {
+                            FE = statusFE;
+                        }
+                        else if (FEComment == null && FEName !== " ") {
+                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
+                        }
+                        else {
+                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
+                        }
+
                         table.row.add([
                             request_date,
                             review_date_Cost_center_manager,
@@ -133,8 +195,9 @@
                             cost_center,
                             description,
                             amount,
-                            statusCCM,
-                            statusFE
+                            CCM,
+                            FE,
+                            'edit-knop'
                         ]).draw(false);
                     });
 
@@ -152,6 +215,21 @@
                         let statusCCM = null;
                         let amount = value.amount;
                         amount = '€ ' + amount;
+
+                        let FEName = value.fe_name;
+                        let FEComment = value.comment_Financial_employee;
+                        let FE;
+
+                        if (FEComment == null && FEName == null) {
+                            FE = statusFE;
+                        }
+                        else if (FEComment == null && FEName !== " ") {
+                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
+                        }
+                        else {
+                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
+                        }
+
                         table.row.add([
                             request_date,
                             review_date_Cost_center_manager,
@@ -160,16 +238,18 @@
                             description,
                             amount,
                             statusCCM,
-                            statusFE
+                            FE,
+                            'edit-knop'
                         ]).draw(false)
                     })
+                    tooltips();
                 })
         }
 
         // bootstrap tooltips
-        $(function () {
+        function tooltips() {
             $('[data-toggle="tooltip"]').tooltip()
-        })
+        }
     </script>
 
 @endsection
