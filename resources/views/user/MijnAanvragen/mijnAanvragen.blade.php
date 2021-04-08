@@ -86,8 +86,7 @@
                         let FEComment = value.comment_Financial_employee;
                         if (statusFE === "afgekeurd") {
                             review_date_Financial_employee = null;
-                        }
-                        else {
+                        } else {
                             review_date_Financial_employee = value.review_date_Financial_employee;
                         }
                         let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
@@ -97,18 +96,15 @@
 
                         if (CCMComment == null) {
                             CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `" data-placement="top">` + statusCCM + `</p>`
-                        }
-                        else {
+                        } else {
                             CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + `</p>`
                         }
 
                         if (FEComment == null && FEName == null) {
                             FE = statusFE;
-                        }
-                        else if (FEComment == null && FEName !== " ") {
+                        } else if (FEComment == null && FEName !== " ") {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
-                        }
-                        else {
+                        } else {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
                         }
 
@@ -124,8 +120,7 @@
                                 FE,
                                 `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
                             ]).draw(false);
-                        }
-                        else{
+                        } else {
                             table.row.add([
                                 request_date,
                                 review_date_Cost_center_manager,
@@ -133,8 +128,8 @@
                                 cost_center_name,
                                 beschrijving,
                                 amount,
-                                statusCCM,
-                                statusFE
+                                CCM,
+                                FE
                             ]).draw(false);
                         }
 
@@ -153,7 +148,7 @@
                         }
                         let cost_center = '';
                         $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
-                            if (value2.parameter.standard_Cost_center_id != null){
+                            if (value2.parameter.standard_Cost_center_id != null) {
                                 cost_center = value2.parameter.cost_center_name;
                             }
                         })
@@ -173,32 +168,42 @@
 
                         if (CCMComment == null) {
                             CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `" data-placement="top">` + statusCCM + `</p>`
-                        }
-                        else {
+                        } else {
                             CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + `</p>`
                         }
 
                         if (FEComment == null && FEName == null) {
                             FE = statusFE;
-                        }
-                        else if (FEComment == null && FEName !== " ") {
+                        } else if (FEComment == null && FEName !== " ") {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
-                        }
-                        else {
+                        } else {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
                         }
 
-                        table.row.add([
-                            request_date,
-                            review_date_Cost_center_manager,
-                            review_date_Financial_employee,
-                            cost_center,
-                            description,
-                            amount,
-                            CCM,
-                            FE,
-                            'edit-knop'
-                        ]).draw(false);
+                        if ((statusCCM === "in afwachting") || (statusFE === "afgekeurd")) {
+                            table.row.add([
+                                request_date,
+                                review_date_Cost_center_manager,
+                                review_date_Financial_employee,
+                                cost_center,
+                                description,
+                                amount,
+                                CCM,
+                                FE,
+                                `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
+                            ]).draw(false);
+                        } else {
+                            table.row.add([
+                                request_date,
+                                review_date_Cost_center_manager,
+                                review_date_Financial_employee,
+                                cost_center,
+                                description,
+                                amount,
+                                CCM,
+                                FE
+                            ]).draw(false);
+                        }
                     });
 
                     // bike reimbursements
@@ -222,25 +227,36 @@
 
                         if (FEComment == null && FEName == null) {
                             FE = statusFE;
-                        }
-                        else if (FEComment == null && FEName !== " ") {
+                        } else if (FEComment == null && FEName !== " ") {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
-                        }
-                        else {
+                        } else {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
                         }
 
-                        table.row.add([
-                            request_date,
-                            review_date_Cost_center_manager,
-                            review_date_Financial_employee,
-                            cost_center,
-                            description,
-                            amount,
-                            statusCCM,
-                            FE,
-                            'edit-knop'
-                        ]).draw(false)
+                        if ((statusFE === "in afwachting") || (statusFE === "afgekeurd")) {
+                            table.row.add([
+                                request_date,
+                                review_date_Cost_center_manager,
+                                review_date_Financial_employee,
+                                cost_center,
+                                description,
+                                amount,
+                                statusCCM,
+                                FE,
+                                `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
+                            ]).draw(false);
+                        } else {
+                            table.row.add([
+                                request_date,
+                                review_date_Cost_center_manager,
+                                review_date_Financial_employee,
+                                cost_center,
+                                description,
+                                amount,
+                                statusCCM,
+                                FE
+                            ]).draw(false);
+                        }
                     })
                     tooltips();
                 })
