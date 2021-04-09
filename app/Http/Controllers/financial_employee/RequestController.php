@@ -168,7 +168,7 @@ class RequestController extends Controller
 
                 return $item;
             });
-        $bike_reimbursements = Bike_reimbursement::whereIn('status_id', [1, 2, 3])
+        $bike_reimbursements = Bike_reimbursement::whereIn('status_id', [1, 2, 3, 4])
             ->with('status', 'bikerides', 'bikerides.user', 'bike_reimbursement_parameters.parameter', 'financial_employee')
             ->get()
             ->transform(function ($item, $key) use (&$total_open_payments){
@@ -291,7 +291,7 @@ class RequestController extends Controller
                 return $item;
             });
 
-        $bike_reimbursements = Bike_reimbursement::where('status_id', '=', '1')
+        $bike_reimbursements = Bike_reimbursement::where('status_id', '=', '2')
             ->with('bikerides', 'bikerides.user', 'bike_reimbursement_parameters.parameter')
             ->get()
             ->transform(function ($item, $key) use (&$total_open_payments){
@@ -317,5 +317,38 @@ class RequestController extends Controller
         JSON::dump($result);
 
         return $result;
+    }
+
+    public function payOpenPayments(){
+        $diverse_requests = Diverse_reimbursement_request::whereHas('status_FE', function ($innerQuery){
+            $innerQuery->where('id', '=', '2');
+        })
+            ->with(['user', 'diverse_reimbursement_lines.parameter'])
+            ->get();
+
+        foreach ($diverse_requests as $diverse_request){
+            $diverse_request->status_FE = 4;
+            $diverse_request->save();
+        }
+
+        $laptop_requests = Laptop_reimbursement::whereHas('status_FE', function ($innerQuery){
+            $innerQuery->where('id', '=', 2);
+        })
+            ->with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter'])
+            ->get();
+
+        foreach ($laptop_requests as $laptop_request){
+            $laptop_request->status_FE = 4;
+            $laptop_request->save();
+        }
+
+        $bike_reimbursements = Bike_reimbursement::where('status_id', '=', '2')
+            ->with('bikerides', 'bikerides.user', 'bike_reimbursement_parameters.parameter')
+            ->get();
+
+        foreach ($bike_reimbursements as $bike_reimbursement){
+            $bike_reimbursement->status_id = 4;
+            $bike_reimbursement->save();
+        }
     }
 }

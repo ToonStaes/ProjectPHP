@@ -6,7 +6,7 @@
 
 @section('main')
     <div class="messages"></div>
-    <p class="text-right"><button class="btn-primary mb-5" id="openstaande_betalingen">Openstaande betalingen uitbetalen (€)</button></p>
+    <p class="text-right"><button class="btn-primary mb-5" id="openstaande_betalingen" data-toggle="modal" data-target="#betaal-modal">Openstaande betalingen uitbetalen (€)</button></p>
 
     <div id="tabel">
         <table id="requestsTable" class="table">
@@ -52,6 +52,26 @@
                         <input type="submit" class="btn btn-primary" value="Opslaan">
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="betaal-modal" tabindex="-1" role="dialog" aria-labelledby="betaal-modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Openstaande betalingen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="openstaande_betalingen_modal">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuleren</button>
+                    <button type="button" class="btn btn-primary" id="betalen_knop">Betalen</button>
+                </div>
             </div>
         </div>
     </div>
@@ -127,6 +147,23 @@
                         console.log(data);
                     });
             });
+
+            $("#openstaande_betalingen").click(function () {
+                buildModal();
+            })
+
+            $("#betalen_knop").click(function () {
+                let pars = {
+                    '_token': '{{ csrf_token() }}',
+                    '_method': 'post'
+                };
+
+                $.post("/financial_employee/payOpenPayments", pars)
+                    .done(function () {
+                        $("#betaal-modal").modal('hide');
+                        buildTable();
+                });
+            })
         })
 
         function buildTable() {
@@ -159,6 +196,10 @@
                         let status_counter = 0;
                         $.each(data.statuses, function (key, value2) {
                             status_counter += 1;
+
+                            if (value.status_FE === "betaald") {
+                                select+= `<option selected>betaald</option>`;
+                            }
 
                             if (status_counter <= 3){
                                 select += `<option`;
@@ -274,6 +315,10 @@
                         $.each(data.statuses, function (key, value2) {
                             status_counter += 1;
 
+                            if (value.status_FE === "betaald") {
+                                select+= `<option selected>betaald</option>`;
+                            }
+
                             if (status_counter <= 3){
                                 select += `<option`;
                                 if (value2.name === value.status_FE){
@@ -305,9 +350,30 @@
                 });
         }
 
-        function makeTooltipsVisible()
-        {
+        function makeTooltipsVisible() {
             $('[data-toggle="tooltip"]').tooltip()
+        }
+
+        function buildModal(){
+            //Modal leegmaken voor alles er wordt aan toegevoegd
+            $("#openstaande_betalingen_modal").html("");
+
+            $.getJSON('/financial_employee/getOpenPayments')
+                .done(function (data) {
+                    console.log('data', data);
+                    $.each(data.diverse_requests, function (key, val) {
+                        $("#openstaande_betalingen_modal").append("<p>" + val.username + " (" + val.iban + ") - €" + val.amount + ": " + val.description +"</p>")
+                    });
+                    $.each(data.laptop_requests, function (key, val) {
+                        $("#openstaande_betalingen_modal").append("<p>" + val.username + " (" + val.iban + ") - €" + val.amount + ": " + val.description +"</p>")
+                    });
+                    $.each(data.bike_reimbursements, function (key, val) {
+                        $("#openstaande_betalingen_modal").append("<p>" + val.username + " (" + val.iban + ") - €" + val.amount + ": " + val.name +"</p>")
+                    });
+                })
+                .fail(function (e) {
+                    console.log('error', e);
+                });
         }
     </script>
 @endsection
