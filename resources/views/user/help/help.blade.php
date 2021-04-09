@@ -4,7 +4,7 @@
 
 @section('main')
     <div class="help container">
-        <h1>Help</h1>
+        <h1>Help <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u hulp vinden voor alle pagina's van het onkostenportaal."></i></h1>
         <div class="container row justify-content-between">
             @auth
                 <div class="col-md-6">
