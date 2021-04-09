@@ -4,7 +4,7 @@
 
 @section('main')
     <div class="container">
-        <h1>Laptopvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"  data-html="true" title="Op deze pagina kan u een vergoeding aanvragen voor uw aangekochte laptop."></i></h1>
+        <h1>Laptopvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u een vergoeding aanvragen voor uw aangekochte laptop."></i></h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 @include('shared.alert')

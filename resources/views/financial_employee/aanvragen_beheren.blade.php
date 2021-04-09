@@ -5,6 +5,7 @@
 @endsection
 
 @section('main')
+    <h1>Vergoedingen behandelen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u vergoedingen die goedgekeurd zijn door de kostenplaatsverantwoordelijke, af- en goedkeuren."></i></h1>
     <div class="messages"></div>
 
     <div id="tabel">
