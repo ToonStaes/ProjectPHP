@@ -81,6 +81,14 @@
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script>
+        /* Create an array with the values of all the select options in a column */
+        $.fn.dataTable.ext.order['dom-select'] = function  ( settings, col )
+        {
+            return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                return $('select', td).val();
+            } );
+        }
+
         let table = $('#requestsTable').DataTable({
             "columns": [
                 {"name": "Aanvraagdatum", "orderable": true},
@@ -91,7 +99,7 @@
                 {"name": "Bedrag", "orderable": true},
                 {"name": "Bewijsstuk(en)", "orderable": true},
                 {"name": "Status", "orderable": true},
-                {"name": "Status financieel medewerker", "orderable": true},
+                {"name": "Status financieel medewerker", "orderable": true, "orderDataType": "dom-select"},
             ],
             "language": {
                 "lengthMenu": "_MENU_ aanvragen per pagina",
@@ -106,7 +114,8 @@
                     "first": "Eerste",
                     "last": "Laatste"
                 }
-            }
+            },
+            "order": [[8, "desc"], [7, "desc"]]
         });
 
         $(document).ready(function () {
