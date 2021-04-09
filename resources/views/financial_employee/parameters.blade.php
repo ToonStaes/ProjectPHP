@@ -4,7 +4,7 @@
 
 @section('main')
     <div class="container">
-        <h1>Parameters beheren</h1>
+        <h1>Parameters beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u de parameters wijzigen."></i></h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 @include('shared.alert')
