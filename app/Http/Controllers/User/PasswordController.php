@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mailcontent;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -57,10 +58,17 @@ class PasswordController extends Controller
         $user->update(['password'=>Hash::make($newPass)]);
         $user->update(['changedPassword'=>false]);
 
+        $mailcontent = Mailcontent::firstWhere('mailtype', 'Wachtwoord vergeten');
+        $mailtext = $mailcontent->content;
+
+        $mailtext = str_replace('[NAAM]', $user->first_name, $mailtext);
+        $mailtext = str_replace('[EMAIL]', $user->email, $mailtext);
+        $mailtext = str_replace('[WACHTWOORD]', $newPass, $mailtext);
+
+        $mailtext = explode("\n", $mailtext);
+
         $data = array(
-            'naam'=>$user->first_name,
-            'email'=>$user->email,
-            'paswoord'=>$newPass
+            'content'=>$mailtext
         );
 
         Mail::to($user->email)->send(new SendPasswordReset($data));
