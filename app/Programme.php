@@ -8,11 +8,11 @@ class Programme extends Model
 {
     // R27
     public function userProgrammes() {
-        return $this->hasMany('App/UserProgramme');
+        return $this->hasMany('App\UserProgramme');
     }
 
     // R24
-    public function programmeCost_Centers() {
-        return $this->hasMany('App/ProgrammeCost_center');
+    public function programme_cost_centers() {
+        return $this->hasMany('App\ProgrammeCost_center');
     }
 }

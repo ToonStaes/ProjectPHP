@@ -26,10 +26,32 @@ class CreateBikeridesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
 
-        for ($i = 0; $i <= 20; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             DB::table('bikerides')->insert(
                 [
                     'date' => now(),
+                    'user_id' => 3,
+                    'created_at' => now()
+                ]
+            );
+        }
+
+        for ($i = 0; $i <= 5; $i++) {
+            DB::table('bikerides')->insert(
+                [
+                    'date' => now(),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 3,
+                    'created_at' => now()
+                ]
+            );
+        }
+
+        for ($i = 0; $i <= 5; $i++) {
+            DB::table('bikerides')->insert(
+                [
+                    'date' => now(),
+                    'bike_reimbursement_id' => 2,
                     'user_id' => 3,
                     'created_at' => now()
                 ]

@@ -17,7 +17,6 @@ class CreateDiverseReimbursementLinesTable extends Migration
             $table->id();
             $table->foreignId('DR_request_id');
             $table->float('amount')->nullable();
-            $table->string('description');
             $table->float('number_of_km')->nullable();
             $table->foreignId('parameter_id')->nullable();
             $table->timestamps();
@@ -31,17 +30,27 @@ class CreateDiverseReimbursementLinesTable extends Migration
             [
                 [
                     'DR_request_id' => 1,
-                    'description' => 'treinticket',
                     'amount' => 37.5,
                     'number_of_km' => null,
                     'parameter_id' => null,
                 ],
                 [
                     'DR_request_id' => 1,
-                    'description' => 'stagebezoek ometa',
                     'amount' => null,
                     'number_of_km' => 25,
                     'parameter_id' => 2,
+                ],
+                [
+                    'DR_request_id' => 2,
+                    'amount' => null,
+                    'number_of_km' => 12,
+                    'parameter_id' => 2,
+                ],
+                [
+                    'DR_request_id' => 2,
+                    'amount' => 85,
+                    'number_of_km' => null,
+                    'parameter_id' => null,
                 ]
             ]
         );

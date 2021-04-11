@@ -43,7 +43,6 @@ class LaptopController extends Controller
             $NewInvoice->amount = $request->bedrag;
             $NewInvoice->invoice_description = $request->reden;
             $NewInvoice->purchase_date = $request->datum;
-            $NewInvoice->user_id_Cost_center_manager = 2;
             $NewInvoice->save();
             session()->flash('success', 'De aanvraag is goed ontvangen.');
             return back();

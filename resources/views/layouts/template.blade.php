@@ -19,7 +19,7 @@
     @yield('main', 'Page under construction ...')
 </main>
 
-{{--@include('shared.footer')--}}
+@include('shared.footer')
 
 <script src="{{ mix('js/app.js') }}"></script>
 
