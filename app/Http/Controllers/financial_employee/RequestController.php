@@ -8,9 +8,12 @@ use App\Diverse_reimbursement_line;
 use App\Diverse_reimbursement_request;
 use App\Http\Controllers\Controller;
 use App\Laptop_reimbursement;
+use App\Mail\SendRequestDenied;
+use App\Mailcontent;
 use App\Status;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class RequestController extends Controller
 {
@@ -150,6 +153,7 @@ class RequestController extends Controller
 
     public function saveComment(Request $request){
         $status = Status::where("name", "=", $request->keuring)->first()->id;
+        \Log::debug($status);
         $type = $request->type;
         if ($type == "divers"){
             $diverse_reimbursement = Diverse_reimbursement_request::find($request->id);
@@ -168,6 +172,30 @@ class RequestController extends Controller
             $laptop_reimbursement->user_id_Financial_employee = Auth()->user()->id;
 
             $laptop_reimbursement->save();
+        }
+
+        if($status==3){
+            //get the corresponding user
+            $diverse_with_user = Diverse_reimbursement_request::find($request->id)->with(['user', 'financial_employee'])->get()[0];
+
+            //get the mailcontent associated
+            //with this action
+            $mailcontent = Mailcontent::firstWhere('mailtype', 'Afwijzing');
+            $mailtext = $mailcontent->content;
+
+            //replace all replaceables with
+            //the necessary data
+            $mailtext = str_replace("[NAAM]", $diverse_with_user->user->first_name, $mailtext);
+            $finance_employee = $diverse_with_user->financial_employee;
+            $mailtext = str_replace("[NAAM FINANCIEEL MEDEWERKER]", $finance_employee->first_name.' '.$finance_employee->last_name, $mailtext);
+            $mailtext = str_replace("[AANVRAAG]", $diverse_with_user->description, $mailtext);
+            $mailtext = str_replace("[REDEN]", $diverse_with_user->comment_Financial_employee, $mailtext);
+
+            $mailtext = explode("\n", $mailtext);
+
+            $data = array('content'=>$mailtext);
+
+            Mail::to($diverse_with_user->user->email)->send(new SendRequestDenied($data));
         }
     }
 }
