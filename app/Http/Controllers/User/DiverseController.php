@@ -29,76 +29,99 @@ class DiverseController extends Controller
         $cterID = $request->kostenplaats;
         $cter = Cost_center::whereid($cterID)->first();
 
-        $date_current = new DateTime();
-        $date_given    = new DateTime($request->datum);
-
         $iserror = false;
         $errormessage = "";
 
-        if ($request->AutoSwitch){
-            if ($request->afstand <= 0){
-                $errormessage = $errormessage . "De afstand is ongeldig. ";
-                $iserror = true;
-            }
-        }
-        else{
-            if ($date_current < $date_given) {
-                $errormessage = $errormessage . "De aankoopdatum is ongeldig. ";
-                $iserror = true;
+        $savenewreq = true;
+
+        for ($x = 1; $x <= $request->aantalkosten; $x++) {
+            $currFileUpCountName = "aantalbestanden".$x;
+            $currdatename = "datum".$x;
+            $currswitchname = "AutoSwitch".$x;
+            $currafstandname = "afstand".$x;
+            $currbedragname = "bedrag".$x;
+            $currbestandname = "UploadBestand".$x;
+
+
+            $date_current = new DateTime();
+            $date_given   = new DateTime($request->$currdatename);
+
+            if ($request->$currswitchname){
+                if ($request->$currafstandname <= 0){
+                    $errormessage = $errormessage . "Ongeldige afstand(en). ";
+                    $iserror = true;
+                }
             }
 
-            if ($request->bedrag < 1) {
-                $errormessage = $errormessage . "Het aankoopbedrag is ongeldig. ";
-                $iserror = true;
+            else{
+                if ($date_current < $date_given) {
+                    $errormessage = $errormessage . "Ongeldige aankoopdatum(s)";
+                    $iserror = true;
+                }
+
+                if ($request->$currbedragname < 1) {
+                    $errormessage = $errormessage . "Ongeldig(e) aankoopbedrag(en)";
+                    $iserror = true;
+                }
             }
-        }
 
-        if ($iserror){
-            session()->flash('danger', $errormessage);
-            return back();
-        }
-        else{
-            if ($request->AutoSwitch)
-            {
-                $NewRequest = new Diverse_reimbursement_request();
-                $NewRequest->user_id = \Auth::user()->id;
-                $NewRequest->invoice_description = $request->reden;
-                $NewRequest->request_date = $date_current;
-                $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager; //NOG AANPASSEN ADHV DROPDOWN
-                $NewRequest->cost_center_id = $cterID; //NOG AANPASSEN ADHV DROPDOW
-                $NewRequest->save();
-
-                $NewLine = new Diverse_reimbursement_line();
-                $NewLine->DR_request_id = $NewRequest->id;
-                $NewLine->number_of_km = $request->afstand;
-                $NewLine->description = $request->reden;
-                $NewLine->save();
+            if ($iserror){
+                session()->flash('danger', $errormessage);
+                return back();
             }
             else{
-                $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
-                $request->UploadBestand->storeAs('DiverseBewijzen', $FileName); //MEERDERE IMPLEMENTEREN!
+                if ($request->$currswitchname)
+                {
+                    if ($savenewreq){
+                        $NewRequest = new Diverse_reimbursement_request();
+                        $NewRequest->user_id = \Auth::user()->id;
+                        $NewRequest->invoice_description = $request->reden;
+                        $NewRequest->request_date = $date_current;
+                        $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager;
+                        $NewRequest->cost_center_id = $cterID;
+                        $NewRequest->save();
+                        $savenewreq = false;
+                    }
 
-                $NewRequest = new Diverse_reimbursement_request();
-                $NewRequest->user_id = \Auth::user()->id;
-                $NewRequest->invoice_description = $request->reden;
-                $NewRequest->request_date = $request->datum;
-                $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager; //NOG AANPASSEN ADHV DROPDOWN
-                $NewRequest->cost_center_id = $cterID; //NOG AANPASSEN ADHV DROPDOW
-                $NewRequest->save();
+                    $NewLine = new Diverse_reimbursement_line();
+                    $NewLine->DR_request_id = $NewRequest->id;
+                    $NewLine->number_of_km = $request->$currafstandname;
+                    $NewLine->description = $request->reden;
+                    $NewLine->save();
+                }
+                else{
 
-                $NewLine = new Diverse_reimbursement_line();
-                $NewLine->DR_request_id = $NewRequest->id;
-                $NewLine->description = $request->reden;
-                $NewLine->save();
+                    if ($savenewreq){
+                        $NewRequest = new Diverse_reimbursement_request();
+                        $NewRequest->user_id = \Auth::user()->id;
+                        $NewRequest->invoice_description = $request->reden;
+                        $NewRequest->request_date = $request->$currdatename;
+                        $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager;
+                        $NewRequest->cost_center_id = $cterID;
+                        $NewRequest->save();
+                        $savenewreq = false;
+                    }
 
-                $NewEvidence= new Diverse_reimbursement_evidence();
-                $NewEvidence->filepath = $FileName;
-                $NewEvidence->DR_line_id =$NewLine->id;
-                $NewEvidence->save();
+
+                    $NewLine = new Diverse_reimbursement_line();
+                    $NewLine->DR_request_id = $NewRequest->id;
+                    $NewLine->description = $request->reden;
+                    $NewLine->save();
+
+                    for ($y = 1; $y <= $request->$currFileUpCountName; $y++){
+                        $currbestandname = 'UploadBestand'.$x.'-'.$y;
+                        $FileName = date('YzHis') . $request->$currbestandname->getClientOriginalName();
+                        $request->$currbestandname->storeAs('DiverseBewijzen', $FileName);
+
+                        $NewEvidence= new Diverse_reimbursement_evidence();
+                        $NewEvidence->filepath = $FileName;
+                        $NewEvidence->DR_line_id = $NewLine->id;
+                        $NewEvidence->save();
+                    }
+                }
             }
-
-            session()->flash('success', 'De aanvraag is goed ontvangen.');
-            return back();
         }
+        session()->flash('success', 'De aanvraag is goed ontvangen.');
+        return back();
     }
 }
