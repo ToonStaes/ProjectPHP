@@ -153,7 +153,6 @@ class RequestController extends Controller
 
     public function saveComment(Request $request){
         $status = Status::where("name", "=", $request->keuring)->first()->id;
-        \Log::debug($status);
         $type = $request->type;
         if ($type == "divers"){
             $diverse_reimbursement = Diverse_reimbursement_request::find($request->id);
@@ -176,7 +175,7 @@ class RequestController extends Controller
 
         if($status==3){
             //get the corresponding user
-            $diverse_with_user = Diverse_reimbursement_request::find($request->id)->with(['user', 'financial_employee'])->get()[0];
+            $diverse_with_user = Diverse_reimbursement_request::where('id', $request->id)->with(['user', 'financial_employee'])->get()[0];
 
             //get the mailcontent associated
             //with this action

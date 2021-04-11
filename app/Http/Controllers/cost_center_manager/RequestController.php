@@ -7,9 +7,12 @@ use App\Diverse_reimbursement_line;
 use App\Diverse_reimbursement_request;
 use App\Http\Controllers\Controller;
 use App\Laptop_reimbursement;
+use App\Mail\SendRequestDenied;
+use App\Mailcontent;
 use App\Status;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class RequestController extends Controller
 {
@@ -148,6 +151,30 @@ class RequestController extends Controller
             $laptop_reimbursement->user_id_Cost_center_manager = Auth()->user()->id;
 
             $laptop_reimbursement->save();
+        }
+
+        if($status==3){
+            //get the corresponding user
+            $diverse_with_user = Diverse_reimbursement_request::where('id', $request->id)->with(['user', 'cost_center_manager'])->get()[0];
+
+            //get the mailcontent associated
+            //with this action
+            $mailcontent = Mailcontent::firstWhere('mailtype', 'Afwijzing');
+            $mailtext = $mailcontent->content;
+
+            //replace all replaceables with
+            //the necessary data
+            $mailtext = str_replace("[NAAM]", $diverse_with_user->user->first_name, $mailtext);
+            $cost_manager = $diverse_with_user->cost_center_manager;
+            $mailtext = str_replace("[NAAM FINANCIEEL MEDEWERKER]", $cost_manager->first_name.' '.$cost_manager->last_name, $mailtext);
+            $mailtext = str_replace("[AANVRAAG]", $diverse_with_user->description, $mailtext);
+            $mailtext = str_replace("[REDEN]", $diverse_with_user->comment_Cost_center_manager, $mailtext);
+
+            $mailtext = explode("\n", $mailtext);
+
+            $data = array('content'=>$mailtext);
+
+            Mail::to($diverse_with_user->user->email)->send(new SendRequestDenied($data));
         }
     }
 }
