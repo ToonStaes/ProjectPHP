@@ -15,8 +15,10 @@
 <main class="container mt-3">
     @yield('main', 'Page under construction ...')
 </main>
+<footer class="container mt-5">
+    @include('shared.footer')
+</footer>
 
-@include('shared.footer')
 
 <script src="{{ mix('js/app.js') }}"></script>
 @yield('script_after')

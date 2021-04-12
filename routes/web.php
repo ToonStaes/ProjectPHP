@@ -31,6 +31,12 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::get('request_bike_reimbursement', 'User\BikerideController@index');
     Route::post('save_bikerides', 'User\BikerideController@store');
     Route::post('request_bikeReimbursement', 'User\BikeReimbursementController@store');
+    Route::get('help', 'HelpController@index');
+    Route::get('help/fietsvergoeding', 'HelpController@bikereimbursement');
+    Route::get('help/laptopvergoeding', 'HelpController@laptopreimbursement');
+    Route::get('help/diverseAanvragen', 'HelpController@diversrequests');
+    Route::get('help/mijnAanvragen', 'HelpController@myrequests');
+
 });
 
 Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->group(function () {
@@ -38,6 +44,12 @@ Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->group(fu
     Route::get('/getRequests', 'cost_center_manager\RequestController@getRequests');
     Route::put('/saveComment', 'cost_center_manager\RequestController@saveComment');
 });
+
+Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->prefix('cost_center_manager')->group(function () {
+    Route::get('/help/aanvragenBeheren', 'HelpController@manageRequestsCC');
+    Route::get('/help/kostenplaatsenVergelijken', 'HelpController@compareCostcenters');
+});
+
 
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(function () {
   Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
@@ -47,6 +59,7 @@ Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(fun
   Route::get('Mailcontent/qryMailcontents', 'financial_employee\MailcontentController@qryMailcontents');
   Route::resource('Mailcontent', 'financial_employee\MailcontentController',['parameters' => ['Mailcontent' => 'mailcontent']]);
   Route::resource('parameters', 'financial_employee\ParameterController');
+
 });
 
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->prefix('financial_employee')->group(function () {
@@ -55,4 +68,9 @@ Route::middleware(['auth', 'changed_password' ,'financial_employee'])->prefix('f
     Route::get('/getOpenPayments', 'financial_employee\RequestController@getOpenPayments');
     Route::post('/payOpenPayments', 'financial_employee\RequestController@payOpenPayments');
     Route::put('/saveComment', 'financial_employee\RequestController@saveComment');
+    Route::get('/help/vergoedingenBeheren', 'HelpController@manageRequests');
+    Route::get('/help/gebruikersBeheren', 'HelpController@manageUsers');
+    Route::get('/help/kostenplaatsenBeheren', 'HelpController@manageCostcenters');
+    Route::get('/help/mailtekstenBeheren', 'HelpController@manageMail');
+    Route::get('/help/parametersBeheren', 'HelpController@manageParameters');
 });

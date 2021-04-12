@@ -5,6 +5,7 @@
 @endsection
 
 @section('main')
+    <h1>Aanvragen beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u aanvragen af- en goedkeuren."> </i></h1>
     <div class="messages"></div>
 
     <div id="tabel">

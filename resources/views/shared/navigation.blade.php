@@ -51,6 +51,7 @@
                                 <div class="dropdown-divider"></div>
                             @endif
 
+                        <a class="dropdown-item" href="/user/help">Help <i class="fas fa-question-circle"></i></a>
                         <a class="dropdown-item" href="/user/password">Wachtwoord aanpassen</a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                            onclick="event.preventDefault();

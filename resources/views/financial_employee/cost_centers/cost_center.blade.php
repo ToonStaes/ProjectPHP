@@ -6,9 +6,9 @@
 @endsection
 
 @section('main')
-    <h1>Kostenplaatsen beheren</h1>
+    <h1>Kostenplaatsen beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u kostenplaatsen toevoegen en verwijderen. Ook kan u hier het budget van de kostenplaats wijzigen."></i></h1>
     <button class="btn btn-primary mb-4" id="button-cost_center-add" data-toggle="modal" data-target="#cost_center_form_modal"> <i class="fas fa-plus"></i> Kostenplaats toevoegen</button>
-    <button class="btn btn-primary float-right" id="button-save">Opslaan</button>
+    <button class="btn btn-primary float-right" id="button-save" data-toggle="tooltip" data-placement="left" title="De wijzigingen van de budgetten opslaan.">Opslaan</button>
     <table id="tabel" class="table">
         <thead>
         <tr>
@@ -32,7 +32,7 @@
                            value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"
                            step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
                     <td class="text-center">
-                        <button type="submit" class="deleteCostCenter">
+                        <button type="submit" class="deleteCostCenter" data-toggle="tooltip" title="Verwijder kostenplaats {{$cost_center->name}}">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
