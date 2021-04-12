@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\financial_employee;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendNewUser;
 use App\Mail\SendPasswordMail;
+use App\Mailcontent;
 use App\Programme;
 use App\User;
 use App\UserProgramme;
@@ -116,13 +118,18 @@ class UserController extends Controller
             $newProgramme->save();
         }
 
-        $data = array(
-            'naam' => $user->first_name,
-            'email' => $user->email,
-            'paswoord' => $wachtwoord,
-        );
+        $mailcontent = Mailcontent::firstWhere('mailtype', 'Nieuwe user');
+        $mailtext = $mailcontent->content;
 
-        Mail::to($user->email)->send(new SendPasswordMail($data));
+        $mailtext = str_replace('[NAAM]', $user->first_name, $mailtext);
+        $mailtext = str_replace('[EMAIL]', $user->email, $mailtext);
+        $mailtext = str_replace('[WACHTWOORD]', $wachtwoord, $mailtext);
+
+        $mailtext = explode("\n", $mailtext);
+
+        $data = array('content'=>$mailtext);
+
+        Mail::to($user->email)->send(new SendNewUser($data));
 
         session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is aangemaakt.");
         return View::make('shared.alert');
