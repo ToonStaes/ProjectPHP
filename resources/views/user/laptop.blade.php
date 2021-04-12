@@ -4,13 +4,12 @@
 
 @section('main')
     <div class="container">
+        <h1>Laptopvergoeding aanvragen</h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 @include('shared.alert')
                 <div class="card">
-                    <div class="card-header">{{ __('Laptopvergoeding aanvragen') }}</div>
                     <div class="card-body">
-
                         <form action="/user/laptop" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
@@ -52,7 +51,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn btn-success">Aanvraag bevestigen</button>
+                            <button type="submit" class="btn btn-primary">Aanvraag bevestigen</button>
                         </form>
                     </div>
                 </div>

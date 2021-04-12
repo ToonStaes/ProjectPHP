@@ -18,7 +18,7 @@ class Diverse_reimbursement_request extends Model
 
     // R10
     public function cost_center_manager() {
-        return $this->belongsTo('App\User')->withDefault();
+        return $this->belongsTo('App\User', 'user_id_CC_manager')->withDefault();
     }
 
     // R11

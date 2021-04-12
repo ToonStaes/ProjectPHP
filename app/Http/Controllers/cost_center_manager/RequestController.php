@@ -40,6 +40,16 @@ class RequestController extends Controller
                 $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
                 unset($item->financial_employee);
 
+                if ($item->review_date_Cost_center_manager != null){
+                    $item->review_date_Cost_center_manager = date("d/m/Y", strtotime($item->review_date_Cost_center_manager));
+                }
+                if ($item->review_date_Financial_employee != null){
+                    $item->review_date_Financial_employee = date("d/m/Y", strtotime($item->review_date_Financial_employee));
+                }
+                if ($item->request_date != null){
+                    $item->request_date = date("d/m/Y", strtotime($item->request_date));
+                }
+
                 $item->amount = 0;
                 foreach ($item->diverse_reimbursement_lines as $line){
 
@@ -80,17 +90,22 @@ class RequestController extends Controller
         $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_cc_manager', 'status_fe', 'financial_employee'])
             ->get()
             ->transform(function ($item, $key){
+                $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
+                unset($item->laptop_invoice->user);
 
-                $item['laptop_invoice']['user']['name'] = $item['laptop_invoice']['user']['first_name'] . ' ' . $item['laptop_invoice']['user']['last_name'];
+                unset($item->laptop_invoice->created_at, $item->laptop_invoice->updated_at);
 
-                unset($item['laptop_invoice']['user']['address'], $item['laptop_invoice']['user']['city'], $item['laptop_invoice']['user']['zip_code'], $item['laptop_invoice']['user']['IBAN'],
-                    $item['laptop_invoice']['user']['email'], $item['laptop_invoice']['user']['phone_number'], $item['laptop_invoice']['user']['changedPassword'],
-                    $item['laptop_invoice']['user']['isActive'], $item['laptop_invoice']['user']['isCost_Center_manager'], $item['laptop_invoice']['user']['isFinancial_employee'],
-                    $item['laptop_invoice']['user']['number_of_km'], $item['laptop_invoice']['user']['created_at'], $item['laptop_invoice']['user']['updated_at']);
+                $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
 
-                unset($item['laptop_invoice']['created_at'], $item['laptop_invoice']['updated_at']);
-
-                $item['fe_name'] = $item['financial_employee']['first_name'] . " " . $item['financial_employee']['last_name'];
+                if ($item->review_date_Cost_center_manager != null){
+                    $item->review_date_Cost_center_manager = date("d/m/Y", strtotime($item->review_date_Cost_center_manager));
+                }
+                if ($item->review_date_Financial_employee != null){
+                    $item->review_date_Financial_employee = date("d/m/Y", strtotime($item->review_date_Financial_employee));
+                }
+                if ($item->laptop_invoice->purchase_date != null){
+                    $item->laptop_invoice->purchasedate = date("d/m/Y", strtotime($item->laptop_invoice->purchase_date));
+                }
 
                 $parameters = $item['laptop_reimbursement_parameters'];
                 foreach ($parameters as $parameter){
@@ -137,6 +152,10 @@ class RequestController extends Controller
             $diverse_reimbursement->comment_Cost_center_manager = $request->commentaar;
             $diverse_reimbursement->review_date_Cost_center_manager = now();
             $diverse_reimbursement->status_CC_manager = $status;
+
+            if ($status == 3){
+                $diverse_reimbursement->status_FE = 5;
+            }
 
             $diverse_reimbursement->save();
         }

@@ -32,11 +32,11 @@
         <form action="/user/save_bikerides" method="post">
             @csrf
             <input id="fietsritten" name="fietsritten" type="hidden"/>
-            <button id="save" type="submit" class="btn-primary" disabled>Ritten opslaan</button>
+            <button id="save" type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
         </form>
         <form action="/user/request_bikeReimbursement" method="post">
             @csrf
-            <button id="request" type="submit" class="btn-secondary" disabled>Aanvraag indienen</button>
+            <button id="request" type="submit" class="btn btn-secondary" disabled>Aanvraag indienen</button>
         </form>
     </div>
 
