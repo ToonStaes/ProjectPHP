@@ -7,7 +7,12 @@
     <div id="Message">
 
     </div>
-
+    <h1>Mailteksten beheren</h1>
+    <h2>
+        <a href="#!" data-toggle="modal" data-target="#modal-mailhelp">
+            <i class="far fa-question-circle"></i>
+        </a>
+    </h2>
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -21,6 +26,7 @@
         </table>
     </div>
     @include('financial_employee.mailcontent.modal')
+    @include('financial_employee.mailcontent.modal_help')
 @endsection
 
 @section('script_after')

@@ -30,16 +30,22 @@ class CreateBikeReimbursementsTable extends Migration
 
 
 
-        for ($i = 0; $i <= 5; $i++) {
-            DB::table('bike_reimbursements')->insert(
+        DB::table('bike_reimbursements')->insert(
+            [
                 [
                     'status_id' => 1,
                     'request_date' => now(),
-                    'name' => "reimbursement $i",
+                    'name' => "reimbursement februari",
+                    'created_at' => now()
+                ],
+                [
+                    'status_id' => 1,
+                    'request_date' => now(),
+                    'name' => "reimbursement maart",
                     'created_at' => now()
                 ]
-            );
-        }
+            ]
+        );
     }
 
     /**

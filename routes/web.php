@@ -65,6 +65,8 @@ Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(fun
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->prefix('financial_employee')->group(function () {
     Route::get('/aanvragen_beheren', 'financial_employee\RequestController@index');
     Route::get('/getRequests', 'financial_employee\RequestController@getRequests');
+    Route::get('/getOpenPayments', 'financial_employee\RequestController@getOpenPayments');
+    Route::post('/payOpenPayments', 'financial_employee\RequestController@payOpenPayments');
     Route::put('/saveComment', 'financial_employee\RequestController@saveComment');
     Route::get('/help/vergoedingenBeheren', 'HelpController@manageRequests');
     Route::get('/help/gebruikersBeheren', 'HelpController@manageUsers');
