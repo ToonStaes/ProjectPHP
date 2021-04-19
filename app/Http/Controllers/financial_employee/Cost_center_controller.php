@@ -190,28 +190,10 @@ class Cost_center_controller extends Controller
      */
     public function destroy(Cost_center $cost_center)
     {
-        $id = $cost_center->id;
-        $parameters = Parameter::where('standard_Cost_center_id', $id);
-
-        /*
-         * The relations between parameter and cost_centers
-         * is defined using a DTR (restrict on delete)
-         *
-         * This means we need to delete all corresponding
-         * parameters first
-         *
-         * However, the relationship between parameter and
-         * laptop_reimbursement_param also has a DTR,
-         * so we also need to delete any of these first
-         * */
-        foreach($parameters->get() as $parameter){
-            $laptop_reimbursement_param = Laptop_reimbursementParameter::where('parameter_id', $parameter->id);
-            $laptop_reimbursement_param->delete();
-        }
-        $parameters->delete();
-        $cost_center->delete();
+        $cost_center->isActive = false;
+        $cost_center->save();
 
         //respons with ok + the id of the deleted cost_center
-        return response(['r'=>'ok','id'=>$id]);
+        return response(['r'=>'ok','id'=>$cost_center->id]);
     }
 }

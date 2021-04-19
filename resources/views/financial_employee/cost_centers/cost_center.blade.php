@@ -199,6 +199,7 @@
             }).fail(function(jqXHR, statusText, errorText){
                 if(jqXHR.status == 500){
                     alert("Er is een fout gebeurt bij het verwijderen");
+                    console.log(this.id + " " + this.name);
                     return;
                 }
                 this.tryCount++;
