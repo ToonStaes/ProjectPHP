@@ -39,7 +39,7 @@
                             </div>
                             <div class="kosten">
                                 <div class="kost">
-                                    <div class="form-check form-switch">
+                                    <div class="form-check form-switch mx-3">
                                         <input class="form-check-input autoswitch" type="checkbox" id="AutoSwitch1" name="AutoSwitch1">
                                         <label class="form-check-label" for="flexSwitchCheckDefault">Autovergoeding?</label>
                                     </div>

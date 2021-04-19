@@ -75,7 +75,7 @@ class DiverseController extends Controller
                     if ($savenewreq){
                         $NewRequest = new Diverse_reimbursement_request();
                         $NewRequest->user_id = \Auth::user()->id;
-                        $NewRequest->invoice_description = $request->reden;
+                        $NewRequest->description = $request->reden;
                         $NewRequest->request_date = $date_current;
                         $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager;
                         $NewRequest->cost_center_id = $cterID;
@@ -86,7 +86,6 @@ class DiverseController extends Controller
                     $NewLine = new Diverse_reimbursement_line();
                     $NewLine->DR_request_id = $NewRequest->id;
                     $NewLine->number_of_km = $request->$currafstandname;
-                    $NewLine->description = $request->reden;
                     $NewLine->save();
                 }
                 else{
@@ -94,7 +93,7 @@ class DiverseController extends Controller
                     if ($savenewreq){
                         $NewRequest = new Diverse_reimbursement_request();
                         $NewRequest->user_id = \Auth::user()->id;
-                        $NewRequest->invoice_description = $request->reden;
+                        $NewRequest->description = $request->reden;
                         $NewRequest->request_date = $request->$currdatename;
                         $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager;
                         $NewRequest->cost_center_id = $cterID;
@@ -105,7 +104,6 @@ class DiverseController extends Controller
 
                     $NewLine = new Diverse_reimbursement_line();
                     $NewLine->DR_request_id = $NewRequest->id;
-                    $NewLine->description = $request->reden;
                     $NewLine->save();
 
                     for ($y = 1; $y <= $request->$currFileUpCountName; $y++){
