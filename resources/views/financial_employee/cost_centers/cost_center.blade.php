@@ -199,7 +199,6 @@
             }).fail(function(jqXHR, statusText, errorText){
                 if(jqXHR.status == 500){
                     alert("Er is een fout gebeurt bij het verwijderen");
-                    console.log(this.id + " " + this.name);
                     return;
                 }
                 this.tryCount++;
@@ -267,12 +266,13 @@
                 "<td>"+cost_center.description+"</td>",
                 "<td><input class=\"input-budget\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
                 "                           min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
-                "<td><button type=\"submit\" class=\"btn btn-outline-danger deleteCostCenter\">\n" +
+                "<td><button type=\"submit\" class=\"deleteCostCenter\" data-toggle=\"tooltip\" title=\"Verwijder kostenplaats "+cost_center.cost_center_name+"\">\n" +
                 "                        <i class=\"fas fa-trash-alt\"></i></button></td>"
             ]).draw().node();
             _datatable.draw();
             _datatable.sort();
             $("td:nth-child(2)").addClass("cost_center_name");
+            $("td:last-child").addClass("text-center");
             $(newrow).on('click','.deleteCostCenter', cost_center_delete_click);
             $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
         }
