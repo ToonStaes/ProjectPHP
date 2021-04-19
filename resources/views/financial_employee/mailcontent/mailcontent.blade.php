@@ -3,10 +3,16 @@
 @section('title', 'Mailteksten beheren')
 
 @section('main')
+    <h1>Mailteksten beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u de standaard mailteksten wijzigen."></i></h1>
     <div id="Message">
 
     </div>
     <h1>Mailteksten beheren</h1>
+    <h2>
+        <a href="#!" data-toggle="modal" data-target="#modal-mailhelp">
+            <i class="far fa-question-circle"></i>
+        </a>
+    </h2>
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -20,6 +26,7 @@
         </table>
     </div>
     @include('financial_employee.mailcontent.modal')
+    @include('financial_employee.mailcontent.modal_help')
 @endsection
 
 @section('script_after')
@@ -41,7 +48,7 @@
                             <td class="column1">${value.mailtype}</td>
                             <td class="content">${value.content}</td>
                             <td data-id="${value.id}" data-type="${value.mailtype}">
-                                        <a href="#!" class="btn-edit">
+                                        <a href="#!" class="btn-edit" data-toggle="tooltip" title="Wijzig de mail voor ${value.mailtype}">
                                             <i class="fas fa-edit"></i>
                                         </a></td>`;
                     $('tbody').append(tr);

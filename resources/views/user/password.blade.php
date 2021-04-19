@@ -4,7 +4,7 @@
 
 @section('main')
     <div class="container">
-        <h1>Wachtwoord aanpassen</h1>
+        <h1>Wachtwoord aanpassen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u uw wachtwoord wijzigen."></i></h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
@@ -47,7 +47,7 @@
                                        required>
                                 <i class="far fa-eye" id="togglePasswordNew2"></i>
                             </div>
-                            <button type="submit" class="btn btn-primary">Opslaan</button>
+                            <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Uw nieuw wachtwoord opslaan">Opslaan</button>
                         </form>
                     </div>
                 </div>
