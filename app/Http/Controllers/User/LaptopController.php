@@ -10,6 +10,7 @@ use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Integer;
+use View;
 
 class LaptopController extends Controller
 {
@@ -77,7 +78,8 @@ class LaptopController extends Controller
             $laptopInvoice->invoice_description = $request->reden;
             $laptopInvoice->purchase_date = $request->datum;
             $laptopInvoice->save();
-            return back();
+            session()->flash('success', 'Uw aanvraag is aangepast.');
+            return $laptopInvoice;
         }
 
         else{

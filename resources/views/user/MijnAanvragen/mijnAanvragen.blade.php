@@ -6,6 +6,9 @@
 @endsection
 
 @section('main')
+    <div id="Message">
+
+    </div>
     <div class="container">
         <table id="mijnAanvragen" class="table">
             <thead>
@@ -48,6 +51,33 @@
                 $('#uploadFile').addClass('d-none');
                 $('#bestand').prop('required', false);
             })
+
+            $('#modal-laptop form').submit(function (e) {
+                // Don't submit the form
+                e.preventDefault();
+                // Get the action property (the URL to submit)
+                let action = $(this).attr('action');
+                // Serialize the form and send it as a parameter with the post
+                let pars = $(this).serialize();
+                // Post the data to the URL
+                $.post(action, pars, 'json')
+                    .done(function (data) {
+                        $('#Message').html(data);
+                        // Hide the modal
+                        $('#modal-laptop').modal('hide');
+                        // Rebuild the table
+                        buildTable();
+                    })
+                    .fail(function (e) {
+                        // Loop over the e.responseJSON.errors array and create an ul list with all the error messages
+                        let msg = '<p>Errors: <ul>';
+                        $.each(e.responseJSON.errors, function (key, value) {
+                            msg += `<li>${value}</li>`;
+                        });
+                        msg += '</ul></p>';
+                        $('#Message').html(msg);
+                    });
+            });
         })
 
         $('tbody').on('click', '.btn-edit', function () {
