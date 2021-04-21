@@ -18,9 +18,10 @@
                                    class="form-control" required>
                             <div class="form-group">
                                 <label for="kostenplaats">Kostenplaats</label>
-                                <select class="form-control" name="kostenplaats" id="kostenplaats" required>
+                                <select class="form-control search-dropdown" name="kostenplaats" id="kostenplaats" required>
+                                    <option value="">Selecteer een kostenplaats</option>
                                     @foreach($kostenplaatsen as $kostenplaats)
-                                        <option value="{{ $kostenplaats->id }}">{{ $kostenplaats->description}}</option>
+                                        <option value="{{ $kostenplaats->id }}">{{ $kostenplaats->name}} - {{ $kostenplaats->description}}</option>
                                     @endforeach
                                 </select>
                                 @error('kostenplaats')
