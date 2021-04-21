@@ -23,7 +23,7 @@ class Bike_reimbursement extends Model
     }
 
     // R12
-    public function users(){
-        return $this->hasMany('App\User'); // a bike_reimbursement has many users
+    public function financial_employee(){
+        return $this->belongsTo('App\User', 'user_id_Financial_employee'); // a bike_reimbursement has many users
     }
 }

@@ -1,18 +1,18 @@
 @extends('layouts.template')
 
-@section('title', 'Mailtekst beheren')
+@section('title', 'Mailteksten beheren')
 
 @section('main')
     <div id="Message">
 
     </div>
-    <h1>Mailtekst aanpassen</h1>
+    <h1>Mailteksten beheren</h1>
     <div class="table-responsive">
         <table class="table">
             <thead>
             <tr>
                 <th>Mailtype</th>
-                <th>Mailcontent</th>
+                <th>Mailtekst</th>
                 <th></th>
             </tr>
             </thead>
@@ -41,7 +41,7 @@
                             <td class="column1">${value.mailtype}</td>
                             <td class="content">${value.content}</td>
                             <td data-id="${value.id}" data-type="${value.mailtype}">
-                                        <a href="#!" class="btn btn-outline-success btn-edit">
+                                        <a href="#!" class="btn-edit">
                                             <i class="fas fa-edit"></i>
                                         </a></td>`;
                     $('tbody').append(tr);
@@ -58,8 +58,8 @@
             let type = $(this).closest('td').data('type');
             let content = $(this).closest('tr').find('.content').text(); // To prevent <br>-tag from appearing in edit-form
             // Update the modal
-            $('.modal-title').text(`Edit ${type}`);
             $('form').attr('action', `/financial_employee/mailcontent/${id}`);
+            $('.modal-title').text(`Wijzig ${type}`);
             $('#mailcontent').val(content);
             $('#mailtype').val(type);
             $('input[name="_method"]').val('put');

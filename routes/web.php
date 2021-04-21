@@ -22,6 +22,7 @@ Route::view('/', 'home');
 
 Route::get('user/firstPassword', 'User\PasswordController@edit');
 Route::post('user/password', 'User\PasswordController@update');
+Route::post('password/reset', 'User\PasswordController@reset');
 
 Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
@@ -52,4 +53,12 @@ Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(fun
   Route::get('Mailcontent/qryMailcontents', 'financial_employee\MailcontentController@qryMailcontents');
   Route::resource('Mailcontent', 'financial_employee\MailcontentController',['parameters' => ['Mailcontent' => 'mailcontent']]);
   Route::resource('parameters', 'financial_employee\ParameterController');
+});
+
+Route::middleware(['auth', 'changed_password' ,'financial_employee'])->prefix('financial_employee')->group(function () {
+    Route::get('/aanvragen_beheren', 'financial_employee\RequestController@index');
+    Route::get('/getRequests', 'financial_employee\RequestController@getRequests');
+    Route::get('/getOpenPayments', 'financial_employee\RequestController@getOpenPayments');
+    Route::post('/payOpenPayments', 'financial_employee\RequestController@payOpenPayments');
+    Route::put('/saveComment', 'financial_employee\RequestController@saveComment');
 });

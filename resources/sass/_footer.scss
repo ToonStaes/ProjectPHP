@@ -1,0 +1,13 @@
+footer{
+    #border{
+        background-color: $blue;
+        height: 2px;
+        box-shadow: 2px 2px 20px $dark-grey;
+        margin-bottom: 1rem;
+    }
+    @media screen and (min-width: 900px) {
+        #rechts {
+            text-align: right;
+        }
+    }
+}

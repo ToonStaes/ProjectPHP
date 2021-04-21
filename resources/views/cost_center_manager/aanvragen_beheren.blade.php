@@ -60,6 +60,14 @@
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script>
+        /* Create an array with the values of all the select options in a column */
+        $.fn.dataTable.ext.order['dom-select'] = function  ( settings, col )
+        {
+            return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                return $('select', td).val();
+            } );
+        }
+
         let table = $('#requestsTable').DataTable({
             "columns": [
                 {"name": "Aanvraagdatum", "orderable": true},
@@ -69,7 +77,7 @@
                 {"name": "Beschrijving", "orderable": true},
                 {"name": "Bedrag", "orderable": true},
                 {"name": "Bewijsstuk(en)", "orderable": true},
-                {"name": "Status", "orderable": true},
+                {"name": "Status", "orderable": true, "orderDataType": "dom-select"},
                 {"name": "Status financieel medewerker", "orderable": true},
             ],
             "language": {
@@ -85,7 +93,8 @@
                     "first": "Eerste",
                     "last": "Laatste"
                 }
-            }
+            },
+            "order": [[7, "desc"], [8, "desc"]]
         });
 
         $(document).ready(function () {
@@ -154,12 +163,18 @@
                             select += `disabled style="pointer-events: none;"`;
                         }
                         select += `>`;
+
+                        let status_counter = 0;
                         $.each(data.statuses, function (key, value2) {
-                            select += `<option`;
-                            if (value2.name === value.status_CC_manager){
-                                select += ` selected`;
+                            status_counter += 1;
+
+                            if (status_counter <= 3){
+                                select += `<option`;
+                                if (value2.name === value.status_CC_manager){
+                                    select += ` selected`;
+                                }
+                                select +=  `>${value2.name}</option>`;
                             }
-                            select +=  `>${value2.name}</option>`;
                         })
                         select += `</select></span>`;
 
@@ -173,7 +188,7 @@
                         $.each(value.diverse_reimbursement_lines, function (key, value) {
                             //Alle bewijsstukken achter elkaar zetten
                             $.each(value.diverse_reimbursement_evidences, function (key2, value2) {
-                                evidence += `<a class="btn btn-outline-dark" href="${value2.filepath}"><nobr><img src='assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name}</nobr></a>`;
+                                evidence += `<a class="btn btn-outline-dark" href="${value2.filepath}" download><nobr><img src='assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name}</nobr></a>`;
                             });
                         })
 
@@ -197,35 +212,42 @@
                             value.comment_Cost_center_manager = "";
                         }
 
-                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'"`;
+                        let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'`;
                         if (value.status_fe.name !== "in afwachting"){
                             select += `disabled style="pointer-events: none;"`;
                         }
                         select += `>`;
+
+                        let status_counter = 0;
+
                         $.each(data.statuses, function (key, value2) {
-                            select += `<option`;
-                            if (value2.name === value.status_cc_manager.name){
-                                select += ` selected`;
+                            status_counter += 1;
+
+                            if (status_counter <= 3){
+                                select += `<option`;
+                                if (value2.name === value.status_CC_manager){
+                                    select += ` selected`;
+                                }
+                                select +=  `>${value2.name}</option>`;
                             }
-                            select +=  `>${value2.name}</option>`;
                         })
                         select += `</select></span>`;
 
-                        let request_date = value.laptop_invoice.purchase_date;
+                        let request_date = value.laptop_invoice.purchasedate;
                         let cost_center = '';
                         $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
                             if (value2.parameter.standard_Cost_center_id != null){
                                 cost_center = value2.parameter.cost_center_name;
                             }
                         })
-                        let user_name = value.laptop_invoice.user.name;
+                        let user_name = value.laptop_invoice.username;
 
                         let status_fe = value.status_fe.name;
                         if (value.comment_Financial_employee != null){
                             status_fe = `<p>${value.status_fe.name} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
                         }
 
-                        let evidence = `<a class="btn btn-outline-dark" href="${value.laptop_invoice.filepath}"><nobr><img src='assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name}</nobr></a>`;
+                        let evidence = `<a class="btn btn-outline-dark" href="${value.laptop_invoice.filepath}" download><nobr><img src='assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name}</nobr></a>`;
                         table.row.add([
                             request_date,
                             value.review_date_Cost_center_manager,
