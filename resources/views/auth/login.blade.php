@@ -2,9 +2,10 @@
 
 @section('main')
 <div class="container">
-    <h1>Login</h1>
+
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <h1>Login</h1>
             <div class="card">
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
