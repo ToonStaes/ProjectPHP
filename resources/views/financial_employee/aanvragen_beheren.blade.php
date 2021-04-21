@@ -198,7 +198,7 @@
                             select = `<span data-toggle="tooltip" data-placement="top" data-html="true" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
                         }
 
-                        if (value.status_FE === "betaald"){
+                        if (value.status_FE === "betaald" || value.status_FE === "afgekeurd"){
                             select += `disabled style="pointer-events: none;"`;
                         }
                         select += `>`;

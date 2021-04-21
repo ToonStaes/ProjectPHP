@@ -243,6 +243,30 @@ class RequestController extends Controller
 
             $bike_reimbursement->save();
         }
+
+        if($status==3){
+            //get the corresponding user
+            $diverse_with_user = Diverse_reimbursement_request::where('id', $request->id)->with(['user', 'financial_employee'])->get()[0];
+
+            //get the mailcontent associated
+            //with this action
+            $mailcontent = Mailcontent::firstWhere('mailtype', 'Afwijzing');
+            $mailtext = $mailcontent->content;
+
+            //replace all replaceables with
+            //the necessary data
+            $mailtext = str_replace("[NAAM]", $diverse_with_user->user->first_name, $mailtext);
+            $finance_employee = $diverse_with_user->financial_employee;
+            $mailtext = str_replace("[NAAM FINANCIEEL MEDEWERKER]", $finance_employee->first_name.' '.$finance_employee->last_name, $mailtext);
+            $mailtext = str_replace("[AANVRAAG]", $diverse_with_user->description, $mailtext);
+            $mailtext = str_replace("[REDEN]", $diverse_with_user->comment_Financial_employee, $mailtext);
+
+            $mailtext = explode("\n", $mailtext);
+
+            $data = array('content'=>$mailtext);
+
+            Mail::to($diverse_with_user->user->email)->send(new SendRequestDenied($data));
+        }
     }
 
     public function getOpenPayments(){
@@ -342,6 +366,7 @@ class RequestController extends Controller
 
         foreach ($laptop_requests as $laptop_request){
             $laptop_request->status_FE = 4;
+            $laptop_request->payment_date = now();
             $laptop_request->save();
         }
 
@@ -352,30 +377,6 @@ class RequestController extends Controller
         foreach ($bike_reimbursements as $bike_reimbursement){
             $bike_reimbursement->status_id = 4;
             $bike_reimbursement->save();
-        }
-
-        if($status==3){
-            //get the corresponding user
-            $diverse_with_user = Diverse_reimbursement_request::where('id', $request->id)->with(['user', 'financial_employee'])->get()[0];
-
-            //get the mailcontent associated
-            //with this action
-            $mailcontent = Mailcontent::firstWhere('mailtype', 'Afwijzing');
-            $mailtext = $mailcontent->content;
-
-            //replace all replaceables with
-            //the necessary data
-            $mailtext = str_replace("[NAAM]", $diverse_with_user->user->first_name, $mailtext);
-            $finance_employee = $diverse_with_user->financial_employee;
-            $mailtext = str_replace("[NAAM FINANCIEEL MEDEWERKER]", $finance_employee->first_name.' '.$finance_employee->last_name, $mailtext);
-            $mailtext = str_replace("[AANVRAAG]", $diverse_with_user->description, $mailtext);
-            $mailtext = str_replace("[REDEN]", $diverse_with_user->comment_Financial_employee, $mailtext);
-
-            $mailtext = explode("\n", $mailtext);
-
-            $data = array('content'=>$mailtext);
-
-            Mail::to($diverse_with_user->user->email)->send(new SendRequestDenied($data));
         }
     }
 }
