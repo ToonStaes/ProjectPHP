@@ -26,6 +26,7 @@
             </tbody>
         </table>
     </div>
+    @include('user.MijnAanvragen.laptop_modal')
 @endsection
 
 @section('script_after')
@@ -35,7 +36,46 @@
     <script>
         $(document).ready(function () {
             buildTable();
+
+            $('#delete').click(function () {
+                $(this).parent().addClass('d-none');
+                $('#uploadFile').removeClass('d-none');
+                $('#bestand').prop('required', true);
+            })
+
+            $('#modal-laptop').on('hidden.bs.modal' ,function () {
+                $('#oldfile').removeClass('d-none');
+                $('#uploadFile').addClass('d-none');
+                $('#bestand').prop('required', false);
+            })
         })
+
+        $('tbody').on('click', '.btn-edit', function () {
+            if($(this).hasClass('laptopvergoeding')) {
+                // Get data attributes from td tag
+                let id = $(this).data('id');
+                let amount = $(this).data('amount');
+                let purchaseDate = $(this).data('purchasedate');
+                console.log("purchase Date :" + purchaseDate);
+                let filepath = $(this).data('filepath');
+                let description = $(this).data('description');
+                let file_icon = $(this).data('fileicon');
+                console.log("file icon: " + file_icon)
+                let file_name = $(this).data('filename')
+                let content = `<img src="../assets/icons/file_icons/` + file_icon + `" alt="file icon" width="25px">` + file_name
+                // Update the modal
+                $('.modal-title').text(`Pas laptopaanvraag aan`);
+                $('form').attr('action', `/user/laptop/${id}`);
+
+                $('#bedrag').val(amount);
+                $('#reden').val(description);
+                $('#datum').val(purchaseDate);
+                $('#filepath').attr('href', filepath).html(content);
+                $('input[name="_method"]').val('put');
+                // Show the modal
+                $('#modal-laptop').modal('show');
+            }
+        });
 
         let table = $('#mijnAanvragen').DataTable({
             "columns": [
@@ -79,7 +119,7 @@
                         amount = '€ ' + amount;
                         let statusFE = value.status_FE;
                         let statusCCM = value.status_CC_manager;
-                        let review_date_Financial_employee = null;
+                        let review_date_Financial_employee;
                         let CCMName = value.cc_manager_name;
                         let CCMComment = value.comment_Cost_center_manager;
                         let FEName = value.fe_name;
@@ -100,7 +140,7 @@
                             CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + `</p>`
                         }
 
-                        if (FEComment == null && FEName == null) {
+                        if (FEComment == null || FEName == null) {
                             FE = statusFE;
                         } else if (FEComment == null && FEName !== " ") {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
@@ -136,7 +176,7 @@
                     });
 
                     // laptop reimbursements
-                    $.each(data.laptop_requests, function (key, value) {
+                    $.each(data.laptop_reimbursements, function (key, value) {
                         let request_date = value.laptop_invoice.purchase_date;
                         let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
                         if (review_date_Cost_center_manager == null) {
@@ -190,7 +230,7 @@
                                 amount,
                                 CCM,
                                 FE,
-                                `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
+                                `<a href="#!" class="btn-edit laptopvergoeding" data-id="${value.laptop_invoice.id}" data-amount="${value.laptop_invoice.amount}" data-purchasedate="${value.laptop_invoice.purchase_date}" data-filepath="${value.laptop_invoice.filepath}" data-description="${value.laptop_invoice.invoice_description}" data-fileIcon="${value.laptop_invoice.file_icon}" data-filename="${value.laptop_invoice.file_name}"><i class="fas fa-edit"></i></a>`
                             ]).draw(false);
                         } else {
                             table.row.add([

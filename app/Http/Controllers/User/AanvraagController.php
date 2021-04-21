@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use App\Laptop_reimbursement;
 use App\User;
 use Facades\App\Helpers\Json;
-//use http\Client\Curl\User;
 use Illuminate\Http\Request;
 
 class AanvraagController extends Controller
@@ -78,8 +77,8 @@ class AanvraagController extends Controller
                 return $item;
             });
 
-        // get all laptop_requests
-        $laptop_requests = Laptop_reimbursement::whereHas('laptop_invoice.user', function ($q) {
+        // get all laptop_reimbursements
+        $laptop_reimbursements = Laptop_reimbursement::whereHas('laptop_invoice.user', function ($q) {
                 $q->where('user_id', '=', auth()->user()->id);
             })
             ->with(['laptop_reimbursement_parameters', 'status_fe', 'status_cc_manager', 'cost_center_manager', 'financial_employee'])->get()
@@ -91,7 +90,7 @@ class AanvraagController extends Controller
                     $item->financial_employee_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
                 }
 
-                unset($item->laptop_invoice->id, $item->laptop_invoice->user, $item->laptop_invoice->user_id, $item->laptop_invoice->created_at, $item->laptop_invoice->updated_at,
+                unset($item->laptop_invoice->user, $item->laptop_invoice->user_id, $item->laptop_invoice->created_at, $item->laptop_invoice->updated_at,
                     $item->cost_center_manager, $item->financial_employee, $item->laptop_invoice_id, $item->user_id_Cost_center_manager, $item->user_id_Financial_employee,
                     $item->created_at, $item->updated_at);
 
@@ -123,24 +122,24 @@ class AanvraagController extends Controller
                 $item->status_CC_manager = $item->status_cc_manager->name;
                 unset($item->status_fe, $item->status_cc_manager);
 
-//                $exploded_path = explode('/', $item['laptop_invoice']['filepath']);
-//                if (!empty($exploded_path)){
-//                    $item['laptop_invoice']['file_name'] = end($exploded_path);
-//                    $extension = explode(".", $item['laptop_invoice']['file_name']);
-//                    $extension = end($extension);
-//                    $extension = strtolower($extension);
-//
-//                    $extensions = ["doc", "docx", "gif", "jpg", "jpeg", "mkv", "mov", "mp3", "mp4", "mpg", "pdf", "png", "ppt", "rar", "tiff", "txt", "xls", "xlsx", "zip"];
-//                    if (in_array($extension, $extensions)){
-//                        if ($extension == "jpeg"){
-//                            $item['laptop_invoice']['file_icon'] = "jpg.png";
-//                        } else {
-//                            $item['laptop_invoice']['file_icon'] = $extension . ".png";
-//                        }
-//                    } else {
-//                        $item['laptop_invoice']['file_icon'] = "unknown.png";
-//                    }
-//                }
+                $exploded_path = explode('/', $item['laptop_invoice']['filepath']);
+                if (!empty($exploded_path)){
+                    $item['laptop_invoice']['file_name'] = end($exploded_path);
+                    $extension = explode(".", $item['laptop_invoice']['file_name']);
+                    $extension = end($extension);
+                    $extension = strtolower($extension);
+
+                    $extensions = ["doc", "docx", "gif", "jpg", "jpeg", "mkv", "mov", "mp3", "mp4", "mpg", "pdf", "png", "ppt", "rar", "tiff", "txt", "xls", "xlsx", "zip"];
+                    if (in_array($extension, $extensions)){
+                        if ($extension == "jpeg"){
+                            $item['laptop_invoice']['file_icon'] = "jpg.png";
+                        } else {
+                            $item['laptop_invoice']['file_icon'] = $extension . ".png";
+                        }
+                    } else {
+                        $item['laptop_invoice']['file_icon'] = "unknown.png";
+                    }
+                }
 
                 return $item;
             });
@@ -184,7 +183,6 @@ class AanvraagController extends Controller
                         } else {
                             $counter_normal_rides++;
                         }
-
                         return $item;
                     });
 
@@ -203,9 +201,7 @@ class AanvraagController extends Controller
                 return $item;
             });
 
-
-
-        $result = compact('diverse_requests', 'laptop_requests', 'bike_requests');
+        $result = compact('diverse_requests', 'laptop_reimbursements', 'bike_requests');
         Json::dump($result);
         return $result;
     }

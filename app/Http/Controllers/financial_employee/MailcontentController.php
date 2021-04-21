@@ -82,7 +82,6 @@ class MailcontentController extends Controller
         $mailcontent->save();
         session()->flash('success', "De mail voor <b>$mailcontent->mailtype</b> is bijgewerkt");
         return View::make('shared.alert');
-            //view::make('shared.alert');
     }
 
     /**

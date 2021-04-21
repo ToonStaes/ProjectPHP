@@ -59,8 +59,7 @@
             let content = $(this).closest('tr').find('.content').text(); // To prevent <br>-tag from appearing in edit-form
             // Update the modal
             $('.modal-title').text(`Edit ${type}`);
-            $('form').attr('action', `/financial_employee/Mailcontent/${id}`);
-            $('form').attr('method','put');
+            $('form').attr('action', `/financial_employee/mailcontent/${id}`);
             $('#mailcontent').val(content);
             $('#mailtype').val(type);
             $('input[name="_method"]').val('put');
