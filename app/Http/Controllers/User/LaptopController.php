@@ -13,7 +13,7 @@ class LaptopController extends Controller
     public function store(Request $request)
     {
         $date_current = new DateTime();
-        $date_given    = new DateTime($request->datum);
+        $date_given = new DateTime($request->datum);
 
         $iserror = false;
         $errormessage = "";

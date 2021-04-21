@@ -307,6 +307,8 @@
 
                     if(data.is_active){
                         $('#gebruiker_bewerken input[name="actief"]').prop( "checked", true );
+                    } else {
+                        $('#gebruiker_bewerken input[name="actief"]').prop( "checked", false );
                     }
 
                     if(data.isCost_Center_manager){
