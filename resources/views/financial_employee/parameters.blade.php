@@ -98,3 +98,15 @@
         </div>
     </div>
 @endsection
+@section('script_after')
+
+
+    <script>
+        $(document).ready(function(){
+
+            // Initialize select2
+            $(".search-dropdown").select2();
+
+        });
+    </script>
+@endsection
