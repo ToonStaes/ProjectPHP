@@ -342,6 +342,7 @@ class RequestController extends Controller
 
         foreach ($laptop_requests as $laptop_request){
             $laptop_request->status_FE = 4;
+            $laptop_request->payment_date = now();
             $laptop_request->save();
         }
 
