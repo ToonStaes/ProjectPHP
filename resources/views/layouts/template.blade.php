@@ -22,6 +22,8 @@
 </footer>
 
 <script src="{{ mix('js/app.js') }}"></script>
+@include('shared.cdn_linken')
 @yield('script_after')
+
 </body>
 </html>

@@ -7,4 +7,5 @@ $(function(){
         // hide tooltip when you click on it
         $(this).tooltip('hide');
     });
+    $(".search-dropdown").select2();
 });
