@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Laptop_invoice;
+use App\Laptop_reimbursement;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -42,6 +43,14 @@ class LaptopController extends Controller
             $NewInvoice->invoice_description = $request->reden;
             $NewInvoice->purchase_date = $request->datum;
             $NewInvoice->save();
+
+            $NewLapReimb = new Laptop_reimbursement();
+            $NewLapReimb->laptop_invoice_id = $NewInvoice->id;
+            $NewLapReimb->user_id_Cost_center_manager = 2;
+            $NewLapReimb->payment_date = null;
+            $NewLapReimb->save();
+
+
             session()->flash('success', 'De aanvraag is goed ontvangen.');
             return back();
         }

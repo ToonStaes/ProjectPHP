@@ -3,16 +3,14 @@
 @section('title', 'Mailteksten beheren')
 
 @section('main')
-    <h1>Mailteksten beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u de standaard mailteksten wijzigen."></i></h1>
+    <h1>Mailteksten beheren
+        <a href="#!" data-toggle="modal" data-target="#modal-mailhelp">
+            <i class="fas fa-info-circle"></i>
+        </a>
+    </h1>
     <div id="Message">
 
     </div>
-    <h1>Mailteksten beheren</h1>
-    <h2>
-        <a href="#!" data-toggle="modal" data-target="#modal-mailhelp">
-            <i class="far fa-question-circle"></i>
-        </a>
-    </h2>
     <div class="table-responsive">
         <table class="table">
             <thead>

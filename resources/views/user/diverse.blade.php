@@ -6,9 +6,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <h1>Diverse vergoeding aanvragen</h1>
                 @include('shared.alert')
                 <div class="card">
-                    <div class="card-header"><h1>Diverse vergoeding aanvragen</h1></div>
                     <div class="card-body" id="FormDiv">
                         <button class="btn btn-primary" id="btnaddvergoeding"><i class="fas fa-plus-square"></i> Kost toevoegen</button>
                         <hr>
