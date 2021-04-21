@@ -21,7 +21,7 @@
         </tr>
         </thead>
         <tbody id="table_body">
-        @foreach($cost_centers as $cost_center)
+        {{--@foreach($cost_centers as $cost_center)
             @if($cost_center->isActive)
                 <tr data-id="{{$cost_center->id}}">
                     <td>{{count($cost_center->programmes) ? $cost_center->programmes[0]->name : "Onbekend"}}</td>
@@ -33,6 +33,24 @@
                            step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
                     <td class="text-center">
                         <button type="submit" class="deleteCostCenter" data-toggle="tooltip" title="Verwijder kostenplaats {{$cost_center->name}}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            @endif
+        @endforeach--}}
+        @foreach($programme_cost_centers as $programme_cost_center)
+            @if($programme_cost_center->isActive)
+                <tr data-id="{{$programme_cost_center->cost_center->id}}">
+                    <td>{{!is_null($programme_cost_center->programme) ? $programme_cost_center->programme->name : "Onbekend"}}</td>
+                    <td class="cost_center_name">{{$programme_cost_center->cost_center->name}}</td>
+                    <td>{{$programme_cost_center->cost_center->user->first_name." ".$programme_cost_center->cost_center->user->last_name}}</td>
+                    <td>{{$programme_cost_center->cost_center->description}}</td>
+                    <td><input class="input-budget" type="number"
+                               value="{{count($programme_cost_center->cost_center->cost_center_budgets) ? $programme_cost_center->cost_center->cost_center_budgets[0]->amount : 0}}"
+                               step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
+                    <td class="text-center">
+                        <button type="submit" class="deleteCostCenter" data-toggle="tooltip" title="Verwijder kostenplaats {{$programme_cost_center->cost_center->name}}">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>

@@ -15,6 +15,7 @@ class CreateProgrammeCostCentersTable extends Migration
     {
         Schema::create('programme_cost_centers', function (Blueprint $table) {
             $table->id();
+            $table->boolean('isActive')->default(true);
             $table->foreignId('programme_id');
             $table->foreignId('cost_center_id');
             $table->timestamps();
