@@ -30,7 +30,6 @@
                                        class="form-control @error('password') is-invalid @enderror"
                                        placeholder="Nieuw wachtwoord"
                                        value="{{ old('password') }}"
-                                       minlength="8"
                                        >
                                 <i class="far fa-eye" id="togglePasswordNew1"></i>
                                 @error('password')
@@ -43,7 +42,6 @@
                                        class="form-control @error('password_confirmation') is-invalid @enderror"
                                        placeholder="Bevestig nieuw wachtwoord"
                                        value="{{ old('password_confirmation') }}"
-                                       minlength="8"
                                        >
                                 <i class="far fa-eye" id="togglePasswordNew2"></i>
                                 @error('password_confirmation')
