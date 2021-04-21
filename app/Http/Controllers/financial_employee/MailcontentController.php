@@ -75,6 +75,9 @@ class MailcontentController extends Controller
     {
         $this->validate($request, [
             'mailcontent' => 'required|min:10'
+        ], [
+            'mailcontent.required' => 'Gelieve de mailtekst in te vullen.',
+            'mailcontent.min' => 'De mailtekst moet langer zijn dan 10 tekens.',
         ]);
 
         $mailcontent->content = $request->mailcontent;
