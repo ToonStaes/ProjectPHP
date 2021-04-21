@@ -66,9 +66,9 @@
                                     <option value="">Selecteer een kostenplaats</option>
                                     @foreach($cost_centers as $cost_center)
                                         @if($cost_center_laptopreimbursement->isEmpty())
-                                            <option  value="{{ $cost_center->id }}" >{{ $cost_center->name }}</option>
+                                            <option  value="{{ $cost_center->id }}" >{{ $cost_center->name }} - {{ $cost_center->description }}</option>
                                         @else
-                                            <option  value="{{ $cost_center->id }}" {{ $cost_center_laptopreimbursement[0]->standard_Cost_center_id ==  $cost_center->id ? 'selected' : '' }}>{{ $cost_center->name }}</option>
+                                            <option  value="{{ $cost_center->id }}" {{ $cost_center_laptopreimbursement[0]->standard_Cost_center_id ==  $cost_center->id ? 'selected' : '' }}>{{ $cost_center->name }} - {{ $cost_center->description }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -81,9 +81,9 @@
                                     <option value="">Selecteer een kostenplaats</option>
                                     @foreach($cost_centers as $cost_center)
                                         @if($cost_center_bikereimbursement->isEmpty())
-                                            <option  value="{{ $cost_center->id }}">{{ $cost_center->name }}</option>
+                                            <option  value="{{ $cost_center->id }}">{{ $cost_center->name }} - {{ $cost_center->description }}</option>
                                         @else
-                                            <option  value="{{ $cost_center->id }}" {{ $cost_center_bikereimbursement[0]->standard_Cost_center_id ==  $cost_center->id ? 'selected' : '' }}>{{ $cost_center->name }}</option>
+                                            <option  value="{{ $cost_center->id }}" {{ $cost_center_bikereimbursement[0]->standard_Cost_center_id ==  $cost_center->id ? 'selected' : '' }}>{{ $cost_center->name }} - {{ $cost_center->description }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -100,7 +100,6 @@
 @endsection
 
 @section('script_after')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function(){
 
