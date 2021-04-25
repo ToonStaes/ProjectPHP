@@ -65,6 +65,7 @@
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script>
         let budgets_changed = [];
+        let cost_center_names = [];
         let _csrf = "{{csrf_token()}}";
         let _query_url = "http://cma.test/cost_centers/";
         let _datatable;
@@ -218,6 +219,7 @@
             cost_center_name = $("#cost_center_input").val();
             cost_center_id = $("#cost_centers_list option:selected").data("id");
             description = $("#descr_input").val() ?? " ";
+            if(description.length == 0) description = " ";
 
             budget = parseInt($("#budget_input").val(), 10);
             if(isNaN(budget)) budget = 0;
@@ -257,6 +259,9 @@
 
         function add_cost_center(cost_center){
             if(cost_center.isActive == 0) return;
+
+            update_cost_center_names();
+
             newrow = _datatable.row.add([
                 "<td>"+cost_center.programme_name+"</td>",
                 "<td class=\"cost_center_name\">"+cost_center.cost_center_name+"</td>",
@@ -272,7 +277,9 @@
             $("td:nth-child(2)").addClass("cost_center_name");
             $("td:last-child").addClass("text-center");
             $(newrow).on('click','.deleteCostCenter', cost_center_delete_click);
-            $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
+            if(!cost_center_names.includes((cost_center.cost_center_name))){
+                $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
+            }
         }
 
         function send_new_cost_center(cost_center){
@@ -288,14 +295,26 @@
                 this.cost_center.cost_center_id = data.id;
                 add_cost_center(this.cost_center);
             }).fail(function(jqXHR, statusText, errorText){
+                //  Laravels form validation error code is 422
                 if(jqXHR.status == 409){
                     alert(JSON.parse(jqXHR.responseText).message);
                     return;
+                }
+                else if(jqXHR.status == 422){
+                    alert("Er was iets niet goed, kijk het formulier na");
                 }
                 this.tryCount++;
                 if(this.tryCount > this.tryLimit) return;
                 jQuery.ajax(this);
             });
+        }
+
+        function update_cost_center_names(){
+            $('#table_body .cost_center_name').each(function(index){
+                if(!cost_center_names.includes($(this).text())){
+                    cost_center_names.push($(this).text());
+                }
+            })
         }
     </script>
 @endsection

@@ -15,7 +15,7 @@ class CreateCostCentersTable extends Migration
     {
         Schema::create('cost_centers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->foreignId('user_id_Cost_center_manager');
             $table->string('description')->nullable();
             $table->boolean('isActive')->default(true);
