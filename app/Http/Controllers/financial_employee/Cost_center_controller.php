@@ -24,14 +24,8 @@ class Cost_center_controller extends Controller
      */
     public function index()
     {
-        $programme_cost_centers = ProgrammeCost_center::where('isActive', true)->with(['programme'])->get()->transform(
-            function($item, $key){
-                $item->cost_center = Cost_center::find($item->cost_center_id)->with(['user', 'cost_center_budgets'])->get()[0];
-                unset($item['cost_center_id']);
-                unset($item['programme_id']);
-                return $item;
-            }
-        );
+        $cost_centers = Cost_center::where('isActive', true)->with(['user', 'cost_center_budgets', 'programmes'])->get();
+
         $users = User::where('isActive', 1)
             ->where('isCost_center_manager', 1)
             ->get()
@@ -52,9 +46,9 @@ class Cost_center_controller extends Controller
         });
         $programmes = Programme::all();
 
-        Json::dump($programme_cost_centers);
+        Json::dump($cost_centers);
 
-        $table_data = compact(['programme_cost_centers', 'users', 'programmes']);
+        $table_data = compact(['cost_centers', 'users', 'programmes']);
 
         return view('financial_employee.cost_centers.cost_center', $table_data);
     }

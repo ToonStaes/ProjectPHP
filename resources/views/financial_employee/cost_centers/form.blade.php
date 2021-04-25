@@ -15,8 +15,8 @@
                 <div class="col col-12"><label for="cost_center_input">Kostenplaats<sup>*</sup></label></div>
                 <div class="col col-12"><input list="cost_centers_list" required id="cost_center_input">
                     <datalist id="cost_centers_list">
-                        @foreach($programme_cost_centers as $programme_cost_center)
-                            <option data-id="{{$programme_cost_center->cost_center->id}}">{{$programme_cost_center->cost_center->name}}</option>
+                        @foreach($cost_centers as $cost_center)
+                            <option data-id="{{$cost_center->id}}">{{$cost_center->name}}</option>
                         @endforeach
                     </datalist>
                 </div>
