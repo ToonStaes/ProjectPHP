@@ -246,7 +246,7 @@
                             status_fe = `<p>${value.status_fe.name} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
                         }
 
-                        let evidence = `<a class="btn btn-outline-dark" href="" download><nobr><img src='assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name.substring(13)}</nobr></a>`;
+                        let evidence = `<a class="btn btn-outline-dark" href="/storage/LaptopBewijzen/${value.laptop_invoice.filepath}" download><nobr><img src='assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name.substring(13)}</nobr></a>`;
                         table.row.add([
                             request_date,
                             value.review_date_Cost_center_manager,

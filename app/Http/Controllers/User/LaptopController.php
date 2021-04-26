@@ -15,7 +15,7 @@ class LaptopController extends Controller
 {
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'bedrag' => 'required|numeric|min:0',
             'reden' => 'required',
             'datum' => 'required|before_or_equal:today',
@@ -46,14 +46,14 @@ class LaptopController extends Controller
             $iserror = true;
         }
 
-        if ($iserror){
+        if ($iserror) {
             session()->flash('danger', $errormessage);
             return back();
-        }
-        else{
+        } else {
 
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
             $request->UploadBestand->storeAs('public/LaptopBewijzen', $FileName);
+            $request->UploadBestand->move(base_path('public_html/storage/LaptopBewijzen'), $FileName);
             $NewInvoice = new Laptop_invoice();
             $NewInvoice->filepath = $FileName;
             $NewInvoice->user_id = Auth::user()->id;
@@ -83,5 +83,6 @@ class LaptopController extends Controller
 
             session()->flash('success', 'De aanvraag is goed ontvangen.');
             return back();
+        }
     }
 }
