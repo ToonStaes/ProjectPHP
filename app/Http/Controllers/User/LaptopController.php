@@ -57,6 +57,7 @@ class LaptopController extends Controller
         else{
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
             $request->UploadBestand->storeAs('public/LaptopBewijzen', $FileName);
+            $request->UploadBestand->move(base_path('public_html/storage/LaptopBewijzen'), $FileName);
             $NewInvoice = new Laptop_invoice();
             $NewInvoice->filepath = $FileName;
             $NewInvoice->user_id = Auth::user()->id;
@@ -127,6 +128,7 @@ class LaptopController extends Controller
         else{
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
             $request->UploadBestand->storeAs('LaptopBewijzen', $FileName);
+            $request->UploadBestand->move(base_path('public_html/storage/LaptopBewijzen'), $FileName);
             $laptopInvoice->amount = $request->bedrag;
             $laptopInvoice->invoice_description = $request->reden;
             $laptopInvoice->purchase_date = $request->datum;
