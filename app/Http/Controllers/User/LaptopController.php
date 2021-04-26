@@ -19,7 +19,7 @@ class LaptopController extends Controller
 {
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'bedrag' => 'required|numeric|min:0',
             'reden' => 'required',
             'datum' => 'required|before_or_equal:today',
@@ -50,7 +50,7 @@ class LaptopController extends Controller
             $iserror = true;
         }
 
-        if ($iserror){
+        if ($iserror) {
             session()->flash('danger', $errormessage);
             return back();
         }
