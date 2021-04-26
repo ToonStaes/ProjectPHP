@@ -242,7 +242,7 @@
                             cost_center_name,
                             user_name,
                             value.description,
-                            "€" + value.amount,
+                            "€" + (value.amount).toFixed(2),
                             evidence,
                             status_cc_manager,
                             select
@@ -299,7 +299,7 @@
                             cost_center,
                             user_name,
                             value.laptop_invoice.invoice_description,
-                            "€" + value.amount,
+                            "€" + (value.amount).toFixed(2),
                             evidence,
                             status_cc_manager,
                             select
@@ -352,7 +352,7 @@
                         ]).draw(false);
                     });
 
-                    $("#openstaande_betalingen").text(`Openstaande betalingen uitbetalen (€${data.total_open_payments})`);
+                    $("#openstaande_betalingen").text(`Openstaande betalingen uitbetalen (€${(data.total_open_payments).toFixed(2)})`);
                     makeTooltipsVisible();
                 })
                 .fail(function (e) {

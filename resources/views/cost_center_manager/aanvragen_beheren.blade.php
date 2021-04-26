@@ -253,7 +253,7 @@
                             cost_center,
                             user_name,
                             value.laptop_invoice.invoice_description,
-                            "€" + value.laptop_invoice.amount / 4,
+                            "€" + (value.laptop_invoice.amount).toFixed(2),
                             evidence,
                             select,
                             status_fe
