@@ -7,6 +7,7 @@ use App\Laptop_invoice;
 use App\Mailcontent;
 use App\Laptop_reimbursement;
 use App\Laptop_reimbursement_parameter;
+use App\Parameter;
 use DateTime;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
@@ -68,7 +69,7 @@ class LaptopController extends Controller
 
             $NewLapReimb = new Laptop_reimbursement();
             $NewLapReimb->laptop_invoice_id = $NewInvoice->id;
-            $NewLapReimb->user_id_Cost_center_manager = 2;
+            $NewLapReimb->user_id_Cost_center_manager = Parameter::with('cost_center.user')->findOrFail(4)->cost_center->user->id;
             $NewLapReimb->payment_date = null;
             $NewLapReimb->save();
 
