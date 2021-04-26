@@ -13,6 +13,21 @@ class LaptopController extends Controller
 {
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'bedrag' => 'required|numeric|min:0',
+            'reden' => 'required',
+            'datum' => 'required|before_or_equal:today',
+            'UploadBestand' => 'required',
+        ], [
+            'bedrag.required' => 'Het bedrag voor de laptopvergoeding moet ingevuld zijn.',
+            'bedrag.numeric' => 'Het bedrag voor de laptopvergoeding moet een getal zijn.',
+            'bedrag.min' => 'Het bedrag voor de laptopvergoeding moet groter of gelijk zijn aan 0.',
+            'reden.required' => 'De verkaring voor de aanvraag moet ingevuld zijn.',
+            'datum.required' => 'De aankoopdatum moet ingevuld zijn.',
+            'datum.before_or_equal' => 'De aankoopdatum moet een dag voor vandaag of vandaag zijn.',
+            'UploadBestand.required' => 'Er moet een bestand geüpload zijn.',
+        ]);
+
         $date_current = new DateTime();
         $date_given = new DateTime($request->datum);
 
@@ -34,6 +49,7 @@ class LaptopController extends Controller
             return back();
         }
         else{
+
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
             $request->UploadBestand->storeAs('LaptopBewijzen', $FileName);
             $NewInvoice = new Laptop_invoice();
@@ -53,6 +69,5 @@ class LaptopController extends Controller
 
             session()->flash('success', 'De aanvraag is goed ontvangen.');
             return back();
-        }
     }
 }

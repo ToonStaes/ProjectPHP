@@ -18,7 +18,7 @@
                                        class="form-control @error('current_password') is-invalid @enderror"
                                        placeholder="Huidig wachtwoord"
                                        value="{{ old('current_password') }}"
-                                       required>
+                                       >
                                 <i class="far fa-eye" id="togglePasswordCurrent"></i>
                                 @error('current_password')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -30,8 +30,7 @@
                                        class="form-control @error('password') is-invalid @enderror"
                                        placeholder="Nieuw wachtwoord"
                                        value="{{ old('password') }}"
-                                       minlength="8"
-                                       required>
+                                       >
                                 <i class="far fa-eye" id="togglePasswordNew1"></i>
                                 @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -40,12 +39,14 @@
                             <div class="form-group">
                                 <label for="password_confirmation">Bevestig nieuw wachtwoord</label>
                                 <input type="password" name="password_confirmation" id="password_confirmation"
-                                       class="form-control"
+                                       class="form-control @error('password_confirmation') is-invalid @enderror"
                                        placeholder="Bevestig nieuw wachtwoord"
                                        value="{{ old('password_confirmation') }}"
-                                       minlength="8"
-                                       required>
+                                       >
                                 <i class="far fa-eye" id="togglePasswordNew2"></i>
+                                @error('password_confirmation')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Uw nieuw wachtwoord opslaan">Opslaan</button>
                         </form>

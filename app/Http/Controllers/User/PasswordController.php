@@ -22,6 +22,14 @@ class PasswordController extends Controller
         $this->validate($request,[
             'current_password' => 'required',
             'password' => 'required|min:8|confirmed',
+            'password_confirmation' => 'required|min:8',
+        ],[
+            'current_password.required' => 'Gelieve uw huidig wachtwoord in te vullen.',
+            'password.required' => 'Gelieve uw nieuw wachtwoord in te vullen.',
+            'password.min' => 'Uw nieuw wachtwoord moet langer zijn dan 8 tekens.',
+            'password.confirmed' => 'Uw nieuw wachtwoord moet hetzelfde zijn als de bevestiging.',
+            'password_confirmation.required' => 'Gelieve de bevestiging van uw nieuw wachtwoord in te vullen.',
+            'password_confirmation.min' => 'Uw nieuw wachtwoord moet langer zijn dan 8 tekens.',
         ]);
 
         $user = User::findOrFail(auth()->user()->id);

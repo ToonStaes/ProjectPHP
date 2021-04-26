@@ -17,7 +17,8 @@
                                 <input type="number" name="bedrag" id="bedrag"
                                        class="form-control @error('bedrag') is-invalid @enderror"
                                        placeholder="123"
-                                       required>
+                                       value="{{old('bedrag')}}"
+                                >
                                 @error('bedrag')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -27,7 +28,7 @@
                                 <input type="text" name="reden" id="reden"
                                        class="form-control @error('reden') is-invalid @enderror"
                                        placeholder="Reden"
-                                       required>
+                                       value="{{old('reden')}}">
                                 @error('reden')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -36,8 +37,7 @@
                                 <label for="datum">Datum van aankoop</label>
                                 <input type="date" name="datum" id="datum"
                                        class="form-control @error('datum') is-invalid @enderror"
-                                       placeholder=""
-                                       required>
+                                       value="{{old('datum')}}">
                                 @error('datum')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -45,8 +45,7 @@
                             <div class="form-group">
                                 <label for="bestand">Uploaden bewijsstuk <i class="fas fa-info-circle pr-3 pl-1" data-toggle="tooltip" data-placement="right"  data-html="true" title="Upload hier bijvoorbeeld de factuur van uw laptop."></i></label>
                                 <input type="file" name="UploadBestand" id="bestand"
-                                       class="form-control-file @error('bestand') is-invalid @enderror"
-                                       required>
+                                       class="form-control-file @error('bestand') is-invalid @enderror">
                                 @error('bestand')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

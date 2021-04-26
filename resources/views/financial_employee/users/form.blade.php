@@ -1,48 +1,48 @@
     <div class="modal-body">
         <div class="form-group">
             <label for="voornaam">Voornaam</label>
-            <input type="text" class="form-control" id="voornaam" name="voornaam" value="" required>
-            <span id="voornaam_error" class="form-error"></span>
+            <input type="text" class="form-control " id="voornaam" name="voornaam" value="{{old('voornaam')}}">
+            <span id="voornaam_error" class="form-error text-danger"></span>
         </div>
         <div class="form-group">
             <label for="achternaam">Achternaam</label>
-            <input type="text" class="form-control" id="achternaam" name="achternaam" required>
-            <span id="achternaam_error" class="form-error"></span>
+            <input type="text" class="form-control" id="achternaam" name="achternaam" value="{{old('achternaam')}}">
+            <span id="achternaam_error" class="form-error text-danger"></span>
         </div>
         <div class="form-group">
             <label for="adres">Adres</label>
-            <input type="text" class="form-control" id="adres" name="adres" required>
-            <span id="adres_error" class="form-error"></span>
+            <input type="text" class="form-control" id="adres" name="adres" value="{{old('adres')}}">
+            <span id="adres_error" class="form-error text-danger"></span>
         </div>
         <div class="form-group">
             <label for="postcode">Postcode</label>
-            <input type="text" class="form-control" id="postcode" name="postcode" required>
-            <span id="postcode_error" class="form-error"></span>
+            <input type="text" class="form-control" id="postcode" name="postcode" value="{{old('postcode')}}">
+            <span id="postcode_error" class="form-error text-danger"></span>
         </div>
         <div class="form-group">
             <label for="woonplaats">Woonplaats</label>
-            <input type="text" class="form-control" id="woonplaats" name="woonplaats">
-            <span id="woonplaats_error" class="form-error"></span>
+            <input type="text" class="form-control" id="woonplaats" name="woonplaats" value="{{old('woonplaats')}}">
+            <span id="woonplaats_error" class="form-error text-danger"></span>
         </div>
         <div class="form-group">
             <label for="iban">IBAN</label>
-            <input type="text" class="form-control" id="iban" name="iban" required>
-            <span id="iban_error" class="form-error"></span>
+            <input type="text" class="form-control" id="iban" name="iban" value="{{old('iban')}}">
+            <span id="iban_error" class="form-error text-danger"></span>
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-            <span id="email_error" class="form-error"></span>
+            <input type="email" class="form-control" id="email" name="email" value="{{old('email')}}">
+            <span id="email_error" class="form-error text-danger"></span>
         </div>
         <div class="form-group">
             <label for="telefoonnummer">Telefoonnummer</label>
-            <input type="text" class="form-control" id="telefoonnummer" name="telefoonnummer">
-            <span id="telefoonnummer_error" class="form-error"></span>
+            <input type="text" class="form-control" id="telefoonnummer" name="telefoonnummer" value="{{old('telefoonnummer')}}">
+            <span id="telefoonnummer_error" class="form-error text-danger"></span>
         </div>
         <div class="form-group">
             <label for="aantal_km">Aantal km</label>
-            <input type="text" class="form-control" id="aantal_km" name="aantal_km" required>
-            <span id="aantal_km_error" class="form-error"></span>
+            <input type="text" class="form-control" id="aantal_km" name="aantal_km" value="{{old('aantal_km')}}">
+            <span id="aantal_km_error" class="form-error text-danger"></span>
         </div>
         <div class="form-group">
             <label for="opleidingen">Opleiding toevoegen</label>
