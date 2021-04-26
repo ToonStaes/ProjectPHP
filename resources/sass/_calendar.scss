@@ -110,6 +110,10 @@
     width: 75vw;
     #save:disabled, #request:disabled{
         cursor: not-allowed;
+        pointer-events: none;
     }
 
 }
+
+
+

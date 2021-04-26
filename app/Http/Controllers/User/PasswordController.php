@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mailcontent;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,14 @@ class PasswordController extends Controller
         $this->validate($request,[
             'current_password' => 'required',
             'password' => 'required|min:8|confirmed',
+            'password_confirmation' => 'required|min:8',
+        ],[
+            'current_password.required' => 'Gelieve uw huidig wachtwoord in te vullen.',
+            'password.required' => 'Gelieve uw nieuw wachtwoord in te vullen.',
+            'password.min' => 'Uw nieuw wachtwoord moet langer zijn dan 8 tekens.',
+            'password.confirmed' => 'Uw nieuw wachtwoord moet hetzelfde zijn als de bevestiging.',
+            'password_confirmation.required' => 'Gelieve de bevestiging van uw nieuw wachtwoord in te vullen.',
+            'password_confirmation.min' => 'Uw nieuw wachtwoord moet langer zijn dan 8 tekens.',
         ]);
 
         $user = User::findOrFail(auth()->user()->id);
@@ -57,10 +66,17 @@ class PasswordController extends Controller
         $user->update(['password'=>Hash::make($newPass)]);
         $user->update(['changedPassword'=>false]);
 
+        $mailcontent = Mailcontent::firstWhere('mailtype', 'Wachtwoord vergeten');
+        $mailtext = $mailcontent->content;
+
+        $mailtext = str_replace('[NAAM]', $user->first_name, $mailtext);
+        $mailtext = str_replace('[EMAIL]', $user->email, $mailtext);
+        $mailtext = str_replace('[WACHTWOORD]', $newPass, $mailtext);
+
+        $mailtext = explode("\n", $mailtext);
+
         $data = array(
-            'naam'=>$user->first_name,
-            'email'=>$user->email,
-            'paswoord'=>$newPass
+            'content'=>$mailtext
         );
 
         Mail::to($user->email)->send(new SendPasswordReset($data));

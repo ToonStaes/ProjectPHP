@@ -16,7 +16,7 @@ class CreateLaptopReimbursementsTable extends Migration
         Schema::create('laptop_reimbursements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('laptop_invoice_id');
-            $table->date('payment_date');
+            $table->date('payment_date')->nullable();
             $table->foreignId('status_CC_manager')->default(1);
             $table->foreignId('status_FE')->default(1);
             $table->foreignId('user_id_Cost_center_manager');

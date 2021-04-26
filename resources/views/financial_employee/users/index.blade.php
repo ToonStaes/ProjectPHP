@@ -5,10 +5,10 @@
 @endsection
 
 @section('main')
-    <h1>Gebruikers beheren</h1>
+    <h1>Gebruikers beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u gebruikers toevoegen, wijzigen en verwijderen."></i></h1>
     <div class="messages"></div>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gebruiker_toevoegen" id="gebruiker_toevoegen_knop">
+    <button type="button" class="btn btn-primary" id="gebruiker_toevoegen_knop">
         <i class="fas fa-plus"></i> Gebruiker toevoegen
     </button>
 
@@ -214,6 +214,7 @@
             $("#gebruiker_toevoegen_knop").click(function () {
                 $(".geselecteerde_opleidingen").empty();
                 $("#gebruiker_toevoegen form")[0].reset();
+                $('#gebruiker_toevoegen').modal('show');
             })
 
             $('.geselecteerde_opleidingen').on('click', '.verwijder-li-opleiding', function () {
@@ -265,7 +266,7 @@
                             is_active,
                             isCost_Center_manager,
                             isFinancial_employee,
-                            `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-id="${value.id}"><i class="fas fa-trash-alt"></i></a>`
+                            `<a href="#!" class="btn-edit" data-toggle="tooltip" title="Wijzig ${value.name}" data-id="${value.id}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-toggle="tooltip" title="Verwijder ${value.name}" data-id="${value.id}" data-id="${value.id}"><i class="fas fa-trash-alt"></i></a>`
                         ]).draw(false);
                     });
                 })
@@ -307,6 +308,8 @@
 
                     if(data.is_active){
                         $('#gebruiker_bewerken input[name="actief"]').prop( "checked", true );
+                    } else {
+                        $('#gebruiker_bewerken input[name="actief"]').prop( "checked", false );
                     }
 
                     if(data.isCost_Center_manager){

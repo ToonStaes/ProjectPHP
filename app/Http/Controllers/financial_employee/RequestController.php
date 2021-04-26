@@ -8,9 +8,13 @@ use App\Diverse_reimbursement_line;
 use App\Diverse_reimbursement_request;
 use App\Http\Controllers\Controller;
 use App\Laptop_reimbursement;
+use App\Mail\SendRequestDenied;
+use App\Mailcontent;
+use App\Parameter;
 use App\Status;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class RequestController extends Controller
 {
@@ -99,12 +103,14 @@ class RequestController extends Controller
                 return $item;
             });
 
+        $maxpaymentlaptop = Parameter::find(3)->max_reimbursement_laptop;
+
         $laptop_requests = Laptop_reimbursement::whereHas('status_cc_manager', function ($innerQuery){
             $innerQuery->where('id', '=', 2);
         })
             ->with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_fe', 'financial_employee', 'cost_center_manager'])
             ->get()
-            ->transform(function ($item, $key) use (&$total_open_payments){
+            ->transform(function ($item, $key) use (&$total_open_payments, $maxpaymentlaptop){
 
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
                 unset($item->laptop_invoice->user);
@@ -160,7 +166,11 @@ class RequestController extends Controller
                     }
                 }
 
-                $item->amount = $item->laptop_invoice->amount / 4;
+                if ($item->laptop_invoice->amount / 4 <= $maxpaymentlaptop){
+                    $item->laptop_invoice->amount = $item->laptop_invoice->amount / 4;
+                } else {
+                    $item->laptop_invoice->amount = $maxpaymentlaptop;
+                }
 
                 if ($item->status_FE == "goedgekeurd"){
                     $total_open_payments += $item->amount;
@@ -240,6 +250,30 @@ class RequestController extends Controller
 
             $bike_reimbursement->save();
         }
+
+        if($status==3){
+            //get the corresponding user
+            $diverse_with_user = Diverse_reimbursement_request::where('id', $request->id)->with(['user', 'financial_employee'])->get()[0];
+
+            //get the mailcontent associated
+            //with this action
+            $mailcontent = Mailcontent::firstWhere('mailtype', 'Afwijzing');
+            $mailtext = $mailcontent->content;
+
+            //replace all replaceables with
+            //the necessary data
+            $mailtext = str_replace("[NAAM]", $diverse_with_user->user->first_name, $mailtext);
+            $finance_employee = $diverse_with_user->financial_employee;
+            $mailtext = str_replace("[NAAM FINANCIEEL MEDEWERKER]", $finance_employee->first_name.' '.$finance_employee->last_name, $mailtext);
+            $mailtext = str_replace("[AANVRAAG]", $diverse_with_user->description, $mailtext);
+            $mailtext = str_replace("[REDEN]", $diverse_with_user->comment_Financial_employee, $mailtext);
+
+            $mailtext = explode("\n", $mailtext);
+
+            $data = array('content'=>$mailtext);
+
+            Mail::to($diverse_with_user->user->email)->send(new SendRequestDenied($data));
+        }
     }
 
     public function getOpenPayments(){
@@ -273,18 +307,23 @@ class RequestController extends Controller
                 return $item;
             });
 
+        $maxpaymentlaptop = Parameter::find(3)->max_reimbursement_laptop;
         $laptop_requests = Laptop_reimbursement::whereHas('status_FE', function ($innerQuery){
             $innerQuery->where('id', '=', 2);
         })
             ->with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter'])
             ->get()
-            ->transform(function ($item, $key) use (&$total_open_payments){
+            ->transform(function ($item, $key) use (&$total_open_payments, $maxpaymentlaptop){
 
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
                 $item->laptop_invoice->iban = $item->laptop_invoice->user->IBAN;
                 unset($item->laptop_invoice->user, $item->laptop_invoice->created_at, $item->laptop_invoice->updated_at);
 
-                $item->amount = $item->laptop_invoice->amount / 4;
+                if ($item->laptop_invoice->amount / 4 <= $maxpaymentlaptop){
+                    $item->laptop_invoice->amount = $item->laptop_invoice->amount / 4;
+                } else {
+                    $item->laptop_invoice->amount = $maxpaymentlaptop;
+                }
 
                 $total_open_payments += $item->amount;
 
@@ -339,6 +378,7 @@ class RequestController extends Controller
 
         foreach ($laptop_requests as $laptop_request){
             $laptop_request->status_FE = 4;
+            $laptop_request->payment_date = now();
             $laptop_request->save();
         }
 

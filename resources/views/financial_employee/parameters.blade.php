@@ -4,9 +4,9 @@
 
 @section('main')
     <div class="container">
-        <h1>Parameters beheren</h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <h1>Parameters beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u de parameters wijzigen."></i></h1>
                 @include('shared.alert')
                 <div class="card">
                     <div class="card-body">
@@ -62,13 +62,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="cost_center_laptopreimbursement">Standaard kostenplaats laptopvergoeding:</label>
-                                <select class="form-control {{ $errors->first('cost_center_laptopreimbursement') ? 'is-invalid' : '' }}" name="cost_center_laptopreimbursement" id="cost_center_laptopreimbursement">
+                                <select data-width="100%" class="search-dropdown select2-container form-control {{ $errors->first('cost_center_laptopreimbursement') ? 'is-invalid' : '' }}" name="cost_center_laptopreimbursement" id="cost_center_laptopreimbursement">
                                     <option value="">Selecteer een kostenplaats</option>
                                     @foreach($cost_centers as $cost_center)
                                         @if($cost_center_laptopreimbursement->isEmpty())
-                                            <option  value="{{ $cost_center->id }}" >{{ $cost_center->name }}</option>
+                                            <option  value="{{ $cost_center->id }}" >{{ $cost_center->name }} - {{ $cost_center->description }}</option>
                                         @else
-                                            <option  value="{{ $cost_center->id }}" {{ $cost_center_laptopreimbursement[0]->standard_Cost_center_id ==  $cost_center->id ? 'selected' : '' }}>{{ $cost_center->name }}</option>
+                                            <option  value="{{ $cost_center->id }}" {{ $cost_center_laptopreimbursement[0]->standard_Cost_center_id ==  $cost_center->id ? 'selected' : '' }}>{{ $cost_center->name }} - {{ $cost_center->description }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -77,13 +77,13 @@
 
                             <div class="form-group">
                                 <label for="cost_center_bikereimbursement">Standaard kostenplaats fietsvergoeding:</label>
-                                <select class="form-control {{ $errors->first('cost_center_bikereimbursement') ? 'is-invalid' : '' }}" name="cost_center_bikereimbursement" id="cost_center_bikereimbursement">
+                                <select data-width="100%" class="search-dropdown form-control  {{ $errors->first('cost_center_bikereimbursement') ? 'is-invalid' : '' }}" name="cost_center_bikereimbursement" id="cost_center_bikereimbursement">
                                     <option value="">Selecteer een kostenplaats</option>
                                     @foreach($cost_centers as $cost_center)
                                         @if($cost_center_bikereimbursement->isEmpty())
-                                            <option  value="{{ $cost_center->id }}">{{ $cost_center->name }}</option>
+                                            <option  value="{{ $cost_center->id }}">{{ $cost_center->name }} - {{ $cost_center->description }}</option>
                                         @else
-                                            <option  value="{{ $cost_center->id }}" {{ $cost_center_bikereimbursement[0]->standard_Cost_center_id ==  $cost_center->id ? 'selected' : '' }}>{{ $cost_center->name }}</option>
+                                            <option  value="{{ $cost_center->id }}" {{ $cost_center_bikereimbursement[0]->standard_Cost_center_id ==  $cost_center->id ? 'selected' : '' }}>{{ $cost_center->name }} - {{ $cost_center->description }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -97,4 +97,16 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script_after')
+
+
+    <script>
+        $(document).ready(function(){
+
+            // Initialize select2
+            $(".search-dropdown").select2();
+
+        });
+    </script>
 @endsection

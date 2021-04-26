@@ -1,16 +1,19 @@
 @extends('layouts.template')
 
 @section('main')
-    <h1>Fietsvergoeding aanvragen</h1>
+
+
     @include('shared.alert')
+    <h1 class="text-center">Fietsvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"  data-html="true" title="Op deze pagina kan u een of meerdere fietsritten opslaan. Ook kan u op deze pagina een fietsvergoeding aanvragen van de opgeslagen fietsritten. <br/> <ul><li>Oranje datums = geslecteerde fietsritten</li> <li>Blauwe datums = opgeslagen fietsritten</li> <li>Grijze datums = aangevraagde fietsritten</li></ul>"></i></h1>
     <div class="container-calendar">
         <div class="calendar">
+
             <div class="month">
-                <i class="fas fa-angle-left prev"></i>
+                <i class="fas fa-angle-left" id="prev" data-toggle="tooltip"></i>
                 <div class="date">
                     <h1></h1>
                 </div>
-                <i class="fas fa-angle-right next"></i>
+                <i class="fas fa-angle-right" id="next" data-toggle="tooltip"></i>
             </div>
             <div class="weekdays">
                 <div>Zo</div>
@@ -32,11 +35,17 @@
         <form action="/user/save_bikerides" method="post">
             @csrf
             <input id="fietsritten" name="fietsritten" type="hidden"/>
-            <button id="save" type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
+            <span id="save-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Er moeten fietsritten geselecteerd zijn om de ritten te kunnen opslaan." >
+                <button id="save" type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
+            </span>
+
         </form>
         <form action="/user/request_bikeReimbursement" method="post">
             @csrf
-            <button id="request" type="submit" class="btn btn-secondary" disabled>Aanvraag indienen</button>
+            <span id="request-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="left" title="Er moeten fietsritten zijn opgeslagen om een fietsvergoeding aan te vragen.">
+                <button id="request" type="submit" class="btn btn-secondary" disabled>Aanvraag indienen</button>
+            </span>
+
         </form>
     </div>
 
@@ -44,7 +53,6 @@
 
 @section('script_after')
     <script>
-
         const date = new Date();
         let selected_dates = [];
         let saved_dates = document.querySelector(".days").getAttribute("data-saved").split(',');
@@ -65,14 +73,22 @@
         }
 
         function selecteerDatums(){
-            console.log(saved_dates);
+            //indien er datums zijn geselecteerd
             if(selected_dates.length > 0){
                 document.getElementById("save").disabled = false;
+                //tooltip wijzigen
+                document.getElementById("save-tooltip-wrapper").setAttribute("data-original-title", "De geselecteerde fietsritten opslaan.");
+                document.getElementById("save-tooltip-wrapper").setAttribute("title", "De geselecteerde fietsritten opslaan.");
             }
+            //indien er datums opgeslagen zijn
             if(saved_dates[0] !== ""){
                 document.getElementById("request").disabled = false;
+                document.getElementById("request-tooltip-wrapper").setAttribute("data-original-title", "Voor de opgeslagen fietsritten een fietsvergoeding aanvragen.");
+                document.getElementById("request-tooltip-wrapper").setAttribute("title", "Voor de opgeslagen fietsritten een fietsvergoeding aanvragen.");
             }
+            //controleren of datums opgeslagen/ geselecteerd/ aangevraagd zijn
             let result=document.querySelectorAll('[data-value]');
+            console.log(selected_dates);
             for (let index in result){
                 if (result.hasOwnProperty(index)){
                     if(selected_dates.includes(result[index].getAttribute('data-value'))){
@@ -122,6 +138,26 @@
 
             document.querySelector(".date h1").innerHTML = months[date.getMonth()] +  " " + date.getFullYear();
 
+            //tooltips vorige en volgende maand
+            if(date.getMonth() === 11){
+                document.querySelector('#next').setAttribute('title', "Ga naar januari");
+                document.querySelector('#next').setAttribute('data-original-title', "Ga naar januari");
+            } else{
+                document.querySelector('#next').setAttribute('title', "Ga naar " + months[date.getMonth()+1].toLowerCase());
+                document.querySelector('#next').setAttribute('data-original-title', "Ga naar " + months[date.getMonth()+1].toLowerCase());
+            }
+
+            if(date.getMonth() === 0){
+                document.querySelector('#prev').setAttribute('title', "Ga naar december");
+                document.querySelector('#prev').setAttribute('data-original-title', "Ga naar december");
+
+            }else{
+                document.querySelector('#prev').setAttribute('title', "Ga naar " + months[date.getMonth()-1].toLowerCase());
+                document.querySelector('#prev').setAttribute('data-original-title', "Ga naar " + months[date.getMonth()-1].toLowerCase());
+
+            }
+
+
             let days="";
 
             for (let j = firstDayIndex; j > 0; j--){
@@ -131,11 +167,11 @@
 
                 }
                 else if(date.getMonth()<9){
-                        days += `<div class="prev-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-0${date.getMonth()}-0${prevLastDay -j +1}">${prevLastDay -j +1}</div>`;
+                        days += `<div class="prev-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-0${date.getMonth()}-${prevLastDay -j +1}">${prevLastDay -j +1}</div>`;
 
                 }
                 else {
-                    days += `<div class="prev-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-${date.getMonth()}-0${prevLastDay -j +1}">${prevLastDay -j +1}</div>`;
+                    days += `<div class="prev-date" onload="selecteerDatums()" onclick="selecteer(this)" data-value="${date.getFullYear()}-${date.getMonth()}-${prevLastDay -j +1}">${prevLastDay -j +1}</div>`;
                 }
             }
 
@@ -165,15 +201,16 @@
 
                 monthDays.innerHTML = days;
             }
+
             selecteerDatums();
         }
 
-        document.querySelector(".prev").addEventListener("click", () => {
+        document.querySelector("#prev").addEventListener("click", () => {
             date.setMonth(date.getMonth()-1);
             renderCalender();
         });
 
-        document.querySelector(".next").addEventListener("click", () => {
+        document.querySelector("#next").addEventListener("click", () => {
             date.setMonth(date.getMonth()+1);
             renderCalender();
         });

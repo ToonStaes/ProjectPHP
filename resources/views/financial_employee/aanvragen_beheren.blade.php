@@ -5,6 +5,7 @@
 @endsection
 
 @section('main')
+    <h1>Vergoedingen behandelen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u vergoedingen die goedgekeurd zijn door de kostenplaatsverantwoordelijke, af- en goedkeuren."></i></h1>
     <div class="messages"></div>
     <p class="text-right"><button class="btn-primary mb-5" id="openstaande_betalingen" data-toggle="modal" data-target="#betaal-modal">Openstaande betalingen uitbetalen (€)</button></p>
 
@@ -197,7 +198,7 @@
                             select = `<span data-toggle="tooltip" data-placement="top" data-html="true" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='divers'`;
                         }
 
-                        if (value.status_FE === "betaald"){
+                        if (value.status_FE === "betaald" || value.status_FE === "afgekeurd"){
                             select += `disabled style="pointer-events: none;"`;
                         }
                         select += `>`;
@@ -230,7 +231,7 @@
                         $.each(value.diverse_reimbursement_lines, function (key, value) {
                             //Alle bewijsstukken achter elkaar zetten
                             $.each(value.diverse_reimbursement_evidences, function (key2, value2) {
-                                evidence += `<a class="btn btn-outline-dark" href="${value2.filepath}" download><nobr><img src='/assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name}</nobr></a>`;
+                                evidence += `<a class="btn btn-outline-dark" href="/storage/DiverseBewijzen/${value2.filepath}" download><nobr><img src='/assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name.substring(13)}</nobr></a>`;
                             });
                         })
 
@@ -241,7 +242,7 @@
                             cost_center_name,
                             user_name,
                             value.description,
-                            "€" + value.amount,
+                            "€" + (value.amount).toFixed(2),
                             evidence,
                             status_cc_manager,
                             select
@@ -291,14 +292,14 @@
                             status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Cost_center_manager}</p><p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
                         }
 
-                        let evidence = `<a class="btn btn-outline-dark" href="${value.laptop_invoice.filepath}" download><nobr><img src='/assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name}</nobr></a>`;
+                        let evidence = `<a class="btn btn-outline-dark" href="/storage/LaptopBewijzen/${value.laptop_invoice.filepath}" download><nobr><img src='/assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name.substring(13)}</nobr></a>`;
                         table.row.add([
                             request_date,
                             value.review_date_Financial_employee,
                             cost_center,
                             user_name,
                             value.laptop_invoice.invoice_description,
-                            "€" + value.amount,
+                            "€" + (value.amount).toFixed(2),
                             evidence,
                             status_cc_manager,
                             select
@@ -351,7 +352,7 @@
                         ]).draw(false);
                     });
 
-                    $("#openstaande_betalingen").text(`Openstaande betalingen uitbetalen (€${data.total_open_payments})`);
+                    $("#openstaande_betalingen").text(`Openstaande betalingen uitbetalen (€${(data.total_open_payments).toFixed(2)})`);
                     makeTooltipsVisible();
                 })
                 .fail(function (e) {
