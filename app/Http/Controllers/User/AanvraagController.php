@@ -192,7 +192,6 @@ class AanvraagController extends Controller
                 $number_of_km += $normalDistanceTravelled;
 
                 $amount = $number_of_km * $amount_per_km;
-                $amount = number_format($amount, 2, '.', ' ');
 
                 $item->amount = $amount;
 

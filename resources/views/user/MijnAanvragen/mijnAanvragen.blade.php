@@ -145,8 +145,8 @@
                         let request_date = value.request_date;
                         let cost_center_name = value.cost_center_name;
                         let beschrijving = value.description;
-                        let amount = value.amount;
-                        amount = '€ ' + amount;
+                        let amount = (value.amount).toFixed(2);
+                        let strAmount = '€ ' + amount;
                         let statusFE = value.status_FE;
                         let statusCCM = value.status_CC_manager;
                         let review_date_Financial_employee;
@@ -185,7 +185,7 @@
                                 review_date_Financial_employee,
                                 cost_center_name,
                                 beschrijving,
-                                amount,
+                                strAmount,
                                 CCM,
                                 FE,
                                 `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
@@ -288,7 +288,7 @@
                         let description = value.name;
                         let statusFE = value.status_FE;
                         let statusCCM = null;
-                        let amount = value.amount;
+                        let amount = (value.amount).toFixed(2);
                         amount = '€ ' + amount;
 
                         let FEName = value.fe_name;
