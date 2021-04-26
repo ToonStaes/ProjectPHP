@@ -67,12 +67,18 @@ class BikeReimbursementController extends Controller
         $result = compact('saved_fietsritten', 'requested_fietsritten');
 
         //fietsvergoedingparameter aanmaken
-        $bike_parameter = new Bike_reimbursementParameter();
-        $parameter =  Parameter::whereNull('valid_until')->where('name', 'Fietsvergoeding')->get();
-        $bike_parameter->parameter_id = $parameter[0]->id;
-        $bike_parameter->bike_reimbursement_id = $bike_reimbursement->id;
-        $bike_parameter->save();
+        $bike_parameter_fietsvergoeding = new Bike_reimbursementParameter();
+        $parameter_fietsvergoeding =  Parameter::whereNull('valid_until')->where('name', 'Fietsvergoeding')->get();
+        $bike_parameter_fietsvergoeding->parameter_id = $parameter_fietsvergoeding[0]->id;
+        $bike_parameter_fietsvergoeding->bike_reimbursement_id = $bike_reimbursement->id;
+        $bike_parameter_fietsvergoeding->save();
 
+        //parameter standaard kostenplaats aanmaken
+        $bike_parameter_standaard_kostenplaats = new Bike_reimbursementParameter();
+        $parameter_standaard_kostenplaats =  Parameter::whereNull('valid_until')->where('name', 'Standaard kostenplaats fietsvergoeding')->get();
+        $bike_parameter_standaard_kostenplaats->parameter_id = $parameter_standaard_kostenplaats[0]->id;
+        $bike_parameter_standaard_kostenplaats->bike_reimbursement_id = $bike_reimbursement->id;
+        $bike_parameter_standaard_kostenplaats->save();
 
         Json::dump($result);
         return view('user.request_bike_reimbursement', $result);
