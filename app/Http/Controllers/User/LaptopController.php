@@ -55,7 +55,6 @@ class LaptopController extends Controller
             return back();
         }
         else{
-
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
             $request->UploadBestand->storeAs('public/LaptopBewijzen', $FileName);
             $NewInvoice = new Laptop_invoice();
@@ -87,6 +86,7 @@ class LaptopController extends Controller
 
             session()->flash('success', 'De aanvraag is goed ontvangen.');
             return back();
+        }
     }
 
     public function update(Request $request, $id)
@@ -116,10 +116,14 @@ class LaptopController extends Controller
             $laptopInvoice->invoice_description = $request->reden;
             $laptopInvoice->purchase_date = $request->datum;
             $laptopInvoice->save();
+            $laptopReimbursements = Laptop_reimbursement::where('laptop_invoice_id', '=', $id)->WhereIn('status_FE', [1, 3])->get();
+            foreach ($laptopReimbursements as $item) {
+                $item->status_FE = 1;
+                $item->status_CC_manager = 1;
+                $item->save();
+            }
             session()->flash('success', 'Uw aanvraag is aangepast.');
-            return $laptopInvoice;
         }
-
         else{
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
             $request->UploadBestand->storeAs('LaptopBewijzen', $FileName);
@@ -128,8 +132,13 @@ class LaptopController extends Controller
             $laptopInvoice->purchase_date = $request->datum;
             $laptopInvoice->filepath = $FileName;
             $laptopInvoice->save();
+            $laptopReimbursements = Laptop_reimbursement::where('laptop_invoice_id', '=', $id)->WhereIn('status_FE', [1, 3])->get();
+            foreach ($laptopReimbursements as $item) {
+                $item->status_FE = 1;
+                $item->status_CC_manager = 1;
+                $item->save();
+            }
             session()->flash('success', 'Uw aanvraag is aangepast.');
-            return back();
         }
     }
 }

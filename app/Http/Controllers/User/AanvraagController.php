@@ -17,7 +17,7 @@ class AanvraagController extends Controller
     public function index() {
         return view('user.MijnAanvragen.mijnAanvragen');
     }
-//
+
     public function qryRequests() {
         // get all diverse_reimbursement_requests with linked tables included
         $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center.user', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'status_cc_manager', 'status_fe', 'financial_employee'])
