@@ -25,29 +25,30 @@ class CreateBikeReimbursementParametersTable extends Migration
         });
 
         DB::table('bike_reimbursement_parameters')->insert(
-            [
-                [
-                    'bike_reimbursement_id' => 1,
-                    'parameter_id' => 1,
-                    'created_at' => now()
-                ],
-                [
-                    'bike_reimbursement_id' => 1,
-                    'parameter_id' => 5,
-                    'created_at' => now()
-                ],
-                [
-                    'bike_reimbursement_id' => 2,
-                    'parameter_id' => 1,
-                    'created_at' => now()
-                ],
-                [
-                    'bike_reimbursement_id' => 2,
-                    'parameter_id' => 5,
-                    'created_at' => now()
-                ],
-            ]
-        );
+             [
+                 [
+                     'bike_reimbursement_id' => "1",
+                     'parameter_id' => 1,
+                     'created_at' => now()
+                 ],
+                 [
+                     'bike_reimbursement_id' => "1",
+                     'parameter_id' => 5,
+                     'created_at' => now()
+                 ],
+                 [
+                     'bike_reimbursement_id' => "2",
+                     'parameter_id' => 1,
+                     'created_at' => now()
+                 ],
+                 [
+                     'bike_reimbursement_id' => "2",
+                     'parameter_id' => 5,
+                     'created_at' => now()
+                 ]
+
+             ]
+         );
     }
 
     /**

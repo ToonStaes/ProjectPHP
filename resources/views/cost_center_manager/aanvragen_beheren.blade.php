@@ -136,6 +136,8 @@
                         console.log(data);
                     });
             });
+
+
         })
 
         function buildTable() {
@@ -270,5 +272,6 @@
         {
             $('[data-toggle="tooltip"]').tooltip()
         }
+
     </script>
 @endsection

@@ -15,4 +15,9 @@ class Bikeride extends Model
     public function bike_reimbursement() {
         return $this->belongsTo('App\Bike_reimbursement')->withDefault(); // a Bikeride has one bike_reimbursement
     }
+
+    // R17
+    public function status() {
+        return $this->belongsTo('App\Status', 'status_cc_manager')->withDefault();
+    }
 }

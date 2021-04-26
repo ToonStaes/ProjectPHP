@@ -63,9 +63,8 @@
             let type = $(this).closest('td').data('type');
             let content = $(this).closest('tr').find('.content').text(); // To prevent <br>-tag from appearing in edit-form
             // Update the modal
+            $('form').attr('action', `/financial_employee/mailcontent/${id}`);
             $('.modal-title').text(`Wijzig ${type}`);
-            $('form').attr('action', `/Mailcontent/${id}`);
-            $('form').attr('method','put');
             $('#mailcontent').val(content);
             $('#mailtype').val(type);
             $('input[name="_method"]').val('put');
@@ -78,14 +77,11 @@
             e.preventDefault();
             // Get the action property (the URL to submit)
             let action = $(this).attr('action');
-            console.log(action, 'actionnpm')
             // Serialize the form and send it as a parameter with the post
             let pars = $(this).serialize();
-            console.log(pars);
             // Post the data to the URL
             $.post(action, pars, 'json')
                 .done(function (data) {
-                    console.log(data);
                     $('#Message').html(data);
                     // Hide the modal
                     $('#modal-mailcontent').modal('hide');
@@ -93,10 +89,6 @@
                     loadTable();
                 })
                 .fail(function (e) {
-                    // console.log('error', e);
-                    // console.log('log')
-                    // e.responseJSON.errors contains an array of all the validation errors
-                    // console.log('error message', e.responseJSON.errors);
                     // Loop over the e.responseJSON.errors array and create an ul list with all the error messages
                     let msg = '<p>Errors: <ul>';
                     $.each(e.responseJSON.errors, function (key, value) {
@@ -104,7 +96,6 @@
                     });
                     msg += '</ul></p>';
                     $('#Message').html(msg);
-                    console.log(msg)
                 });
         });
     </script>

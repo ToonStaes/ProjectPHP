@@ -27,12 +27,15 @@ Route::post('password/reset', 'User\PasswordController@reset');
 Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
     Route::view('laptop', 'user.laptop');
-    Route::post('laptop', 'User\LaptopController@store');
-    Route::get('divers', 'User\DiverseController@diverseindex');
-    Route::post('divers', 'User\DiverseController@store');
+    Route::post('laptop', 'user\LaptopController@store');
+    Route::put('laptop/{id}', 'user\LaptopController@update');
+    Route::get('mijnaanvragen', 'user\AanvraagController@index');
+    Route::get('mijnaanvragen/qryRequests', 'user\AanvraagController@qryRequests');
     Route::get('request_bike_reimbursement', 'User\BikerideController@index');
     Route::post('save_bikerides', 'User\BikerideController@store');
     Route::post('request_bikeReimbursement', 'User\BikeReimbursementController@store');
+    Route::get('divers', 'User\DiverseController@diverseindex');
+    Route::post('divers', 'User\DiverseController@store');
     Route::get('help', 'HelpController@index');
     Route::get('help/fietsvergoeding', 'HelpController@bikereimbursement');
     Route::get('help/laptopvergoeding', 'HelpController@laptopreimbursement');

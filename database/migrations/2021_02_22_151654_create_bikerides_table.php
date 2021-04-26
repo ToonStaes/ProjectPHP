@@ -30,6 +30,7 @@ class CreateBikeridesTable extends Migration
             DB::table('bikerides')->insert(
                 [
                     'date' => now(),
+                    'bike_reimbursement_id' => 1,
                     'user_id' => 3,
                     'created_at' => now()
                 ]

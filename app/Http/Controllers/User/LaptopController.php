@@ -4,12 +4,16 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Laptop_invoice;
+use App\Mailcontent;
 use App\Laptop_reimbursement;
 use App\Laptop_reimbursement_parameter;
 use DateTime;
+use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use phpDocumentor\Reflection\Types\Integer;
+use View;
 
 class LaptopController extends Controller
 {
@@ -83,5 +87,49 @@ class LaptopController extends Controller
 
             session()->flash('success', 'De aanvraag is goed ontvangen.');
             return back();
+    }
+
+    public function update(Request $request, $id)
+    {
+        $laptopInvoice = Laptop_invoice::find($id);
+        $date_current = new DateTime();
+        $date_given    = new DateTime($request->datum);
+
+        $iserror = false;
+        $errormessage = "";
+        if ($date_current < $date_given) {
+            $errormessage = $errormessage . "De aankoopdatum is ongeldig. ";
+            $iserror = true;
+        }
+
+        if ($request->bedrag < 1) {
+            $errormessage = $errormessage . "Het aankoopbedrag is ongeldig. ";
+            $iserror = true;
+        }
+
+        if ($iserror){
+            session()->flash('danger', $errormessage);
+            return back();
+        }
+        elseif ($request->UploadBestand == null){
+            $laptopInvoice->amount = $request->bedrag;
+            $laptopInvoice->invoice_description = $request->reden;
+            $laptopInvoice->purchase_date = $request->datum;
+            $laptopInvoice->save();
+            session()->flash('success', 'Uw aanvraag is aangepast.');
+            return $laptopInvoice;
+        }
+
+        else{
+            $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
+            $request->UploadBestand->storeAs('LaptopBewijzen', $FileName);
+            $laptopInvoice->amount = $request->bedrag;
+            $laptopInvoice->invoice_description = $request->reden;
+            $laptopInvoice->purchase_date = $request->datum;
+            $laptopInvoice->filepath = $FileName;
+            $laptopInvoice->save();
+            session()->flash('success', 'Uw aanvraag is aangepast.');
+            return back();
+        }
     }
 }

@@ -85,7 +85,6 @@ class MailcontentController extends Controller
         $mailcontent->save();
         session()->flash('success', "De mail voor <b>$mailcontent->mailtype</b> is bijgewerkt");
         return View::make('shared.alert');
-            //view::make('shared.alert');
     }
 
     /**
@@ -113,6 +112,6 @@ class MailcontentController extends Controller
 //        $mailcontent->ID = trim($mailcontent->mailtype, ' ');
         $result = compact('mailcontent');
         \Facades\App\Helpers\Json::dump($result);
-        return $mailcontent;
+        return $result;
     }
 }

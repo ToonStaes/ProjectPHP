@@ -20,12 +20,6 @@
                                   required
                                   value="" rows="25">
                         </textarea>
-{{--                        <input type="text" name="mailcontent" id="mailcontent"--}}
-{{--                               class="form-control"--}}
-{{--                               placeholder="content"--}}
-{{--                               minlength="10"--}}
-{{--                               required--}}
-{{--                               value="">--}}
                         <input type="hidden" id="mailtype" name="mailtype">
                     </div>
                     <button type="submit" class="btn btn-primary">Sla mailtekst op</button>
