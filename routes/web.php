@@ -26,10 +26,10 @@ Route::post('password/reset', 'User\PasswordController@reset');
 
 Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
-    Route::view('laptop', 'user.laptop');
-    Route::post('laptop', 'user\LaptopController@store');
-    Route::get('divers', 'user\DiverseController@diverseindex');
-    Route::post('divers', 'user\DiverseController@store');
+    Route::view('laptop', 'User.laptop');
+    Route::post('laptop', 'User\LaptopController@store');
+    Route::get('divers', 'User\DiverseController@diverseindex');
+    Route::post('divers', 'User\DiverseController@store');
     Route::get('request_bike_reimbursement', 'User\BikerideController@index');
     Route::post('save_bikerides', 'User\BikerideController@store');
     Route::post('request_bikeReimbursement', 'User\BikeReimbursementController@store');
