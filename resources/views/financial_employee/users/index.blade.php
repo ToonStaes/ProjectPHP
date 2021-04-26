@@ -8,7 +8,7 @@
     <h1>Gebruikers beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u gebruikers toevoegen, wijzigen en verwijderen."></i></h1>
     <div class="messages"></div>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gebruiker_toevoegen" id="gebruiker_toevoegen_knop">
+    <button type="button" class="btn btn-primary" id="gebruiker_toevoegen_knop">
         <i class="fas fa-plus"></i> Gebruiker toevoegen
     </button>
 
@@ -214,6 +214,7 @@
             $("#gebruiker_toevoegen_knop").click(function () {
                 $(".geselecteerde_opleidingen").empty();
                 $("#gebruiker_toevoegen form")[0].reset();
+                $('#gebruiker_toevoegen').modal('show');
             })
 
             $('.geselecteerde_opleidingen').on('click', '.verwijder-li-opleiding', function () {
