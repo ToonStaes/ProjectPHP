@@ -231,7 +231,7 @@
                         $.each(value.diverse_reimbursement_lines, function (key, value) {
                             //Alle bewijsstukken achter elkaar zetten
                             $.each(value.diverse_reimbursement_evidences, function (key2, value2) {
-                                evidence += `<a class="btn btn-outline-dark" href="${value2.filepath}" download><nobr><img src='/assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name}</nobr></a>`;
+                                evidence += `<a class="btn btn-outline-dark" href="/storage/DiverseBewijzen/${value2.filepath}" download><nobr><img src='/assets/icons/file_icons/${value2.icon}' alt="file icon" width="25px"> ${value2.name.substring(13)}</nobr></a>`;
                             });
                         })
 
@@ -292,7 +292,7 @@
                             status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Cost_center_manager}</p><p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
                         }
 
-                        let evidence = `<a class="btn btn-outline-dark" href="${value.laptop_invoice.filepath}" download><nobr><img src='/assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name}</nobr></a>`;
+                        let evidence = `<a class="btn btn-outline-dark" href="/storage/LaptopBewijzen/${value.laptop_invoice.filepath}" download><nobr><img src='/assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name.substring(13)}</nobr></a>`;
                         table.row.add([
                             request_date,
                             value.review_date_Financial_employee,

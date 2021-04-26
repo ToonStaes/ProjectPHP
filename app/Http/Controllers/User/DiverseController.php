@@ -84,6 +84,7 @@ class DiverseController extends Controller
                     $NewLine = new Diverse_reimbursement_line();
                     $NewLine->DR_request_id = $NewRequest->id;
                     $NewLine->number_of_km = $request->$currafstandname;
+                    $NewLine->parameter_id = 2;
                     $NewLine->save();
                 }
                 else{
@@ -102,12 +103,13 @@ class DiverseController extends Controller
 
                     $NewLine = new Diverse_reimbursement_line();
                     $NewLine->DR_request_id = $NewRequest->id;
+                    $NewLine->amount = $request->$currbedragname;
                     $NewLine->save();
 
                     for ($y = 1; $y <= $request->$currFileUpCountName; $y++){
                         $currbestandname = 'UploadBestand'.$x.'-'.$y;
                         $FileName = date('YzHis') . $request->$currbestandname->getClientOriginalName();
-                        $request->$currbestandname->storeAs('DiverseBewijzen', $FileName);
+                        $request->$currbestandname->storeAs('public/DiverseBewijzen', $FileName);
 
                         $NewEvidence= new Diverse_reimbursement_evidence();
                         $NewEvidence->filepath = $FileName;
