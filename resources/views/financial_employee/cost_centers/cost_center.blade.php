@@ -136,6 +136,7 @@
                         for(budget in budgets_changed){
                             if (budgets_changed[budget] == this.toCheck) budgets_changed.splice(budget, 1);
                         }
+                        alert("De budgetten werden succesvol geüpdated");
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
                             alert("Er is een fout gebeurt bij het opslagen");
@@ -176,7 +177,7 @@
 
         function cost_center_delete_click(event){
             name = $(this).parent().parent().children(".cost_center_name").text();
-            id = parseInt($("#cost_centers_list option:contains("+name+")").data("id"));
+            id = parseInt($(this).parent().parent().data("id"));
             send_deletion(id, name);
         }
 
@@ -195,6 +196,7 @@
                 context: {id: center_id, name: center_name}
             }).done(function(data){
                 delete_cost_center_row(this.id, this.name);
+                alert("De kostenplaats werd succesvol verwijderd");
             }).fail(function(jqXHR, statusText, errorText){
                 if(jqXHR.status == 500){
                     alert("Er is een fout gebeurt bij het verwijderen");
@@ -294,6 +296,7 @@
                 reset_form();
                 this.cost_center.cost_center_id = data.id;
                 add_cost_center(this.cost_center);
+                alert("De kostenplaats werd succesvol opgeslagen");
             }).fail(function(jqXHR, statusText, errorText){
                 //  Laravels form validation error code is 422
                 if(jqXHR.status == 409){
