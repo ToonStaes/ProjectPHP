@@ -116,7 +116,7 @@ class LaptopController extends Controller
             $laptopInvoice->invoice_description = $request->reden;
             $laptopInvoice->purchase_date = $request->datum;
             $laptopInvoice->save();
-            $laptopReimbursements = Laptop_reimbursement::where('laptop_invoice_id', '=', $id)->WhereIn('status_FE', [1, 3])->get();
+            $laptopReimbursements = Laptop_reimbursement::where('laptop_invoice_id', '=', $id)->WhereIn('status_FE', [1, 3])->Where('status_CC_manager', '!=', 2)->get();
             foreach ($laptopReimbursements as $item) {
                 $item->status_FE = 1;
                 $item->status_CC_manager = 1;

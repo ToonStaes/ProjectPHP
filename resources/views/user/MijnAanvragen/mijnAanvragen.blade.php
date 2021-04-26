@@ -250,7 +250,7 @@
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
                         }
 
-                        if ((statusCCM === "in afwachting") || (statusFE === "afgekeurd")) {
+                        if (((statusCCM === "in afwachting" || statusCCM === "afgekeurd")) || (statusFE === "afgekeurd")) {
                             table.row.add([
                                 request_date,
                                 review_date_Cost_center_manager,
