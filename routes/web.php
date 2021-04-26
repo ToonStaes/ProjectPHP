@@ -26,7 +26,7 @@ Route::post('password/reset', 'User\PasswordController@reset');
 
 Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function () {
     Route::get('password', 'User\PasswordController@edit');
-    Route::view('laptop', 'User.laptop');
+    Route::view('laptop', 'user.laptop');
     Route::post('laptop', 'User\LaptopController@store');
     Route::get('divers', 'User\DiverseController@diverseindex');
     Route::post('divers', 'User\DiverseController@store');
@@ -38,7 +38,6 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::get('help/laptopvergoeding', 'HelpController@laptopreimbursement');
     Route::get('help/diverseAanvragen', 'HelpController@diversrequests');
     Route::get('help/mijnAanvragen', 'HelpController@myrequests');
-
 });
 
 Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->group(function () {
