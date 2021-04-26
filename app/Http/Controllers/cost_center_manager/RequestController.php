@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Laptop_reimbursement;
 use App\Mail\SendRequestDenied;
 use App\Mailcontent;
+use App\Parameter;
 use App\Status;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
@@ -90,9 +91,11 @@ class RequestController extends Controller
                 return $item;
             });
 
+        $maxpaymentlaptop = Parameter::find(3)->max_reimbursement_laptop;
+
         $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_cc_manager', 'status_fe', 'financial_employee'])
             ->get()
-            ->transform(function ($item, $key){
+            ->transform(function ($item, $key) use ($maxpaymentlaptop){
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
                 unset($item->laptop_invoice->user);
 
@@ -138,10 +141,16 @@ class RequestController extends Controller
                     }
                 }
 
+                if ($item->laptop_invoice->amount / 4 < $maxpaymentlaptop){
+                    $item->laptop_invoice->amount = $item->laptop_invoice->amount / 4;
+                } else {
+                    $item->laptop_invoice->amount = $maxpaymentlaptop;
+                }
+
                 return $item;
             });
         $statuses = Status::all();
-        $result = compact('diverse_requests', 'laptop_requests', 'statuses');
+        $result = compact('diverse_requests', 'laptop_requests', 'statuses', 'maxpaymentlaptop');
         JSON::dump($result);
 
         return $result;

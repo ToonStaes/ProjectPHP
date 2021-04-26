@@ -1,26 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\user;
+namespace App\Http\Controllers\User;
 
 use App\Cost_center;
 use App\Diverse_reimbursement_evidence;
 use App\Diverse_reimbursement_line;
 use App\Diverse_reimbursement_request;
-use App\Helpers\Json;
 use App\Http\Controllers\Controller;
-use App\Laptop_invoice;
 use DateTime;
+use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class DiverseController extends Controller
 {
-
     public function diverseindex()
     {
-        $kostenplaatsen = Cost_center::get();
+        $kostenplaatsen = Cost_center::all();
         $result = compact('kostenplaatsen');
-        \Facades\App\Helpers\Json::dump($result);
+        Json::dump($result);
         return view('user.diverse', $result);
     }
 
@@ -74,7 +72,7 @@ class DiverseController extends Controller
                 {
                     if ($savenewreq){
                         $NewRequest = new Diverse_reimbursement_request();
-                        $NewRequest->user_id = \Auth::user()->id;
+                        $NewRequest->user_id = Auth::user()->id;
                         $NewRequest->description = $request->reden;
                         $NewRequest->request_date = $date_current;
                         $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager;
@@ -86,13 +84,14 @@ class DiverseController extends Controller
                     $NewLine = new Diverse_reimbursement_line();
                     $NewLine->DR_request_id = $NewRequest->id;
                     $NewLine->number_of_km = $request->$currafstandname;
+                    $NewLine->parameter_id = 2;
                     $NewLine->save();
                 }
                 else{
 
                     if ($savenewreq){
                         $NewRequest = new Diverse_reimbursement_request();
-                        $NewRequest->user_id = \Auth::user()->id;
+                        $NewRequest->user_id = Auth::user()->id;
                         $NewRequest->description = $request->reden;
                         $NewRequest->request_date = $request->$currdatename;
                         $NewRequest->user_id_CC_manager = $cter->user_id_Cost_center_manager;
@@ -104,12 +103,13 @@ class DiverseController extends Controller
 
                     $NewLine = new Diverse_reimbursement_line();
                     $NewLine->DR_request_id = $NewRequest->id;
+                    $NewLine->amount = $request->$currbedragname;
                     $NewLine->save();
 
                     for ($y = 1; $y <= $request->$currFileUpCountName; $y++){
                         $currbestandname = 'UploadBestand'.$x.'-'.$y;
                         $FileName = date('YzHis') . $request->$currbestandname->getClientOriginalName();
-                        $request->$currbestandname->storeAs('DiverseBewijzen', $FileName);
+                        $request->$currbestandname->storeAs('public/DiverseBewijzen', $FileName);
 
                         $NewEvidence= new Diverse_reimbursement_evidence();
                         $NewEvidence->filepath = $FileName;

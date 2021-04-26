@@ -29,7 +29,7 @@ class CreateLaptopInvoicesTable extends Migration
         for ($i = 1; $i <= 10; $i++) {
             DB::table('laptop_invoices')->insert(
                 [
-                    'filepath' => "/map/map/map/laptop$i.docx",
+                    'filepath' => "0000000000000laptop$i.docx",
                     'user_id' => 2,
                     'amount' => 750,
                     'invoice_description' => "aanschaf nieuwe laptop",

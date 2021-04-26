@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Laptop_reimbursement;
 use App\Mail\SendRequestDenied;
 use App\Mailcontent;
+use App\Parameter;
 use App\Status;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
@@ -102,12 +103,14 @@ class RequestController extends Controller
                 return $item;
             });
 
+        $maxpaymentlaptop = Parameter::find(3)->max_reimbursement_laptop;
+
         $laptop_requests = Laptop_reimbursement::whereHas('status_cc_manager', function ($innerQuery){
             $innerQuery->where('id', '=', 2);
         })
             ->with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_fe', 'financial_employee', 'cost_center_manager'])
             ->get()
-            ->transform(function ($item, $key) use (&$total_open_payments){
+            ->transform(function ($item, $key) use (&$total_open_payments, $maxpaymentlaptop){
 
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
                 unset($item->laptop_invoice->user);
@@ -163,7 +166,11 @@ class RequestController extends Controller
                     }
                 }
 
-                $item->amount = $item->laptop_invoice->amount / 4;
+                if ($item->laptop_invoice->amount / 4 <= $maxpaymentlaptop){
+                    $item->laptop_invoice->amount = $item->laptop_invoice->amount / 4;
+                } else {
+                    $item->laptop_invoice->amount = $maxpaymentlaptop;
+                }
 
                 if ($item->status_FE == "goedgekeurd"){
                     $total_open_payments += $item->amount;
@@ -300,18 +307,23 @@ class RequestController extends Controller
                 return $item;
             });
 
+        $maxpaymentlaptop = Parameter::find(3)->max_reimbursement_laptop;
         $laptop_requests = Laptop_reimbursement::whereHas('status_FE', function ($innerQuery){
             $innerQuery->where('id', '=', 2);
         })
             ->with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter'])
             ->get()
-            ->transform(function ($item, $key) use (&$total_open_payments){
+            ->transform(function ($item, $key) use (&$total_open_payments, $maxpaymentlaptop){
 
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
                 $item->laptop_invoice->iban = $item->laptop_invoice->user->IBAN;
                 unset($item->laptop_invoice->user, $item->laptop_invoice->created_at, $item->laptop_invoice->updated_at);
 
-                $item->amount = $item->laptop_invoice->amount / 4;
+                if ($item->laptop_invoice->amount / 4 <= $maxpaymentlaptop){
+                    $item->laptop_invoice->amount = $item->laptop_invoice->amount / 4;
+                } else {
+                    $item->laptop_invoice->amount = $maxpaymentlaptop;
+                }
 
                 $total_open_payments += $item->amount;
 
