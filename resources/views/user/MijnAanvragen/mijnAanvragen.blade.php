@@ -260,7 +260,7 @@
                                 amount,
                                 CCM,
                                 FE,
-                                `<a href="#!" class="btn-edit laptopvergoeding" data-id="${value.laptop_invoice.id}" data-amount="${value.laptop_invoice.amount}" data-purchasedate="${value.laptop_invoice.purchase_date}" data-filepath="${value.laptop_invoice.filepath}" data-description="${value.laptop_invoice.invoice_description}" data-fileIcon="${value.laptop_invoice.file_icon}" data-filename="${value.laptop_invoice.file_name}"><i class="fas fa-edit"></i></a>`
+                                `<a href="#!" class="btn-edit laptopvergoeding" data-id="${value.laptop_invoice.id}" data-amount="${value.laptop_invoice.amount}" data-purchasedate="${value.laptop_invoice.purchase_date}" data-filepath="${value.laptop_invoice.filepath}" data-description="${value.laptop_invoice.invoice_description}" data-fileIcon="${value.laptop_invoice.file_icon}" data-filename="${value.laptop_invoice.file_name.substring(13)}"><i class="fas fa-edit"></i></a>`
                             ]).draw(false);
                         } else {
                             table.row.add([
