@@ -83,6 +83,22 @@ class Cost_center_controller extends Controller
             'cost_center_name'=>'required_without:cost_center_id|string|max:256',
             'description'=>'string|max:1024|nullable',
             'isActive'=>'boolean'
+        ],
+        [
+            'programme_id.required'=>'Je moet een unit kiezen',
+            'programme_id.integer'=>'Je moet een unit kiezen',
+            'programme_id.min'=>'Je moet een unit kiezen',
+            'programme_id.exists'=>'De gekozen unit bestaat niet',
+            'user_id.required'=>'Je moet een verantwoordelijke kiezen',
+            'user_id.integer'=>'Je moet een verantwoordelijke kiezen',
+            'user_id.exists'=>'De gekozen verantwoordelijke bestaat niet',
+            'budget.integer'=>'Het budget moet een getal zijn',
+            'budget.min'=>'Het budget kan minimaal €0 zijn',
+            'cost_center_name.required_without'=>'De naam van de kostenplaats is verplicht',
+            'cost_center_name.string'=>'De naam van de kostenplaats moet tekst zijn',
+            'cost_center_name.max'=>'De naam mag maximaal 256 tekens lang zijn',
+            'description.string'=>'De omschrijving moet een tekst zijn',
+            'description.max'=>'De omschrijving mag maximaal 1024 tekens lang zijn',
         ]);
 
         //  We need to check if a cost center with

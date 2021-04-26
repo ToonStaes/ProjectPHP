@@ -9,6 +9,12 @@
     <h1>Kostenplaatsen beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u kostenplaatsen toevoegen en verwijderen. Ook kan u hier het budget van de kostenplaats wijzigen."></i></h1>
     <button class="btn btn-primary mb-4" id="button-cost_center-add" data-toggle="modal" data-target="#cost_center_form_modal"> <i class="fas fa-plus"></i> Kostenplaats toevoegen</button>
     <button class="btn btn-primary float-right" id="button-save" data-toggle="tooltip" data-placement="left" title="De wijzigingen van de budgetten opslaan.">Opslaan</button>
+    <div id="notification" class="alert alert-dismissible">
+        <button type="button" id="notification-dismiss" class="close" aria-label="Sluiten">
+            <span aria-hidden="true">×</span>
+        </button>
+        <p id="notification-text"></p>
+    </div>
     <table id="tabel" class="table">
         <thead>
         <tr>
@@ -71,6 +77,8 @@
         let _datatable;
 
         $(document).ready( function () {
+            $('#notification').hide();
+
             _datatable = $('#tabel').DataTable({
                 "columns": [
                     {"name": "Opleiding", "orderable": true},
@@ -136,10 +144,10 @@
                         for(budget in budgets_changed){
                             if (budgets_changed[budget] == this.toCheck) budgets_changed.splice(budget, 1);
                         }
-                        alert("De budgetten werden succesvol geüpdated");
+                        show_success_notification("De budgetten werden succesvol geüpdated");
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
-                            alert("Er is een fout gebeurt bij het opslagen");
+                            show_failure_notification("Er is een fout gebeurt bij het opslagen");
                             return;
                         }
                         this.tryCount++;
@@ -147,7 +155,7 @@
                         jQuery.ajax(this);
                     }).always(function(){
                         if(this.tryCount>this.tryLimit){
-                            alert("Er is een fout gebeurt bij het opslagen");
+                            show_failure_notification("Er is een fout gebeurt bij het opslagen");
                         }
                     });
                 }
@@ -196,10 +204,10 @@
                 context: {id: center_id, name: center_name}
             }).done(function(data){
                 delete_cost_center_row(this.id, this.name);
-                alert("De kostenplaats werd succesvol verwijderd");
+                show_success_notification("De kostenplaats werd succesvol verwijderd");
             }).fail(function(jqXHR, statusText, errorText){
                 if(jqXHR.status == 500){
-                    alert("Er is een fout gebeurt bij het verwijderen");
+                    show_failure_notification("Er is een fout gebeurt bij het verwijderen");
                     return;
                 }
                 this.tryCount++;
@@ -257,6 +265,8 @@
             $("#active_input").prop("checked", false);
 
             $("#cost_center_form_modal").modal('hide');
+
+            $(".invalid-feedback").empty();
         }
 
         function add_cost_center(cost_center){
@@ -296,15 +306,25 @@
                 reset_form();
                 this.cost_center.cost_center_id = data.id;
                 add_cost_center(this.cost_center);
-                alert("De kostenplaats werd succesvol opgeslagen");
+                show_success_notification("De kostenplaats werd succesvol opgeslagen");
             }).fail(function(jqXHR, statusText, errorText){
                 //  Laravels form validation error code is 422
                 if(jqXHR.status == 409){
-                    alert(JSON.parse(jqXHR.responseText).message);
+                    $('#invalid-cost_center').text(JSON.parse(jqXHR.responseText).message);
                     return;
                 }
                 else if(jqXHR.status == 422){
-                    alert("Er was iets niet goed, kijk het formulier na");
+                    errors = JSON.parse(jqXHR.responseText).errors;
+                    error_names = Object.getOwnPropertyNames(errors);
+                    error_names.forEach(function(name){
+                        switch(name){
+                            case "programme_id": $('#invalid-programme').text(errors.programme_id[0]); break;
+                            case "user_id": $('#invalid-user').text(errors.user_id[0]); break;
+                            case "budget": $('#invalid-budget').text(errors.budget[0]); break;
+                            case "cost_center_name": $('#invalid-cost_center').text(errors.cost_center_name[0]); break;
+                            case "description": $('#invalid-description').text(errors.description[0]); break;
+                        }
+                    });
                 }
                 this.tryCount++;
                 if(this.tryCount > this.tryLimit) return;
@@ -319,5 +339,25 @@
                 }
             })
         }
+
+        function show_success_notification(text){
+            notification_div = $('#notification');
+            notification_div.removeClass('alert-danger');
+            notification_div.addClass('alert-success');
+            $('#notification-text').text(text)
+            notification_div.show();
+        }
+
+        function show_failure_notification(text){
+            notification_div = $('#notification');
+            notification_div.removeClass('alert-success');
+            notification_div.addClass('alert-danger');
+            $('#notification-text').text(text)
+            notification_div.show();
+        }
+
+        $('#notification-dismiss').on('click', function(){
+            $('#notification').hide();
+        })
     </script>
 @endsection
