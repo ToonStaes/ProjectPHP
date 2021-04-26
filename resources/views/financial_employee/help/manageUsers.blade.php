@@ -5,7 +5,6 @@
 @section('main')
     <div class="help container">
         <h1>Help - gebruikers beheren</h1>
-            <h2>Gebruikers beheren</h2>
             <p>Net boven de tabel kan je kiezen hoeveel rijen je wil zien per pagina: <img src="/assets/icons/help/financial_employee/manageUsers/gebruikersPerPaginapng.png" alt="Aantal rijen per pagina"></p>
             <p>Rechts onderaan kan je navigeren tussen pagina’s: <img src="/assets/icons/help/financial_employee/manageUsers/navigate.png" alt="Navigeren tussen paginas"></p>
             <p>De tabel kan volledig gesorteerd worden en er kan gefilterd worden op elke kolom. Sorteren doe je door op de 2 pijltjes naast de kolomtitel te klikken. Wil je graag op meerdere kolommen sorteren? Dat kan ook, als je de shift toets ingedrukt houdt terwijl je op de pijltjes duwt.</p>
