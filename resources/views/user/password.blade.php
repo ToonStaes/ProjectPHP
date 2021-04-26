@@ -4,9 +4,9 @@
 
 @section('main')
     <div class="container">
-        <h1>Wachtwoord aanpassen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u uw wachtwoord wijzigen."></i></h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <h1>Wachtwoord aanpassen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u uw wachtwoord wijzigen."></i></h1>
                 <div class="card">
                     <div class="card-body">
                         @include('shared.alert')

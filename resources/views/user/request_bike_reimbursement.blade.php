@@ -2,8 +2,9 @@
 
 @section('main')
 
-    <h1>Fietsvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"  data-html="true" title="Op deze pagina kan u een of meerdere fietsritten opslaan. Ook kan u op deze pagina een fietsvergoeding aanvragen van de opgeslagen fietsritten. <br/> <ul><li>Oranje datums = geslecteerde fietsritten</li> <li>Blauwe datums = opgeslagen fietsritten</li> <li>Grijze datums = aangevraagde fietsritten</li></ul>"></i></h1>
+
     @include('shared.alert')
+    <h1 class="text-center">Fietsvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"  data-html="true" title="Op deze pagina kan u een of meerdere fietsritten opslaan. Ook kan u op deze pagina een fietsvergoeding aanvragen van de opgeslagen fietsritten. <br/> <ul><li>Oranje datums = geslecteerde fietsritten</li> <li>Blauwe datums = opgeslagen fietsritten</li> <li>Grijze datums = aangevraagde fietsritten</li></ul>"></i></h1>
     <div class="container-calendar">
         <div class="calendar">
 

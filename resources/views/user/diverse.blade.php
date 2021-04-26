@@ -6,9 +6,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <h1>Diverse vergoeding aanvragen</h1>
                 @include('shared.alert')
                 <div class="card">
-                    <div class="card-header"><h1>Diverse vergoeding aanvragen</h1></div>
                     <div class="card-body" id="FormDiv">
                         <button class="btn btn-primary" id="btnaddvergoeding"><i class="fas fa-plus-square"></i> Kost toevoegen</button>
                         <hr>
@@ -18,9 +18,10 @@
                                    class="form-control" required>
                             <div class="form-group">
                                 <label for="kostenplaats">Kostenplaats</label>
-                                <select class="form-control" name="kostenplaats" id="kostenplaats" required>
+                                <select class="form-control search-dropdown" name="kostenplaats" id="kostenplaats" required>
+                                    <option value="">Selecteer een kostenplaats</option>
                                     @foreach($kostenplaatsen as $kostenplaats)
-                                        <option value="{{ $kostenplaats->id }}">{{ $kostenplaats->description}}</option>
+                                        <option value="{{ $kostenplaats->id }}">{{ $kostenplaats->name}} - {{ $kostenplaats->description}}</option>
                                     @endforeach
                                 </select>
                                 @error('kostenplaats')
