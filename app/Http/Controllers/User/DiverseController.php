@@ -110,7 +110,7 @@ class DiverseController extends Controller
                         $currbestandname = 'UploadBestand'.$x.'-'.$y;
                         $FileName = date('YzHis') . $request->$currbestandname->getClientOriginalName();
                         $request->$currbestandname->storeAs('public/DiverseBewijzen', $FileName);
-                        $request->UploadBestand->move(base_path('public_html/storage/DiverseBewijzen'), $FileName);
+                        $request->$currbestandname->move(base_path('public_html/storage/DiverseBewijzen'), $FileName);
 
                         $NewEvidence= new Diverse_reimbursement_evidence();
                         $NewEvidence->filepath = $FileName;
