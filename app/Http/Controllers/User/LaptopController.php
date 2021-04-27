@@ -54,8 +54,8 @@ class LaptopController extends Controller
         if ($iserror) {
             session()->flash('danger', $errormessage);
             return back();
-        } else {
-
+        }
+        else{
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
             $request->UploadBestand->storeAs('public/LaptopBewijzen', $FileName);
             $request->UploadBestand->move(base_path('public_html/storage/LaptopBewijzen'), $FileName);
@@ -118,20 +118,30 @@ class LaptopController extends Controller
             $laptopInvoice->invoice_description = $request->reden;
             $laptopInvoice->purchase_date = $request->datum;
             $laptopInvoice->save();
+            $laptopReimbursements = Laptop_reimbursement::where('laptop_invoice_id', '=', $id)->WhereIn('status_FE', [1, 3])->Where('status_CC_manager', '!=', 2)->get();
+            foreach ($laptopReimbursements as $item) {
+                $item->status_FE = 1;
+                $item->status_CC_manager = 1;
+                $item->save();
+            }
             session()->flash('success', 'Uw aanvraag is aangepast.');
-            return $laptopInvoice;
         }
-
         else{
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
             $request->UploadBestand->storeAs('LaptopBewijzen', $FileName);
+            $request->UploadBestand->move(base_path('public_html/storage/LaptopBewijzen'), $FileName);
             $laptopInvoice->amount = $request->bedrag;
             $laptopInvoice->invoice_description = $request->reden;
             $laptopInvoice->purchase_date = $request->datum;
             $laptopInvoice->filepath = $FileName;
             $laptopInvoice->save();
+            $laptopReimbursements = Laptop_reimbursement::where('laptop_invoice_id', '=', $id)->WhereIn('status_FE', [1, 3])->get();
+            foreach ($laptopReimbursements as $item) {
+                $item->status_FE = 1;
+                $item->status_CC_manager = 1;
+                $item->save();
+            }
             session()->flash('success', 'Uw aanvraag is aangepast.');
-            return back();
         }
     }
 }

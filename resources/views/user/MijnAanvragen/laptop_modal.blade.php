@@ -43,7 +43,7 @@
                     </div>
 
                     <div class="form-group" id="oldfile" class="mb-3">
-                        <a class="btn btn-outline-dark" id="filepath" href=""><nobr>
+                        <a class="btn btn-outline-dark" id="filepath" href="" download><nobr>
                             </nobr></a>
                         <a href="#!" class="btn" id="delete">X</a>
                     </div>
