@@ -193,6 +193,8 @@ class RequestController extends Controller
                 foreach ($item->bikerides as $bikeride){
                     if ($bikeride->number_of_km == null){
                         $item->amount += $bikeride->user->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
+                    }else {
+                        $item->amount += $bikeride->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
                     }
                 }
 
@@ -341,6 +343,8 @@ class RequestController extends Controller
                 foreach ($item->bikerides as $bikeride){
                     if ($bikeride->number_of_km == null){
                         $item->amount += $bikeride->user->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
+                    }else {
+                        $item->amount += $bikeride->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
                     }
                 }
 
