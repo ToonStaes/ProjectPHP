@@ -143,18 +143,22 @@
             if(date.getMonth() === 11){
                 document.querySelector('#next').setAttribute('title', "Ga naar januari");
                 document.querySelector('#next').setAttribute('data-original-title', "Ga naar januari");
+                document.querySelector('#next').setAttribute('data-bs-original-title', "Ga naar januari");
             } else{
                 document.querySelector('#next').setAttribute('title', "Ga naar " + months[date.getMonth()+1].toLowerCase());
                 document.querySelector('#next').setAttribute('data-original-title', "Ga naar " + months[date.getMonth()+1].toLowerCase());
+                document.querySelector('#next').setAttribute('data-bs-original-title', "Ga naar " + months[date.getMonth()+1].toLowerCase());
             }
 
             if(date.getMonth() === 0){
                 document.querySelector('#prev').setAttribute('title', "Ga naar december");
                 document.querySelector('#prev').setAttribute('data-original-title', "Ga naar december");
+                document.querySelector('#prev').setAttribute('data-bs-original-title', "Ga naar december");
 
             }else{
                 document.querySelector('#prev').setAttribute('title', "Ga naar " + months[date.getMonth()-1].toLowerCase());
                 document.querySelector('#prev').setAttribute('data-original-title', "Ga naar " + months[date.getMonth()-1].toLowerCase());
+                document.querySelector('#prev').setAttribute('data-bs-original-title', "Ga naar " + months[date.getMonth()-1].toLowerCase());
 
             }
 
