@@ -14,6 +14,7 @@ use App\Status;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 class RequestController extends Controller
 {
@@ -25,6 +26,7 @@ class RequestController extends Controller
     public function getRequests()
     {
         $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'status_cc_manager', 'status_fe', 'financial_employee'])
+            ->where("user_id_CC_manager", "=", Auth::user()->id)
             ->get()
             ->transform(function ($item, $key){
                 unset($item->user_id, $item->cost_center_id, $item->user_id_Fin_employee, $item->user_id_CC_manager);
@@ -94,6 +96,7 @@ class RequestController extends Controller
         $maxpaymentlaptop = Parameter::find(3)->max_reimbursement_laptop;
 
         $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_cc_manager', 'status_fe', 'financial_employee'])
+            ->where("user_id_Cost_center_manager", "=", Auth::user()->id)
             ->get()
             ->transform(function ($item, $key) use ($maxpaymentlaptop){
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
