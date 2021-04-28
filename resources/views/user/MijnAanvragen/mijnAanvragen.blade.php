@@ -168,7 +168,7 @@
                             CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + `</p>`
                         }
 
-                        if (FEComment == null || FEName == null) {
+                        if (FEName == null) {
                             FE = statusFE;
                         } else if (FEComment == null && FEName !== " ") {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
@@ -195,7 +195,8 @@
                                 beschrijving,
                                 amount,
                                 CCM,
-                                FE
+                                FE,
+                                ""
                             ]).draw(false);
                         }
 

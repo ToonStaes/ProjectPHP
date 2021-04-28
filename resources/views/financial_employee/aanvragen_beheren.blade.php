@@ -128,16 +128,37 @@
             });
 
             $("#requestsTable").on('change', '.status-select', function () {
-                $("#commentaar-modal").modal('show');
-                let id = $(this).data('id');
-                let type = $(this).data('type');
-                let keuring = $(this).val();
+                if($(this).val() === "afgekeurd"){
+                    $("#commentaar-modal").modal('show');
+                    let id = $(this).data('id');
+                    let type = $(this).data('type');
+                    let keuring = $(this).val();
 
-                $("#commentaar-id").val(id);
-                $("#commentaar-type").val(type);
-                $("#commentaar-keuring").val(keuring);
+                    $("#commentaar-id").val(id);
+                    $("#commentaar-type").val(type);
+                    $("#commentaar-keuring").val(keuring);
 
-                $(this).val(previous);
+                    $(this).val(previous);
+                } else {
+                    let action = "/financial_employee/saveComment";
+                    let pars = {
+                        '_token': '{{ csrf_token() }}',
+                        '_method': 'put',
+                        'commentaar': null,
+                        'type': $(this).data('type'),
+                        'id': $(this).data('id'),
+                        'keuring': $(this).val(),
+                    };
+
+                    $.post(action, pars, 'json')
+                        .done(function (data) {
+                            console.log(data);
+                            buildTable();
+                        })
+                        .fail(function (data) {
+                            console.log(data);
+                        });
+                }
             });
 
             $("#commentaar-modal form").submit(function (e) {
@@ -222,8 +243,8 @@
                         select += `</select></span>`;
 
                         let status_cc_manager = value.status_CC_manager;
-                        if (value.comment_Cost_center_manager != null){
-                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Cost_center_manager}</p><p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
+                        if (value.review_date_Cost_center_manager != null){
+                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
                         }
 
                         let evidence = '';
@@ -288,8 +309,8 @@
                         let user_name = value.laptop_invoice.username;
 
                         let status_cc_manager = value.status_CC_manager;
-                        if (value.comment_Cost_center_manager != null){
-                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Cost_center_manager}</p><p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
+                        if (value.review_date_Cost_center_manager != null){
+                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
                         }
 
                         let evidence = `<a class="btn btn-outline-dark" href="/storage/LaptopBewijzen/${value.laptop_invoice.filepath}" download><nobr><img src='/assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name.substring(13)}</nobr></a>`;
