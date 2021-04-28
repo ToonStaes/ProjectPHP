@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="row knoppen justify-content-between">
-        <form action="/user/save_bikerides" method="post">
+        <form action="/user/save_bikerides" method="post" class="col-4">
             @csrf
             <input id="fietsritten" name="fietsritten" type="hidden"/>
             <span id="save-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Er moeten fietsritten geselecteerd zijn om de ritten te kunnen opslaan." >
@@ -40,7 +40,7 @@
             </span>
 
         </form>
-        <form action="/user/request_bikeReimbursement" method="post">
+        <form action="/user/request_bikeReimbursement" method="post" class="col-4">
             @csrf
             <span id="request-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="left" title="Er moeten fietsritten zijn opgeslagen om een fietsvergoeding aan te vragen.">
                 <button id="request" type="submit" class="btn btn-secondary" disabled>Aanvraag indienen</button>
