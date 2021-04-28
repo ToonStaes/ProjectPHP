@@ -35,7 +35,7 @@ class BikeReimbursementController extends Controller
 
         $bike_reimbursement = new Bike_reimbursement();
         $bike_reimbursement->request_date = now();
-        $bike_reimbursement->name = "Bike reimbursement " . $user->first_name . " " . $user->last_name;
+        $bike_reimbursement->name = "Fietsvergoeding " . $user->first_name . " " . $user->last_name;
         $bike_reimbursement->status_id = 1;
         $bike_reimbursement->save();
 

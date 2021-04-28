@@ -60,23 +60,23 @@
 
         function selecteer(el){
             if(selected_dates.includes(el.getAttribute("data-value"))){
-                console.log(selected_dates);
                 selected_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
                 el.classList.remove("geselecteerd");
                 document.getElementById("fietsritten").value = selected_dates;
-                console.log(selected_dates);
+                console.log(document.getElementById("fietsritten").value);
             }
             else{
                 selected_dates.push(el.getAttribute("data-value"));
-                selecteerDatums();
                 document.getElementById("fietsritten").value = selected_dates;
+                selecteerDatums();
             }
 
         }
 
         function selecteerDatums(){
             //indien er datums zijn geselecteerd
-            if(selected_dates.length > 0){
+            console.log(document.getElementById("fietsritten").value);
+            if(document.getElementById("fietsritten").value !== ""){
                 document.getElementById("save").disabled = false;
                 //tooltip wijzigen
                 document.getElementById("save-tooltip-wrapper").setAttribute("data-original-title", "De geselecteerde fietsritten opslaan.");

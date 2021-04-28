@@ -7,6 +7,7 @@ use Json;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isEmpty;
 
 class BikerideController extends Controller
 {
@@ -63,27 +64,54 @@ class BikerideController extends Controller
         $user = Auth::user();
         $user_id = $user->id;
         $bikerides = explode(',', $request->fietsritten);
+
+        $all_bikerides = Bikeride::with('user')
+            ->where(function ($query) use ($user_id) {
+                $query->where('user_id', 'like', $user_id);
+            })
+            ->get();
+
         $melding = "";
+        $melding_error = "";
         foreach ($bikerides as $datum) {
-            if ($melding === "") {
-                $melding = $datum;
-            } else {
-                $melding = $melding . ', ' . $datum;
+            $date = date_create_from_format('Y-m-d', $datum);
+            $bikes = Bikeride::with('user')
+                ->where(function ($query) use ($user_id) {
+                    $query->where('user_id', 'like', $user_id);
+                })
+                ->whereDate('date', '=', $date)
+                ->get();
+            if(sizeof($bikes) == 0){
+                $bikeride = new Bikeride();
+                $bikeride->user_id = $user->id;
+                $bikeride->date = $date;
+                $bikeride->number_of_km = $user->number_of_km;
+                $bikeride->save();
+                if ($melding === "") {
+                    $melding = $datum;
+                } else {
+                    $melding = $melding . ', ' . $datum;
+                }
             }
-            $datum = date_create_from_format('Y-m-d', $datum);
-            $bikeride = new Bikeride();
-            $bikeride->user_id = $user->id;
-            $bikeride->date = $datum;
-            $bikeride->number_of_km = $user->number_of_km;
-            $bikeride->save();
+            else{
+                if ($melding_error === "") {
+                    $melding_error = $datum;
+                } else {
+                    $melding_error = $melding . ', ' . $datum;
+                }
+            }
+
         }
         session()->flash('success', "De fietsritten <b>$melding</b> zijn toegevoegd.");
+        session()->flash('danger', "De fietsritten <b>$melding_error</b> bestaan al.");
+
         $saved_bikerides = Bikeride::with('user')
             ->where(function ($query) use ($user_id) {
                 $query->where('user_id', 'like', $user_id);
             })
             ->whereNull('bike_reimbursement_id')
             ->get();
+
         $requested_bikerides = Bikeride::with('user')
             ->where(function ($query) use ($user_id) {
                 $query->where('user_id', 'like', $user_id);
