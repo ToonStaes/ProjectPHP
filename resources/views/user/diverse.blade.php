@@ -42,10 +42,10 @@
                                 <div class="kost">
                                     <div class="form-check form-switch mx-3">
                                         <input class="form-check-input autoswitch" type="checkbox" id="AutoSwitch1" name="AutoSwitch1">
-                                        <label class="form-check-label" for="flexSwitchCheckDefault">Autovergoeding?</label>
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">Kilometervergoeding?</label>
                                     </div>
                                     <div class="form-group NotAuto">
-                                        <label for="bedrag">Bedrag in Euro</label>
+                                        <label for="bedrag">Aankoopbedrag in Euro</label>
                                         <input type="number" name="bedrag1" id="bedrag1"
                                                class="Bedrag NotAuto form-control @error('bedrag') is-invalid @enderror"
                                                placeholder="123"
