@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col col-12 col-md-6">
             <div class="row">
-                <div class="col col-12"><label for="programmes_list">Unit<sup>*</sup></label></div>
+                <div class="col col-12"><label for="programmes_list">Opleiding / unit<sup>*</sup></label></div>
                 <div class="col col-12">
                     <select name="programmes_list" required id="programmes_list">
                         @foreach($programmes as $programme)
@@ -50,7 +50,7 @@
             <div class="row">
                 <div class="form-group">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="active_input">
+                        <input class="form-check-input" checked type="checkbox" id="active_input">
                         <label class="form-check-label" for="active_input">Actief</label>
                     </div>
                 </div>

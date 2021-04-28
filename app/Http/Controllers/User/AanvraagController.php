@@ -18,6 +18,13 @@ class AanvraagController extends Controller
         return view('user.MijnAanvragen.mijnAanvragen');
     }
 
+    private function FormatDate($item){
+        if ($item != null) {
+            $item = date("d/m/Y", strtotime($item));
+        }
+        return $item;
+    }
+
     public function qryRequests() {
         // get all diverse_reimbursement_requests with linked tables included
         $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center.user', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'status_cc_manager', 'status_fe', 'financial_employee'])
@@ -73,6 +80,9 @@ class AanvraagController extends Controller
 //                    }
                 }
                 unset($item->diverse_reimbursement_lines);
+                $item->request_date = $this->FormatDate($item->request_date);
+                $item->review_date_Cost_center_manager = $this->FormatDate($item->review_date_Cost_center_manager);
+                $item->review_date_Financial_employee = $this->FormatDate($item->review_date_Financial_employee);
 
                 return $item;
             });
@@ -141,6 +151,11 @@ class AanvraagController extends Controller
                     }
                 }
 
+                $item->laptop_invoice->purchase_date = $this->FormatDate($item->laptop_invoice->purchase_date);
+                $item->payment_date = $this->FormatDate($item->payment_date);
+                $item->review_date_Cost_center_manager = $this->FormatDate($item->review_date_Cost_center_manager);
+                $item->review_date_Financial_employee = $this->FormatDate($item->review_date_Financial_employee);
+
                 return $item;
             });
 
@@ -196,6 +211,9 @@ class AanvraagController extends Controller
                 $item->amount = $amount;
 
                 unset($item->status, $item->id, $item->status_id, $item->created_at, $item->updated_at);
+
+                $item->request_date = $this->FormatDate($item->request_date);
+                $item->review_date_Financial_employee = $this->FormatDate($item->review_date_Financial_employee);
 
                 return $item;
             });

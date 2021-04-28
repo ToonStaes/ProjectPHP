@@ -18,7 +18,7 @@
     <table id="tabel" class="table">
         <thead>
         <tr>
-            <th>Opleiding</th>
+            <th>Opleiding/Unit</th>
             <th>Kostenplaats</th>
             <th>Verantwoordelijke</th>
             <th>Beschrijving</th>
@@ -262,7 +262,7 @@
 
             $("#budget_input").val("");
 
-            $("#active_input").prop("checked", false);
+            $("#active_input").prop("checked", true);
 
             $("#cost_center_form_modal").modal('hide');
 
