@@ -80,7 +80,9 @@ class PasswordController extends Controller
         );
 
         Mail::to($user->email)->send(new SendPasswordReset($data));
-        return view('auth.login');
+
+        session()->flash('success', 'We hebben je een mail gestuurd met een nieuw wachtwoord. Vergeet ook je SPAM niet na te kijken!');
+        return back();
     }
 
     private function randomPassword() {
