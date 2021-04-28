@@ -16,7 +16,6 @@
                 <th>Aanvraagdatum</th>
                 <th>Datum beoordeling kostenplaats-verantwoordelijke</th>
                 <th>Datum terugbetaling</th>
-                <th>Naam kostenplaats</th>
                 <th>Beschrijving</th>
                 <th>Bedrag</th>
                 <th>Status kostenplaatsverantwoordelijke</th>
@@ -112,12 +111,11 @@
                 {"name": "Aanvraagdatum", "orderable": true},
                 {"name": "Datum beoordeling Kostenplaatsverantwoordelijke", "orderable": true},
                 {"name": "Datum terugbetaling", "orderable": true},
-                {"name": "Naam kostenplaats", "orderable": true},
                 {"name": "Beschrijving", "orderable": true},
                 {"name": "Bedrag", "orderable": true},
                 {"name": "Status Kostenplaatsverantwoordelijke", "orderable": true},
                 {"name": "Status Financieel Medewerker", "orderable": true},
-                {"name": "Aanvraag aanpassen", "orderable": true}
+                {"name": "Aanvraag aanpassen", "orderable": false}
             ],
             "language": {
                 "lengthMenu": "_MENU_ aanvragen per pagina",
@@ -143,7 +141,6 @@
                     // diverse reimbursements
                     $.each(data.diverse_requests, function (key, value) {
                         let request_date = value.request_date;
-                        let cost_center_name = value.cost_center_name;
                         let beschrijving = value.description;
                         let amount = (value.amount).toFixed(2);
                         let strAmount = '€ ' + amount;
@@ -183,7 +180,6 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center_name,
                                 beschrijving,
                                 strAmount,
                                 CCM,
@@ -195,7 +191,6 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center_name,
                                 beschrijving,
                                 amount,
                                 CCM,
@@ -216,12 +211,6 @@
                         if (review_date_Financial_employee == null) {
                             review_date_Financial_employee = null
                         }
-                        let cost_center = '';
-                        $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
-                            if (value2.parameter.standard_Cost_center_id != null) {
-                                cost_center = value2.parameter.cost_center_name;
-                            }
-                        })
                         let description = value.laptop_invoice.invoice_description;
                         let statusFE = value.status_FE;
                         let statusCCM = value.status_CC_manager;
@@ -255,7 +244,6 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center,
                                 description,
                                 amount,
                                 CCM,
@@ -267,7 +255,6 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center,
                                 description,
                                 amount,
                                 CCM,
@@ -284,7 +271,6 @@
                         if (review_date_Financial_employee == null) {
                             review_date_Financial_employee = null
                         }
-                        let cost_center = value.cost_center_name;
                         let description = value.name;
                         let statusFE = value.status_FE;
                         let statusCCM = null;
@@ -308,7 +294,6 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center,
                                 description,
                                 amount,
                                 statusCCM,
@@ -320,7 +305,6 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center,
                                 description,
                                 amount,
                                 statusCCM,
