@@ -262,7 +262,7 @@
 
             $("#budget_input").val("");
 
-            $("#active_input").prop("checked", false);
+            $("#active_input").prop("checked", true);
 
             $("#cost_center_form_modal").modal('hide');
 
