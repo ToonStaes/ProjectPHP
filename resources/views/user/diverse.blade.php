@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h1>Diverse vergoeding aanvragen</h1>
+                <h1>Diverse vergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u een vergoeding aanvragen voor diverse aankopen of voor een autorit."></i></h1>
                 @include('shared.alert')
                 <div class="card">
                     <div class="card-body" id="FormDiv">
@@ -29,7 +29,7 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="reden">Verklaring aanvraag</label>
+                                <label for="reden">Verklaring aanvraag <i class="fas fa-info-circle pr-3 pl-1" data-toggle="tooltip" data-placement="right"  data-html="true" title="Geef hier de reden van aankoop in. <em>Voorbeeld: 'Aankoop museumticket voor schoolreis.' </em>"></i></label>
                                 <input type="text" name="reden" id="reden"
                                        class="form-control @error('reden') is-invalid @enderror"
                                        placeholder="Reden"
@@ -67,7 +67,7 @@
                                     <div class="form-group NotAuto FileUpRoot">
                                         <input type="hidden" name="aantalbestanden1" id="aantalbestanden1" value=1
                                                class="form-control FileCount" required>
-                                        <label for="bestand">Uploaden bewijsstuk</label> <a class="btn btn-sm btn-outline-dark btnaddbewijs"><i class="fas fa-plus-square"></i></a>
+                                        <label for="bestand">Uploaden bewijsstuk <i class="fas fa-info-circle pr-3 pl-1" data-toggle="tooltip" data-placement="right"  data-html="true" title="Upload hier een bewijs van de aankoop. Bijvoorbeeld een factuur, leveringsbon, etc."></i></label> <a class="btn btn-sm btn-outline-dark btnaddbewijs"><i class="fas fa-plus-square"></i></a>
                                         <div class="FileUpDiv">
                                             <input type="file" name="UploadBestand1-1" id="bestand1-1" class="BestandInput NotAuto form-control-file @error('bestand') is-invalid @enderror" required>
                                         </div>
