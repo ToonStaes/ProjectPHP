@@ -13,7 +13,7 @@
                         <form action="/user/laptop" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                                <label for="bedrag">Bedrag in euro</label>
+                                <label for="bedrag">Aankoopbedrag in euro</label>
                                 <input type="number" name="bedrag" id="bedrag"
                                        class="form-control @error('bedrag') is-invalid @enderror"
                                        placeholder="123"
