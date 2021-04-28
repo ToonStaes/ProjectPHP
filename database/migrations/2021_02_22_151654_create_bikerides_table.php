@@ -66,37 +66,37 @@ class CreateBikeridesTable extends Migration
                 ],
                 [
                     'date' => date('Y-m-d h:m:s',strtotime("-1 days")),
-                    'bike_reimbursement_id' => 1,
+                    'bike_reimbursement_id' => 2,
                     'user_id' => 5,
                     'created_at' => now()
                 ],
                 [
                     'date' => date('Y-m-d h:m:s',strtotime("-2 days")),
-                    'bike_reimbursement_id' => 1,
+                    'bike_reimbursement_id' => 2,
                     'user_id' => 5,
                     'created_at' => now()
                 ],
                 [
                     'date' => date('Y-m-d h:m:s',strtotime("-3 days")),
-                    'bike_reimbursement_id' => 1,
+                    'bike_reimbursement_id' => 2,
                     'user_id' => 5,
                     'created_at' => now()
                 ],
                 [
                     'date' => date('Y-m-d h:m:s',strtotime("-6 days")),
-                    'bike_reimbursement_id' => 1,
+                    'bike_reimbursement_id' => 2,
                     'user_id' => 5,
                     'created_at' => now()
                 ],
                 [
                     'date' => date('Y-m-d h:m:s',strtotime("-9 days")),
-                    'bike_reimbursement_id' => 1,
+                    'bike_reimbursement_id' => 2,
                     'user_id' => 5,
                     'created_at' => now()
                 ],
                 [
                     'date' => date('Y-m-d h:m:s',strtotime("-11 days")),
-                    'bike_reimbursement_id' => 1,
+                    'bike_reimbursement_id' => 2,
                     'user_id' => 5,
                     'created_at' => now()
                 ],
