@@ -65,12 +65,6 @@ class BikerideController extends Controller
         $user_id = $user->id;
         $bikerides = explode(',', $request->fietsritten);
 
-        $all_bikerides = Bikeride::with('user')
-            ->where(function ($query) use ($user_id) {
-                $query->where('user_id', 'like', $user_id);
-            })
-            ->get();
-
         $melding = "";
         $melding_error = "";
         foreach ($bikerides as $datum) {
@@ -102,8 +96,13 @@ class BikerideController extends Controller
             }
 
         }
-        session()->flash('success', "De fietsritten <b>$melding</b> zijn toegevoegd.");
-        session()->flash('danger', "De fietsritten <b>$melding_error</b> bestaan al.");
+        if($melding != ""){
+            session()->flash('success', "De fietsritten <b>$melding</b> zijn toegevoegd.");
+        }
+        if($melding_error != ""){
+            session()->flash('danger', "De fietsritten <b>$melding_error</b> bestaan al.");
+        }
+
 
         $saved_bikerides = Bikeride::with('user')
             ->where(function ($query) use ($user_id) {
