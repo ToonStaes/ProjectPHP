@@ -112,8 +112,6 @@ class Cost_center_controller extends Controller
             }
         }
 
-        dd("Ewa papie");
-
         $cost_center_budget = new Cost_center_budget();
 
         $cost_center = new Cost_center();
