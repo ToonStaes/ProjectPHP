@@ -26,20 +26,12 @@ class CreateDiverseReimbursementEvidencesTable extends Migration
         DB::table('diverse_reimbursement_evidences')->insert(
             [
                 [
-                    'filepath' => '0000000000000treinticket.jpg',
-                    'DR_line_id' => 1,
+                    'filepath' => '0000000000000parkeerticket.jpg',
+                    'DR_line_id' => 2,
                 ],
                 [
-                    'filepath' => '0000000000000stagebezoekOmeta.docx',
-                    'DR_line_id' => 2
-                ],
-                [
-                    'filepath' => '0000000000000tankbon.jpg',
-                    'DR_line_id' => 3,
-                ],
-                [
-                    'filepath' => '0000000000000factuur_cadeau.pdf',
-                    'DR_line_id' => 4
+                    'filepath' => '0000000000000stagebezoek2ITF3.docx',
+                    'DR_line_id' => 3
                 ],
             ]
         );

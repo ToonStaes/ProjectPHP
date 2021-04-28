@@ -40,21 +40,14 @@ class CreateLaptopReimbursementsTable extends Migration
             [
                 [
                     'laptop_invoice_id' => 1,
-                    'user_id_Cost_center_manager' => 2,
-                    'payment_date' => now()
-                ],
-                [
-                    'laptop_invoice_id' => 1,
-                    'user_id_Cost_center_manager' => 2,
-
+                    'user_id_Cost_center_manager' => 4,
                     'payment_date' => now()
                 ],
                 [
                     'laptop_invoice_id' => 2,
-                    'user_id_Cost_center_manager' => 2,
+                    'user_id_Cost_center_manager' => 4,
                     'payment_date' => now()
-                ]
-
+                ],
             ]
         );
     }

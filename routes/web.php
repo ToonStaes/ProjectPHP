@@ -63,7 +63,6 @@ Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(fun
   Route::get('Mailcontent/qryMailcontents', 'financial_employee\MailcontentController@qryMailcontents');
   Route::resource('Mailcontent', 'financial_employee\MailcontentController',['parameters' => ['Mailcontent' => 'mailcontent']]);
   Route::resource('parameters', 'financial_employee\ParameterController');
-
 });
 
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->prefix('financial_employee')->group(function () {

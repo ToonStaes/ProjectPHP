@@ -5,6 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <h1>Wachtwoord opnieuw instellen</h1>
+                @include('shared.alert')
                 <div class="card">
                     <div class="card-body">
                         @if (session('status'))
