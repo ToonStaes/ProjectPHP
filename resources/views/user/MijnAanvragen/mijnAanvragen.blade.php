@@ -45,7 +45,7 @@
                 $('#bestand').prop('required', true);
             })
 
-            $('#modal-laptop').on('hidden.bs.modal' ,function () {
+            $('#modal-laptop').on('hidden.bs.modal', function () {
                 $('#oldfile').removeClass('d-none');
                 $('#uploadFile').addClass('d-none');
                 $('#bestand').prop('required', false);
@@ -80,7 +80,7 @@
         })
 
         $('tbody').on('click', '.btn-edit', function () {
-            if($(this).hasClass('laptopvergoeding')) {
+            if ($(this).hasClass('laptopvergoeding')) {
                 // Get data attributes from td tag
                 let id = $(this).data('id');
                 let amount = $(this).data('amount');
@@ -289,28 +289,15 @@
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
                         }
 
-                        if ((statusFE === "in afwachting") || (statusFE === "afgekeurd")) {
-                            table.row.add([
-                                request_date,
-                                review_date_Cost_center_manager,
-                                review_date_Financial_employee,
-                                description,
-                                amount,
-                                statusCCM,
-                                FE,
-                                `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
-                            ]).draw(false);
-                        } else {
-                            table.row.add([
-                                request_date,
-                                review_date_Cost_center_manager,
-                                review_date_Financial_employee,
-                                description,
-                                amount,
-                                statusCCM,
-                                FE
-                            ]).draw(false);
-                        }
+                        table.row.add([
+                            request_date,
+                            review_date_Cost_center_manager,
+                            review_date_Financial_employee,
+                            description,
+                            amount,
+                            statusCCM,
+                            FE
+                        ]).draw(false);
                     })
                     tooltips();
                 })
