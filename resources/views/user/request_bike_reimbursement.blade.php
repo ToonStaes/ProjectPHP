@@ -58,11 +58,13 @@
         let saved_dates = document.querySelector(".days").getAttribute("data-saved").split(',');
         let requested_days = document.querySelector(".days").getAttribute("data-requested").split(',');
 
-
         function selecteer(el){
             if(selected_dates.includes(el.getAttribute("data-value"))){
+                console.log(selected_dates);
                 selected_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
                 el.classList.remove("geselecteerd");
+                document.getElementById("fietsritten").value = selected_dates;
+                console.log(selected_dates);
             }
             else{
                 selected_dates.push(el.getAttribute("data-value"));
@@ -88,7 +90,6 @@
             }
             //controleren of datums opgeslagen/ geselecteerd/ aangevraagd zijn
             let result=document.querySelectorAll('[data-value]');
-            console.log(selected_dates);
             for (let index in result){
                 if (result.hasOwnProperty(index)){
                     if(selected_dates.includes(result[index].getAttribute('data-value'))){
