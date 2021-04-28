@@ -10,6 +10,7 @@
 
     </div>
     <div class="container">
+        <h1>Laptopvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina vindt u een overzicht van alle door u ingediende aanvragen."></i></h1>
         <table id="mijnAanvragen" class="table">
             <thead>
             <tr>
@@ -92,8 +93,8 @@
                 console.log("file icon: " + file_icon)
                 let file_name = $(this).data('filename')
                 let content = `<img src="../assets/icons/file_icons/` + file_icon + `" alt="file icon" width="25px">` + file_name
+
                 // Update the modal
-                $('.modal-title').text(`Pas laptopaanvraag aan`);
                 $('form').attr('action', `/user/laptop/${id}`);
 
                 $('#bedrag').val(amount);
@@ -109,7 +110,7 @@
         let table = $('#mijnAanvragen').DataTable({
             "columns": [
                 {"name": "Aanvraagdatum", "orderable": true},
-                {"name": "Datum beoordeling Kostenplaatsverantwoordelijke", "orderable": true},
+                {"name": "Datum beoordeling Kostenplaatsverantwoordelijke", "orderable": true, "width": 150},
                 {"name": "Datum terugbetaling", "orderable": true},
                 {"name": "Beschrijving", "orderable": true},
                 {"name": "Bedrag", "orderable": true},
