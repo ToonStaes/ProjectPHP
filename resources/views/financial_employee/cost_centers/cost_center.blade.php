@@ -73,7 +73,7 @@
         let budgets_changed = [];
         let cost_center_names = [];
         let _csrf = "{{csrf_token()}}";
-        let _query_url = "https://cma.test/cost_centers";
+        let _query_url = "http://cma.test/cost_centers";
         let _datatable;
 
         $(document).ready( function () {

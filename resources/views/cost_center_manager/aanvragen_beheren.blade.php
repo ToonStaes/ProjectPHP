@@ -107,16 +107,37 @@
             });
 
             $("#requestsTable").on('change', '.status-select', function () {
-                $("#commentaar-modal").modal('show');
-                let id = $(this).data('id');
-                let type = $(this).data('type');
-                let keuring = $(this).val();
+                if($(this).val() === "afgekeurd"){
+                    $("#commentaar-modal").modal('show');
+                    let id = $(this).data('id');
+                    let type = $(this).data('type');
+                    let keuring = $(this).val();
 
-                $("#commentaar-id").val(id);
-                $("#commentaar-type").val(type);
-                $("#commentaar-keuring").val(keuring);
+                    $("#commentaar-id").val(id);
+                    $("#commentaar-type").val(type);
+                    $("#commentaar-keuring").val(keuring);
 
-                $(this).val(previous);
+                    $(this).val(previous);
+                } else {
+                    let action = "/saveComment";
+                    let pars = {
+                        '_token': '{{ csrf_token() }}',
+                        '_method': 'put',
+                        'commentaar': null,
+                        'type': $(this).data('type'),
+                        'id': $(this).data('id'),
+                        'keuring': $(this).val(),
+                    };
+
+                    $.post(action, pars, 'json')
+                        .done(function (data) {
+                            console.log(data);
+                            buildTable();
+                        })
+                        .fail(function (data) {
+                            console.log(data);
+                        });
+                }
             });
 
             $("#commentaar-modal form").submit(function (e) {
@@ -124,6 +145,7 @@
 
                 let action = $(this).attr('action');
                 let pars = $(this).serialize();
+                console.log(pars);
 
                 $.post(action, pars, 'json')
                     .done(function (data) {
