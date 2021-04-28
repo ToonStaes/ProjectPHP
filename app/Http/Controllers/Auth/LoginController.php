@@ -73,10 +73,10 @@ class LoginController extends Controller
             }
         }
 
-//        if ($user->changedPassword) {
-//            return redirect('/');
-//        } else {
-//            return redirect('user/firstPassword');
-//        }
+        if ($user->changedPassword) {
+            return redirect('/');
+        } else {
+            return redirect('user/firstPassword');
+        }
     }
 }
