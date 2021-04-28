@@ -18,7 +18,7 @@
     <table id="tabel" class="table">
         <thead>
         <tr>
-            <th>Opleiding</th>
+            <th>Opleiding/Unit</th>
             <th>Kostenplaats</th>
             <th>Verantwoordelijke</th>
             <th>Beschrijving</th>
@@ -73,7 +73,7 @@
         let budgets_changed = [];
         let cost_center_names = [];
         let _csrf = "{{csrf_token()}}";
-        let _query_url = "https://cma.test/cost_centers";
+        let _query_url = "https://cma.test/cost_centers/";
         let _datatable;
 
         $(document).ready( function () {
@@ -262,7 +262,7 @@
 
             $("#budget_input").val("");
 
-            $("#active_input").prop("checked", false);
+            $("#active_input").prop("checked", true);
 
             $("#cost_center_form_modal").modal('hide');
 
