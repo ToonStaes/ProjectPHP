@@ -43,28 +43,22 @@ class CreateDiverseReimbursementLinesTable extends Migration
             [
                 [
                     'DR_request_id' => 1,
-                    'amount' => 37.5,
-                    'number_of_km' => null,
-                    'parameter_id' => null,
+                    'amount' => null,
+                    'number_of_km' => 23,
+                    'parameter_id' => 2,
                 ],
                 [
                     'DR_request_id' => 1,
-                    'amount' => null,
-                    'number_of_km' => 25,
-                    'parameter_id' => 2,
-                ],
-                [
-                    'DR_request_id' => 2,
-                    'amount' => null,
-                    'number_of_km' => 12,
-                    'parameter_id' => 2,
-                ],
-                [
-                    'DR_request_id' => 2,
-                    'amount' => 85,
+                    'amount' => 7,
                     'number_of_km' => null,
                     'parameter_id' => null,
-                ]
+                ],
+                [
+                    'DR_request_id' => 2,
+                    'amount' => 15,
+                    'number_of_km' => null,
+                    'parameter_id' => null,
+                ],
             ]
         );
     }

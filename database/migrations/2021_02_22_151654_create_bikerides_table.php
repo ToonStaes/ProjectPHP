@@ -26,38 +26,82 @@ class CreateBikeridesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
 
-        for ($i = 0; $i <= 10; $i++) {
-            DB::table('bikerides')->insert(
+        DB::table('bikerides')->insert(
+            [
                 [
-                    'date' => now(),
+                    'date' => date('Y-m-d h:m:s',strtotime("-1 days")),
                     'bike_reimbursement_id' => 1,
                     'user_id' => 3,
                     'created_at' => now()
-                ]
-            );
-        }
-
-        for ($i = 0; $i <= 5; $i++) {
-            DB::table('bikerides')->insert(
+                ],
                 [
-                    'date' => now(),
+                    'date' => date('Y-m-d h:m:s',strtotime("-3 days")),
                     'bike_reimbursement_id' => 1,
                     'user_id' => 3,
                     'created_at' => now()
-                ]
-            );
-        }
-
-        for ($i = 0; $i <= 5; $i++) {
-            DB::table('bikerides')->insert(
+                ],
                 [
-                    'date' => now(),
-                    'bike_reimbursement_id' => 2,
+                    'date' => date('Y-m-d h:m:s',strtotime("-6 days")),
+                    'bike_reimbursement_id' => 1,
                     'user_id' => 3,
                     'created_at' => now()
-                ]
-            );
-        }
+                ],
+                [
+                    'date' => date('Y-m-d h:m:s',strtotime("-7 days")),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 3,
+                    'created_at' => now()
+                ],
+                [
+                    'date' => date('Y-m-d h:m:s',strtotime("-8 days")),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 3,
+                    'created_at' => now()
+                ],
+                [
+                    'date' => date('Y-m-d h:m:s',strtotime("-9 days")),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 3,
+                    'created_at' => now()
+                ],
+                [
+                    'date' => date('Y-m-d h:m:s',strtotime("-1 days")),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 5,
+                    'created_at' => now()
+                ],
+                [
+                    'date' => date('Y-m-d h:m:s',strtotime("-2 days")),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 5,
+                    'created_at' => now()
+                ],
+                [
+                    'date' => date('Y-m-d h:m:s',strtotime("-3 days")),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 5,
+                    'created_at' => now()
+                ],
+                [
+                    'date' => date('Y-m-d h:m:s',strtotime("-6 days")),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 5,
+                    'created_at' => now()
+                ],
+                [
+                    'date' => date('Y-m-d h:m:s',strtotime("-9 days")),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 5,
+                    'created_at' => now()
+                ],
+                [
+                    'date' => date('Y-m-d h:m:s',strtotime("-11 days")),
+                    'bike_reimbursement_id' => 1,
+                    'user_id' => 5,
+                    'created_at' => now()
+                ],
+            ]
+        );
     }
 
     /**

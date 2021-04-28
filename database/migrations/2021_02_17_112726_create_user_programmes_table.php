@@ -28,13 +28,29 @@ class CreateUserProgrammesTable extends Migration
         DB::table('user_programmes')->insert(
             [
                 [
+                    'user_id' => 1,
+                    'programme_id' => 1
+                ],
+                [
                     'user_id' => 2,
                     'programme_id' => 1
                 ],
                 [
                     'user_id' => 3,
                     'programme_id' => 1
-                ]
+                ],
+                [
+                    'user_id' => 4,
+                    'programme_id' => 1
+                ],
+                [
+                    'user_id' => 5,
+                    'programme_id' => 1
+                ],
+                [
+                    'user_id' => 5,
+                    'programme_id' => 2
+                ],
             ]
         );
     }

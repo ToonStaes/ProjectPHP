@@ -61,13 +61,13 @@ class CreateParametersTable extends Migration
                 [
                     'name' => 'Standaard kostenplaats laptopvergoeding',
                     'valid_from' => now(),
-                    'standard_Cost_center_id' => 3,
+                    'standard_Cost_center_id' => 2,
                     'description' => 'Standaard kostenplaats van laptop'
                 ],
                 [
                     'name' => 'Standaard kostenplaats fietsvergoeding',
                     'valid_from' => now(),
-                    'standard_Cost_center_id' => 4,
+                    'standard_Cost_center_id' => 1,
                     'description' => 'Standaard kostenplaats fietsvergoeding'
                 ]
             ]

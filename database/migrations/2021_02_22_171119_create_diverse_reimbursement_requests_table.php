@@ -41,30 +41,18 @@ class CreateDiverseReimbursementRequestsTable extends Migration
         DB::table('diverse_reimbursement_requests')->insert(
             [
                 [
-                    'user_id' => 3,
-                    'cost_center_id' => 2,
+                    'user_id' => 5,
+                    'cost_center_id' => 5,
                     'description' => "Stagebezoek met 2ITF3",
                     'request_date' => now(),
                     'user_id_CC_manager' => 2,
-                    'user_id_Fin_employee' => 1,
-                    'review_date_Cost_center_manager' => now(),
-                    'review_date_Financial_employee' => now(),
-                    'comment_Cost_center_manager' => "Voor mij is het in orde.",
-                    'comment_Financial_employee' => "Niet in orde, treintickets worden niet terugbetaald.",
-                    'status_CC_manager' => 2,
-                    'status_FE' => 3,
-                ]
-            ]
-        );
-
-        DB::table('diverse_reimbursement_requests')->insert(
-            [
+                ],
                 [
-                    'user_id' => 3,
-                    'cost_center_id' => 2,
-                    'description' => "Feestje met collega's",
+                    'user_id' => 4,
+                    'cost_center_id' => 4,
+                    'description' => "Slingers gekocht voor opendeurdag",
                     'request_date' => now(),
-                    'user_id_CC_manager' => 2,
+                    'user_id_CC_manager' => 5,
                 ]
             ]
         );

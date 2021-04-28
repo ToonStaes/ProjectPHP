@@ -35,13 +35,13 @@ class CreateBikeReimbursementsTable extends Migration
                 [
                     'status_id' => 1,
                     'request_date' => now(),
-                    'name' => "bike_reimbursement 1 John Doe",
+                    'name' => "bike_reimbursement Britt Theunis",
                     'created_at' => now()
                 ],
                 [
                     'status_id' => 1,
                     'request_date' => now(),
-                    'name' => "bike_reimbursement 2 John Doe",
+                    'name' => "Bike reimbursement Toon Staes",
                     'created_at' => now()
                 ]
             ]
