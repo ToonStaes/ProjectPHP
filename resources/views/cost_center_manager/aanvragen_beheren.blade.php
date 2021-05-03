@@ -1,7 +1,6 @@
 @extends('layouts.template')
 @section('extra_css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
 @endsection
 
 @section('main')
@@ -35,7 +34,7 @@
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="modal-title">Commentaar</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -100,6 +99,10 @@
 
         $(document).ready(function () {
             buildTable();
+
+            $(".close").click(function () {
+                $("#commentaar-modal").modal('hide');
+            })
 
             let previous = "";
             $("#requestsTable").on('focus', '.status-select', function () {
@@ -202,8 +205,8 @@
                         select += `</select></span>`;
 
                         let status_fe = value.status_FE;
-                        if (value.comment_Financial_employee != null){
-                            status_fe = `<p>${value.status_FE} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
+                        if (value.review_date_Financial_employee != null){
+                            status_fe = `<p>${value.status_FE} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
                         }
 
                         let evidence = '';
@@ -266,8 +269,8 @@
                         let user_name = value.laptop_invoice.username;
 
                         let status_fe = value.status_fe.name;
-                        if (value.comment_Financial_employee != null){
-                            status_fe = `<p>${value.status_fe.name} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Financial_employee}</p><p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
+                        if (value.review_date_Financial_employee != null){
+                            status_fe = `<p>${value.status_fe.name} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
                         }
 
                         let evidence = `<a class="btn btn-outline-dark" href="/storage/LaptopBewijzen/${value.laptop_invoice.filepath}" download><nobr><img src='assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name.substring(13)}</nobr></a>`;
@@ -292,7 +295,7 @@
 
         function makeTooltipsVisible()
         {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip({html:true});
         }
 
     </script>

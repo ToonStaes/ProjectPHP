@@ -1,7 +1,6 @@
 @extends('layouts.template')
 @section('extra_css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
 @endsection
 
 @section('main')
@@ -35,8 +34,8 @@
                     @method("put")
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modal-title">Commentaar</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title" id="commentaar">Commentaar</h5>
+                        <button type="button" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -61,8 +60,8 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Openstaande betalingen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="openstaandeBetalingen">Openstaande betalingen</h5>
+                    <button type="button" class="close" aria-label="Close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -121,6 +120,10 @@
 
         $(document).ready(function () {
             buildTable();
+
+            $(".close").click(function () {
+                $("#commentaar-modal").modal('hide');
+            })
 
             let previous = "";
             $("#requestsTable").on('focus', '.status-select', function () {
@@ -382,7 +385,7 @@
         }
 
         function makeTooltipsVisible() {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip({html:true});
         }
 
         function buildModal(){
