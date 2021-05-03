@@ -55,28 +55,60 @@
             $('#modal-laptop form').submit(function (e) {
                 // Don't submit the form
                 e.preventDefault();
+                let form = $('#modal-laptop form')[0];
+                let formData = new FormData(form);
+                let entries = formData.entries();
+                // UploadBestand
+                console.log('bedrag', formData.getAll('UploadBestand'))
+
+
+                let object = {};
+                formData.forEach((v,k) => {
+                    object[k] = v;
+                });
+                let json = JSON.stringify(object);
+                console.log(json);
                 // Get the action property (the URL to submit)
                 let action = $(this).attr('action');
                 // Serialize the form and send it as a parameter with the post
-                let pars = $(this).serialize();
-                // Post the data to the URL
-                $.post(action, pars, 'json')
-                    .done(function (data) {
-                        $('#Message').html(data);
+               // let pars = $(this).serialize();
+
+                $.ajax({
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    type: 'POST',
+                    url: action,
+                    data: formData,
+                    cache: false,
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+
+                    success: function(data) {
+                        console.log(data)
                         // Hide the modal
-                        $('#modal-laptop').modal('hide');
-                        // Rebuild the table
-                        buildTable();
-                    })
-                    .fail(function (e) {
-                        // Loop over the e.responseJSON.errors array and create an ul list with all the error messages
-                        let msg = '<p>Errors: <ul>';
-                        $.each(e.responseJSON.errors, function (key, value) {
-                            msg += `<li>${value}</li>`;
-                        });
-                        msg += '</ul></p>';
-                        $('#Message').html(msg);
-                    });
+                                $('#modal-laptop').modal('hide');
+                                // Rebuild the table
+                                buildTable();
+                    }
+                });
+                // Post the data to the URL
+                // $.post(action, pars, 'json')
+                //     .done(function (data) {
+                //         $('#Message').html(data);
+                //         // Hide the modal
+                //         $('#modal-laptop').modal('hide');
+                //         // Rebuild the table
+                //         buildTable();
+                //     })
+                //     .fail(function (e) {
+                //         // Loop over the e.responseJSON.errors array and create an ul list with all the error messages
+                //         let msg = '<p>Errors: <ul>';
+                //         $.each(e.responseJSON.errors, function (key, value) {
+                //             msg += `<li>${value}</li>`;
+                //         });
+                //         msg += '</ul></p>';
+                //         $('#Message').html(msg);
+                //     });
             });
         })
 
@@ -101,7 +133,8 @@
                 $('#reden').val(description);
                 $('#datum').val(purchaseDate);
                 $('#filepath').attr('href', filepath).html(content);
-                $('input[name="_method"]').val('put');
+                $('#bestand').val(null);
+                $('input[name="_method"]').val('post');
                 // Show the modal
                 $('#modal-laptop').modal('show');
             }

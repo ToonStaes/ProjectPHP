@@ -28,7 +28,7 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::get('password', 'User\PasswordController@edit');
     Route::view('laptop', 'user.laptop');
     Route::post('laptop', 'User\LaptopController@store');
-    Route::put('laptop/{id}', 'User\LaptopController@update');
+    Route::post('laptop/{id}', 'User\LaptopController@update');
     Route::get('mijnaanvragen', 'User\AanvraagController@index');
     Route::get('mijnaanvragen/qryRequests', 'User\AanvraagController@qryRequests');
     Route::get('request_bike_reimbursement', 'User\BikerideController@index');
