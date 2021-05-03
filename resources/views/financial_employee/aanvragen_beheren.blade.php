@@ -1,7 +1,6 @@
 @extends('layouts.template')
 @section('extra_css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
 @endsection
 
 @section('main')
