@@ -44,7 +44,7 @@ class BikerideController extends Controller
             $requested_fietsritten = $requested_fietsritten . "," . $bikeride->date;
         }
         $requested_fietsritten = substr($requested_fietsritten, 1, strlen($requested_fietsritten) - 1);
-        $result = compact('saved_fietsritten', 'requested_fietsritten');
+        $result = compact('saved_fietsritten', 'requested_fietsritten', 'user');
         Json::dump($result);
         return view('user.request_bike_reimbursement', $result);
     }
@@ -63,6 +63,7 @@ class BikerideController extends Controller
         $user_id = $user->id;
         $bikerides = explode(',', $request->fietsritten);
         $teVerwijderen = explode(',', $request->teVerwijderen);
+        $number_of_km = $request->numberOfKm;
 
 
         $melding = "";
@@ -96,7 +97,12 @@ class BikerideController extends Controller
                     $bikeride = new Bikeride();
                     $bikeride->user_id = $user->id;
                     $bikeride->date = $date;
-                    $bikeride->number_of_km = $user->number_of_km;
+                    if ($number_of_km != null){
+                        $bikeride->number_of_km = $number_of_km;
+                    }
+                    else{
+                        $bikeride->number_of_km = $user->number_of_km;
+                    }
                     $bikeride->save();
                     if ($melding === "") {
                         $melding = $datum;
@@ -150,7 +156,7 @@ class BikerideController extends Controller
         $requested_fietsritten = substr($requested_fietsritten, 1, strlen($requested_fietsritten) - 1);
 
 
-        $result = compact('saved_fietsritten', 'requested_fietsritten');
+        $result = compact('saved_fietsritten', 'requested_fietsritten', 'user');
         Json::dump($result);
         return view('user.request_bike_reimbursement', $result);
     }

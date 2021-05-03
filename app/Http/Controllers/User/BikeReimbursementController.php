@@ -64,7 +64,7 @@ class BikeReimbursementController extends Controller
             $requested_fietsritten = $requested_fietsritten . "," . $bikeride ->date;
         }
         $requested_fietsritten = substr($requested_fietsritten,1, strlen($requested_fietsritten)-1);
-        $result = compact('saved_fietsritten', 'requested_fietsritten');
+        $result = compact('saved_fietsritten', 'requested_fietsritten', 'user');
 
         //fietsvergoedingparameter aanmaken
         $bike_parameter_fietsvergoeding = new Bike_reimbursementParameter();

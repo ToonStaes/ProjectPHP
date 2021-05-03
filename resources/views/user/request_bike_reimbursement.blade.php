@@ -32,24 +32,29 @@
         </div>
     </div>
     <div class="row knoppen justify-content-between">
-        <form action="/user/save_bikerides" method="post" class="col-4">
-            @csrf
-            <input id="fietsritten" name="fietsritten" type="hidden"/>
-            <input id="teVerwijderen" name="teVerwijderen" type="hidden"/>
-            <span id="save-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Er moeten fietsritten geselecteerd zijn om de ritten te kunnen opslaan." >
-                <button id="save" type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
-            </span>
-
-        </form>
-        <form action="/user/request_bikeReimbursement" method="post" class="col-4">
-            @csrf
-            <span id="request-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="left" title="Er moeten fietsritten zijn opgeslagen om een fietsvergoeding aan te vragen.">
+        <div class="col-4">
+            <form action="/user/save_bikerides" method="post" class="row justify-content-start">
+                <input id="fietsritten" name="fietsritten" type="hidden"/>
+                <input  id="teVerwijderen" name="teVerwijderen" type="hidden"/>
+                    <div class="col-3"><label class="mr-2" for="numberOfKm">Aantal km</label> <input style="width: 70px;" id="numberOfKm" name="numberOfKm" type="number" value="{{$user->number_of_km}}"/></div>
+                @csrf
+                    <div class="col-4">
+                        <span  id="save-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Er moeten fietsritten geselecteerd zijn om de ritten te kunnen opslaan." >
+                    <button id="save"type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
+                </span>
+                    </div>
+            </form>
+        </div>
+        <div class="col-3">
+            <form action="/user/request_bikeReimbursement" method="post">
+                @csrf
+                <span id="request-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="left" title="Er moeten fietsritten zijn opgeslagen om een fietsvergoeding aan te vragen.">
                 <button id="request" type="submit" class="btn btn-secondary" disabled>Aanvraag indienen</button>
             </span>
 
-        </form>
+            </form>
+        </div>
     </div>
-
 @endsection
 
 @section('script_after')
@@ -237,7 +242,5 @@
         });
 
         renderCalender();
-
-
     </script>
 @endsection
