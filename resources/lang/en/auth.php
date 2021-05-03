@@ -14,6 +14,6 @@ return [
     */
 
     'failed' => 'Dit komt niet overeen met onze gegevens.',
-    'throttle' => 'Too many login attempts. Probeer opnieuw binnen :seconds seconden.',
+    'throttle' => 'Je hebt te vaak geprobeerd. Probeer opnieuw binnen :seconds seconden.',
 
 ];
