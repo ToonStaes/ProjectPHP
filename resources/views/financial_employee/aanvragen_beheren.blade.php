@@ -385,7 +385,7 @@
         }
 
         function makeTooltipsVisible() {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip({html:true});
         }
 
         function buildModal(){
