@@ -34,8 +34,8 @@
                     @method("put")
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modal-title">Commentaar</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title" id="commentaar">Commentaar</h5>
+                        <button type="button" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -60,8 +60,8 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Openstaande betalingen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="openstaandeBetalingen">Openstaande betalingen</h5>
+                    <button type="button" class="close" aria-label="Close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -120,6 +120,10 @@
 
         $(document).ready(function () {
             buildTable();
+
+            $(".close").click(function () {
+                $("#commentaar-modal").modal('hide');
+            })
 
             let previous = "";
             $("#requestsTable").on('focus', '.status-select', function () {

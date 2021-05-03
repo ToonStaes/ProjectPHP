@@ -34,7 +34,7 @@
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="modal-title">Commentaar</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -99,6 +99,10 @@
 
         $(document).ready(function () {
             buildTable();
+
+            $(".close").click(function () {
+                $("#commentaar-modal").modal('hide');
+            })
 
             let previous = "";
             $("#requestsTable").on('focus', '.status-select', function () {

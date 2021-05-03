@@ -31,6 +31,10 @@
     <script>
         $(document).ready(function () {
             loadTable();
+
+            $(".close").click(function () {
+                $('#modal-mailcontent').modal('hide');
+            })
         });
 
         // load mailcontents with AJAX
