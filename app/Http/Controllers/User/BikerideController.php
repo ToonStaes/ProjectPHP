@@ -58,49 +58,67 @@ class BikerideController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            "fietsritten" => "required"
-        ]);
+
         $user = Auth::user();
         $user_id = $user->id;
         $bikerides = explode(',', $request->fietsritten);
+        $teVerwijderen = explode(',', $request->teVerwijderen);
+
 
         $melding = "";
-        $melding_error = "";
-        foreach ($bikerides as $datum) {
+        $melding_verwijderen = "";
+        foreach ($teVerwijderen as $datum) {
             $date = date_create_from_format('Y-m-d', $datum);
-            $bikes = Bikeride::with('user')
+            Bikeride::with('user')
                 ->where(function ($query) use ($user_id) {
                     $query->where('user_id', 'like', $user_id);
                 })
                 ->whereDate('date', '=', $date)
-                ->get();
-            if(sizeof($bikes) == 0){
-                $bikeride = new Bikeride();
-                $bikeride->user_id = $user->id;
-                $bikeride->date = $date;
-                $bikeride->number_of_km = $user->number_of_km;
-                $bikeride->save();
-                if ($melding === "") {
-                    $melding = $datum;
-                } else {
-                    $melding = $melding . ', ' . $datum;
-                }
+                ->delete();
+            if ($melding_verwijderen === "") {
+                $melding_verwijderen = $datum;
+            } else {
+                $melding_verwijderen = $melding_verwijderen . ', ' . $datum;
             }
-            else{
-                if ($melding_error === "") {
-                    $melding_error = $datum;
-                } else {
-                    $melding_error = $melding . ', ' . $datum;
+        }
+        foreach ($bikerides as $datum) {
+            $date = date_create_from_format('Y-m-d', $datum);
+            if($date)
+            {
+                $bikes = Bikeride::with('user')
+                    ->where(function ($query) use ($user_id) {
+                        $query->where('user_id', 'like', $user_id);
+                    })
+                    ->whereDate('date', '=', $date)
+                    ->whereNull('bike_reimbursement_id')
+                    ->get();
+                if(sizeof($bikes) == 0){
+                    $bikeride = new Bikeride();
+                    $bikeride->user_id = $user->id;
+                    $bikeride->date = $date;
+                    $bikeride->number_of_km = $user->number_of_km;
+                    $bikeride->save();
+                    if ($melding === "") {
+                        $melding = $datum;
+                    } else {
+                        $melding = $melding . ', ' . $datum;
+                    }
                 }
             }
 
+
         }
         if($melding != ""){
-            session()->flash('success', "De fietsritten <b>$melding</b> zijn toegevoegd.");
+            if ($melding_verwijderen != ""){
+                session()->flash('success', "De fietsritten <b>$melding</b> zijn toegevoegd & de  opgeslagen fietsritten <b>$melding_verwijderen</b> zijn verwijderd.");
+            }
+            else{
+                session()->flash('success', "De fietsritten <b>$melding</b> zijn toegevoegd.");
+            }
+
         }
-        if($melding_error != ""){
-            session()->flash('danger', "De fietsritten <b>$melding_error</b> bestaan al.");
+        if($melding_verwijderen != "" && $melding == ""){
+            session()->flash('success', "De opgeslagen fietsritten <b>$melding_verwijderen</b> zijn verwijderd.");
         }
 
 
@@ -128,7 +146,10 @@ class BikerideController extends Controller
         foreach ($requested_bikerides as $bikeride) {
             $requested_fietsritten = $requested_fietsritten . "," . $bikeride->date;
         }
+
         $requested_fietsritten = substr($requested_fietsritten, 1, strlen($requested_fietsritten) - 1);
+
+
         $result = compact('saved_fietsritten', 'requested_fietsritten');
         Json::dump($result);
         return view('user.request_bike_reimbursement', $result);

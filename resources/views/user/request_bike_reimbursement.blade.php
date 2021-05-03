@@ -35,6 +35,7 @@
         <form action="/user/save_bikerides" method="post" class="col-4">
             @csrf
             <input id="fietsritten" name="fietsritten" type="hidden"/>
+            <input id="teVerwijderen" name="teVerwijderen" type="hidden"/>
             <span id="save-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Er moeten fietsritten geselecteerd zijn om de ritten te kunnen opslaan." >
                 <button id="save" type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
             </span>
@@ -57,13 +58,20 @@
         let selected_dates = [];
         let saved_dates = document.querySelector(".days").getAttribute("data-saved").split(',');
         let requested_days = document.querySelector(".days").getAttribute("data-requested").split(',');
+        let te_verwijderen = [];
 
         function selecteer(el){
             if(selected_dates.includes(el.getAttribute("data-value"))){
                 selected_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
                 el.classList.remove("geselecteerd");
                 document.getElementById("fietsritten").value = selected_dates;
-                console.log(document.getElementById("fietsritten").value);
+            }
+            else if(saved_dates.includes(el.getAttribute("data-value"))){
+                el.classList.remove("opgeslaan");
+                saved_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
+                te_verwijderen.push(el.getAttribute("data-value"));
+                document.getElementById("teVerwijderen").value = te_verwijderen;
+                selecteerDatums();
             }
             else{
                 selected_dates.push(el.getAttribute("data-value"));
@@ -74,8 +82,13 @@
         }
 
         function selecteerDatums(){
+            if(document.getElementById("teVerwijderen").value !== ""){
+                document.getElementById("save").disabled = false;
+                //tooltip wijzigen
+                document.getElementById("save-tooltip-wrapper").setAttribute("data-original-title", "De opgeslagen fietsritten wijzigen.");
+                document.getElementById("save-tooltip-wrapper").setAttribute("title", "De opgeslagen fietsritten wijzigen.");
+            }
             //indien er datums zijn geselecteerd
-            console.log(document.getElementById("fietsritten").value);
             if(document.getElementById("fietsritten").value !== ""){
                 document.getElementById("save").disabled = false;
                 //tooltip wijzigen
@@ -97,6 +110,9 @@
                     }
                     if(saved_dates.includes(result[index].getAttribute('data-value'))){
                         result[index].classList.add("opgeslaan");
+                    }
+                    if(te_verwijderen.includes(result[index].getAttribute('data-value'))){
+                        result[index].classList.remove("opgeslaan");
                     }
                     if(requested_days.includes(result[index].getAttribute('data-value'))){
                         result[index].classList.add("aangevraagd");
