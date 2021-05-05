@@ -4,7 +4,7 @@
 
 @section('main')
     <h1>Mailteksten beheren
-        <a href="#!" data-toggle="modal" data-target="#modal-mailhelp">
+        <a href="#!" id="help">
             <i class="fas fa-info-circle"></i>
         </a>
     </h1>
@@ -75,6 +75,12 @@
             $('input[name="_method"]').val('put');
             // Show the modal
             $('#modal-mailcontent').modal('show');
+        });
+
+        $('body').on('click', '#help', function () {
+            $('.modal-title').text("Gebruik van 'variabelen'");
+            // Show the modal
+            $('#modal-mailhelp').modal('show');
         });
 
         $('#modal-mailcontent form').submit(function (e) {
