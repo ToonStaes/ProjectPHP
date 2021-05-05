@@ -6,6 +6,7 @@ td {
     word-wrap: break-word;
     padding-bottom: 0.5rem;
     padding-top: 0.5rem;
+
 }
 
 .email_table {
@@ -19,4 +20,8 @@ td {
 
 #gebruiker_toevoegen_knop {
     margin-bottom: 2rem;
+}
+
+.fa-trash-alt, .fa-edit{
+    color: $blue;
 }
