@@ -10,7 +10,9 @@
 
     </div>
     <div class="container">
-        <h1>Laptopvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina vindt u een overzicht van alle door u ingediende aanvragen."></i></h1>
+        <h1>Laptopvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"
+                                          title="Op deze pagina vindt u een overzicht van alle door u ingediende aanvragen."></i>
+        </h1>
         <table id="mijnAanvragen" class="table">
             <thead>
             <tr>
@@ -66,7 +68,7 @@
                 let action = $(this).attr('action');
 
                 $.ajax({
-                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     type: 'POST',
                     url: action,
                     data: formData,
@@ -75,12 +77,31 @@
                     processData: false,
                     contentType: false,
 
-                    success: function(data) {
-                        console.log(data)
+                    success: function (data) {
+                        console.log('redurn ok data', data)
                         // Hide the modal
                         $('#modal-laptop').modal('hide');
                         // Rebuild the table
                         buildTable();
+                        // show noty
+                        let notification = new Noty({
+                            type: data.kind,
+                            text: data.text,
+                            layout: "topRight",
+                            timeout: 5000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
+                    },
+                    error: function (error) {
+                        let errors = JSON.parse(error.responseText).errors;
+                        $.each(errors, function (key, val) {
+                            $("#" + key + "_error").text(val);
+                        });
+                    },
+                    fail: function (data) {
+                        console.log("foutieve data ingevuld");
+
                     }
                 });
             });

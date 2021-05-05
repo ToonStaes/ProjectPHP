@@ -101,6 +101,7 @@ class Cost_center_controller extends Controller
             'description.max'=>'De omschrijving mag maximaal 1024 tekens lang zijn',
         ]);
 
+
         //  We need to check if a cost center with
         //  the same programme already exists
         $possible_conflicts = Cost_center::where('name', $request->cost_center_name)->with('programme_cost_centers')->get();
