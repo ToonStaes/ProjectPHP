@@ -59,7 +59,7 @@
                             <p>Optioneel kan het budget ook al worden meegegeven, net zoals een korte omschrijving van de kostenplaats. De optie om de kostenplaats op actief te zetten is standaard aangevinkt. Als de kostenplaats nog niet geactiveerd moet worden komt deze niet in de lijst te staan.</p>
                         </li>
                         <li>
-                            <p>Om de nieuwe kostenplaats op te slagen klikt u op de knop "Kostenplaats opslaan".</p>
+                            <p>Om de nieuwe kostenplaats op te slaan klikt u op de knop "Kostenplaats opslaan".</p>
                         </li>
                     </ol>
                 </div>
