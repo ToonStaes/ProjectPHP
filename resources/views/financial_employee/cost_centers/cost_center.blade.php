@@ -7,14 +7,8 @@
 
 @section('main')
     <h1>Kostenplaatsen beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u kostenplaatsen toevoegen en verwijderen. Ook kan u hier het budget van de kostenplaats wijzigen."></i></h1>
-    <button class="btn btn-primary mb-4" id="button-cost_center-add" data-toggle="modal" data-target="#cost_center_form_modal"> <i class="fas fa-plus"></i> Kostenplaats toevoegen</button>
+    <button class="btn btn-primary mb-4" id="button-cost_center-add"> <i class="fas fa-plus"></i> Kostenplaats toevoegen</button>
     <button class="btn btn-primary float-right" id="button-save" data-toggle="tooltip" data-placement="left" title="De wijzigingen van de budgetten opslaan.">Opslaan</button>
-    <div id="notification" class="alert alert-dismissible">
-        <button type="button" id="notification-dismiss" class="close" aria-label="Sluiten">
-            <span aria-hidden="true">×</span>
-        </button>
-        <p id="notification-text"></p>
-    </div>
     <table id="tabel" class="table">
         <thead>
         <tr>
@@ -37,8 +31,8 @@
                            value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"
                            step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
                 <td class="text-center">
-                    <button type="submit" class="deleteCostCenter" data-toggle="tooltip" title="Verwijder kostenplaats {{$cost_center->name}}">
-                        <i class="fas fa-trash-alt"></i>
+                    <button type="submit" class="deleteCostCenter">
+                        <i class="fas fa-trash-alt" data-toggle="tooltip" title="Verwijder kostenplaats {{$cost_center->name}}"></i>
                     </button>
                 </td>
             </tr>
@@ -52,7 +46,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="add_cost_center_title">Kostenplaats toevoegen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close modal-close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -73,7 +67,7 @@
         let budgets_changed = [];
         let cost_center_names = [];
         let _csrf = "{{csrf_token()}}";
-        let _query_url = "http://cma.test/cost_centers";
+        let _query_url = "http://cma.test/cost_centers/";
         let _datatable;
 
         $(document).ready( function () {
@@ -103,11 +97,16 @@
                     }
                 }
             });
+
+            $('#cost_center_form_modal').modal();
+
             jQuery.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": _csrf
                 }
             });
+
+            //$('.deleteCostCenter').tooltip({html:true, container:'body', boundary:'window'});
 
             document.getElementById("cost_center_form").addEventListener("submit", function(event){
                 event.preventDefault();
@@ -216,6 +215,14 @@
             });
         }
 
+        $('#button-cost_center-add').on('click', function(){
+            $('#cost_center_form_modal').modal('show');
+        });
+
+        $('.modal-close').on('click', function(){
+            $('#cost_center_form_modal').modal('hide');
+        });
+
         function delete_cost_center_row(id, name){
             _datatable.row($("tr td.cost_center_name:contains("+name+")")).remove().draw();
             $('#cost_centers_list option[data-id="'+id+'"]').remove();
@@ -281,8 +288,8 @@
                 "<td>"+cost_center.description+"</td>",
                 "<td><input class=\"input-budget\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
                 "                           min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
-                "<td><button type=\"submit\" class=\"deleteCostCenter\" data-toggle=\"tooltip\" title=\"Verwijder kostenplaats "+cost_center.cost_center_name+"\">\n" +
-                "                        <i class=\"fas fa-trash-alt\"></i></button></td>"
+                "<td><button type=\"submit\" class=\"deleteCostCenter\">\n" +
+                "                        <i class=\"fas fa-trash-alt\" data-toggle=\"tooltip\" title=\"Verwijder kostenplaats "+cost_center.cost_center_name+"\"></i></button></td>"
             ]).draw().node();
             _datatable.draw();
             _datatable.sort();
@@ -341,23 +348,42 @@
         }
 
         function show_success_notification(text){
-            notification_div = $('#notification');
-            notification_div.removeClass('alert-danger');
-            notification_div.addClass('alert-success');
-            $('#notification-text').text(text)
-            notification_div.show();
+            let notification = new Noty({
+                type: "success",
+                text: text,
+                layout: "topRight",
+                timeout: 10000,
+                progressBar: true,
+                modal: false,
+                buttons: [
+                    Noty.button(
+                        "Sluiten",
+                        "btn btn-success",
+                        function(){
+                            notification.close();
+                        })
+                    ]
+            }).show();
         }
 
         function show_failure_notification(text){
-            notification_div = $('#notification');
-            notification_div.removeClass('alert-success');
-            notification_div.addClass('alert-danger');
-            $('#notification-text').text(text)
-            notification_div.show();
+            let notification = new Noty({
+                type: "error",
+                text: text,
+                layout: "topRight",
+                timeout: 10000,
+                progressBar: true,
+                modal: false,
+                buttons: [
+                    Noty.button(
+                        "Sluiten",
+                        "btn btn-danger",
+                        function(){
+                            notification.close();
+                        }
+                    )
+                ]
+            }).show();
         }
-
-        $('#notification-dismiss').on('click', function(){
-            $('#notification').hide();
-        })
     </script>
 @endsection
