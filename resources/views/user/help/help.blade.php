@@ -71,7 +71,7 @@
                                 </div>
                                 <div class="col-sm-9 col-md-12 col-lg-9">
                                     <h5 class="card-title">Vergoedingen behandelen</h5>
-                                    <p class="card-text">Meer informatie over het goed- of afkeuren van vergoedingen.</p>
+                                    <p class="card-text">Meer informatie over het goed- of afkeuren en uitbetalen van vergoedingen.</p>
                                 </div>
                             </div>
                         </a>
