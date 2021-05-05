@@ -131,8 +131,7 @@ class UserController extends Controller
 
         Mail::to($user->email)->send(new SendNewUser($data));
 
-        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is aangemaakt.");
-        return View::make('shared.alert');
+        return "De gebruiker <b>$user->first_name $user->last_name</b> is aangemaakt.";
     }
 
     /**
@@ -237,8 +236,7 @@ class UserController extends Controller
         $user->number_of_km = $request->aantal_km;
         $user->save();
 
-        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is bijgewerkt.");
-        return View::make('shared.alert');
+        return "De gebruiker <b>$user->first_name $user->last_name</b> is bijgewerkt.";
     }
 
     /**
@@ -252,8 +250,7 @@ class UserController extends Controller
         $user->isActive = 0;
         $user->save();
 
-        session()->flash('success', "De gebruiker <b>$user->first_name $user->last_name</b> is gedeactiveerd");
-        return View::make('shared.alert');
+        return "De gebruiker <b>$user->first_name $user->last_name</b> is gedeactiveerd";
     }
 
     public function getUsers()

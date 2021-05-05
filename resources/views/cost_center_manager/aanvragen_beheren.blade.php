@@ -135,6 +135,14 @@
                     $.post(action, pars, 'json')
                         .done(function (data) {
                             console.log(data);
+                            let notification = new Noty({
+                                type: "success",
+                                text: "Beoordeling opgeslagen",
+                                layout: "topRight",
+                                timeout: 2000,
+                                progressBar: true,
+                                modal: false
+                            }).show();
                             buildTable();
                         })
                         .fail(function (data) {
@@ -155,6 +163,16 @@
                         console.log(data);
                         $("#commentaar-modal").modal('hide');
                         $("#commentaar-modal form textarea").val("");
+
+                        let notification = new Noty({
+                            type: "success",
+                            text: "Beoordeling opgeslagen",
+                            layout: "topRight",
+                            timeout: 2000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
+
                         buildTable();
                     })
                     .fail(function (data) {

@@ -394,5 +394,7 @@ class RequestController extends Controller
             $bike_reimbursement->status_id = 4;
             $bike_reimbursement->save();
         }
+
+        return "De betaling is in orde";
     }
 }
