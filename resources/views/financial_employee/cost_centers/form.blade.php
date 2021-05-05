@@ -59,5 +59,5 @@
         </div>
     </div>
     <button type="submit" class="btn btn-primary" id="cost_center_submit">Kostenplaats opslaan</button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuleren</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuleren</button>
 </form>
