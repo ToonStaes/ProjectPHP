@@ -93,7 +93,6 @@
     }
     .opgeslaan{
         background-color: $blue;
-        pointer-events: none;
     }
 
     .aangevraagd{
@@ -106,12 +105,14 @@
 .knoppen{
     margin: 2rem 5rem;
     text-align: center;
-    justify-content: space-between;
     width: 75vw;
     #save:disabled, #request:disabled{
         cursor: not-allowed;
         pointer-events: none;
     }
+
+
+
 
 }
 
