@@ -12,8 +12,10 @@ use DateTime;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Integer;
+use Symfony\Component\ErrorHandler\Debug;
 use View;
 
 class LaptopController extends Controller
@@ -93,6 +95,8 @@ class LaptopController extends Controller
 
     public function update(Request $request, $id)
     {
+//        dd($request);
+//        return $request;
         $laptopInvoice = Laptop_invoice::find($id);
         $date_current = new DateTime();
         $date_given    = new DateTime($request->datum);
@@ -114,6 +118,7 @@ class LaptopController extends Controller
             return back();
         }
         elseif ($request->UploadBestand == null){
+            log::Debug('bestand niet veranderd');
             $laptopInvoice->amount = $request->bedrag;
             $laptopInvoice->invoice_description = $request->reden;
             $laptopInvoice->purchase_date = $request->datum;
@@ -127,8 +132,9 @@ class LaptopController extends Controller
             session()->flash('success', 'Uw aanvraag is aangepast.');
         }
         else{
+            log::Debug('bestand veranderd');
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
-            $request->UploadBestand->storeAs('LaptopBewijzen', $FileName);
+            $request->UploadBestand->storeAs('public/LaptopBewijzen', $FileName);
             $request->UploadBestand->move(base_path('public_html/storage/LaptopBewijzen'), $FileName);
             $laptopInvoice->amount = $request->bedrag;
             $laptopInvoice->invoice_description = $request->reden;

@@ -48,7 +48,7 @@
 
                             <a href="#!" class="btn" id="delete">&times;</a>
                     </div>
-                    <div class="form-group d-none" id="uploadFile">
+                   <div class="form-group d-none" id="uploadFile">
                         <label for="bestand">Uploaden bewijsstuk</label>
                         <input type="file" name="UploadBestand" id="bestand"
                                class="form-control-file @error('bestand') is-invalid @enderror">
