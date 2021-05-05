@@ -68,7 +68,7 @@
             let type = $(this).closest('td').data('type');
             let content = $(this).closest('tr').find('.content').text(); // To prevent <br>-tag from appearing in edit-form
             // Update the modal
-            $('form').attr('action', `/financial_employee/mailcontent/${id}`);
+            $('form').attr('action', `/Mailcontent/${id}`);
             $('.modal-title').text(`Wijzig ${type}`);
             $('#mailcontent').val(content);
             $('#mailtype').val(type);
@@ -92,6 +92,14 @@
                     $('#modal-mailcontent').modal('hide');
                     // Rebuild the table
                     loadTable();
+                    let notification = new Noty({
+                        type: data.kind,
+                        text: data.text,
+                        layout: "topRight",
+                        timeout: 5000,
+                        progressBar: true,
+                        modal: false
+                    }).show();
                 })
                 .fail(function (e) {
                     // Loop over the e.responseJSON.errors array and create an ul list with all the error messages

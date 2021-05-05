@@ -96,7 +96,7 @@ class LaptopController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = $this->validate($request, [
+        $this->validate($request, [
             'bedrag' => 'required|numeric|min:1',
             'reden' => 'required',
             'datum' => 'required|before_or_equal:today',
@@ -108,9 +108,7 @@ class LaptopController extends Controller
             'datum.required' => 'De aankoopdatum moet ingevuld zijn.',
             'datum.before_or_equal' => 'De aankoopdatum moet een dag voor vandaag of vandaag zijn.',
         ]);
-        /*if($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }*/
+
         $laptopInvoice = Laptop_invoice::find($id);
         if ($request->UploadBestand == null){
             $laptopInvoice->amount = $request->bedrag;

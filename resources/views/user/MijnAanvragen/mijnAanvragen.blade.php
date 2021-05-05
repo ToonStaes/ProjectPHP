@@ -100,7 +100,15 @@
                         });
                     },
                     fail: function (data) {
-                        console.log("foutieve data ingevuld");
+                        // show noty
+                        let notification = new Noty({
+                            type: error,
+                            text: "Probeer opnieuw",
+                            layout: "topRight",
+                            timeout: 5000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
 
                     }
                 });
