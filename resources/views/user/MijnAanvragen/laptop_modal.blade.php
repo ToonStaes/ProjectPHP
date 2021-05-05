@@ -2,8 +2,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">modal-genre-title</h5>
-                <button type="button" class="close" data-dismiss="modal">
+                <h5 class="modal-title">Pas laptopaanvraag aan</h5>
+                <button type="button" class="close">
                     <span>&times;</span>
                 </button>
             </div>
@@ -45,7 +45,8 @@
                     <div class="form-group" id="oldfile" class="mb-3">
                         <a class="btn btn-outline-dark" id="filepath" href="" download><nobr>
                             </nobr></a>
-                        <a href="#!" class="btn" id="delete">X</a>
+
+                            <a href="#!" class="btn" id="delete">&times;</a>
                     </div>
                    <div class="form-group d-none" id="uploadFile">
                         <label for="bestand">Uploaden bewijsstuk</label>

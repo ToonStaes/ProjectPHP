@@ -10,13 +10,13 @@
 
     </div>
     <div class="container">
+        <h1>Laptopvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina vindt u een overzicht van alle door u ingediende aanvragen."></i></h1>
         <table id="mijnAanvragen" class="table">
             <thead>
             <tr>
                 <th>Aanvraagdatum</th>
                 <th>Datum beoordeling kostenplaats-verantwoordelijke</th>
                 <th>Datum terugbetaling</th>
-                <th>Naam kostenplaats</th>
                 <th>Beschrijving</th>
                 <th>Bedrag</th>
                 <th>Status kostenplaatsverantwoordelijke</th>
@@ -40,13 +40,17 @@
         $(document).ready(function () {
             buildTable();
 
+            $(".close").click(function () {
+                $('#modal-laptop').modal('hide');
+            })
+
             $('#delete').click(function () {
                 $(this).parent().addClass('d-none');
                 $('#uploadFile').removeClass('d-none');
                 $('#bestand').prop('required', true);
             })
 
-            $('#modal-laptop').on('hidden.bs.modal' ,function () {
+            $('#modal-laptop').on('hidden.bs.modal', function () {
                 $('#oldfile').removeClass('d-none');
                 $('#uploadFile').addClass('d-none');
                 $('#bestand').prop('required', false);
@@ -83,7 +87,7 @@
         })
 
         $('tbody').on('click', '.btn-edit', function () {
-            if($(this).hasClass('laptopvergoeding')) {
+            if ($(this).hasClass('laptopvergoeding')) {
                 // Get data attributes from td tag
                 let id = $(this).data('id');
                 let amount = $(this).data('amount');
@@ -95,8 +99,8 @@
                 console.log("file icon: " + file_icon)
                 let file_name = $(this).data('filename')
                 let content = `<img src="../assets/icons/file_icons/` + file_icon + `" alt="file icon" width="25px">` + file_name
+
                 // Update the modal
-                $('.modal-title').text(`Pas laptopaanvraag aan`);
                 $('form').attr('action', `/user/laptop/${id}`);
 
                 $('#bedrag').val(amount);
@@ -113,14 +117,13 @@
         let table = $('#mijnAanvragen').DataTable({
             "columns": [
                 {"name": "Aanvraagdatum", "orderable": true},
-                {"name": "Datum beoordeling Kostenplaatsverantwoordelijke", "orderable": true},
+                {"name": "Datum beoordeling Kostenplaatsverantwoordelijke", "orderable": true, "width": 150},
                 {"name": "Datum terugbetaling", "orderable": true},
-                {"name": "Naam kostenplaats", "orderable": true},
                 {"name": "Beschrijving", "orderable": true},
                 {"name": "Bedrag", "orderable": true},
                 {"name": "Status Kostenplaatsverantwoordelijke", "orderable": true},
                 {"name": "Status Financieel Medewerker", "orderable": true},
-                {"name": "Aanvraag aanpassen", "orderable": true}
+                {"name": "Aanvraag aanpassen", "orderable": false}
             ],
             "language": {
                 "lengthMenu": "_MENU_ aanvragen per pagina",
@@ -146,7 +149,6 @@
                     // diverse reimbursements
                     $.each(data.diverse_requests, function (key, value) {
                         let request_date = value.request_date;
-                        let cost_center_name = value.cost_center_name;
                         let beschrijving = value.description;
                         let amount = (value.amount).toFixed(2);
                         let strAmount = '€ ' + amount;
@@ -173,7 +175,7 @@
                             CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + `</p>`
                         }
 
-                        if (FEComment == null || FEName == null) {
+                        if (FEName == null) {
                             FE = statusFE;
                         } else if (FEComment == null && FEName !== " ") {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
@@ -186,7 +188,6 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center_name,
                                 beschrijving,
                                 strAmount,
                                 CCM,
@@ -198,11 +199,11 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center_name,
                                 beschrijving,
                                 amount,
                                 CCM,
-                                FE
+                                FE,
+                                ""
                             ]).draw(false);
                         }
 
@@ -219,12 +220,6 @@
                         if (review_date_Financial_employee == null) {
                             review_date_Financial_employee = null
                         }
-                        let cost_center = '';
-                        $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
-                            if (value2.parameter.standard_Cost_center_id != null) {
-                                cost_center = value2.parameter.cost_center_name;
-                            }
-                        })
                         let description = value.laptop_invoice.invoice_description;
                         let statusFE = value.status_FE;
                         let statusCCM = value.status_CC_manager;
@@ -258,7 +253,6 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center,
                                 description,
                                 amount,
                                 CCM,
@@ -270,7 +264,6 @@
                                 request_date,
                                 review_date_Cost_center_manager,
                                 review_date_Financial_employee,
-                                cost_center,
                                 description,
                                 amount,
                                 CCM,
@@ -287,7 +280,6 @@
                         if (review_date_Financial_employee == null) {
                             review_date_Financial_employee = null
                         }
-                        let cost_center = value.cost_center_name;
                         let description = value.name;
                         let statusFE = value.status_FE;
                         let statusCCM = null;
@@ -306,30 +298,16 @@
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
                         }
 
-                        if ((statusFE === "in afwachting") || (statusFE === "afgekeurd")) {
-                            table.row.add([
-                                request_date,
-                                review_date_Cost_center_manager,
-                                review_date_Financial_employee,
-                                cost_center,
-                                description,
-                                amount,
-                                statusCCM,
-                                FE,
-                                `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
-                            ]).draw(false);
-                        } else {
-                            table.row.add([
-                                request_date,
-                                review_date_Cost_center_manager,
-                                review_date_Financial_employee,
-                                cost_center,
-                                description,
-                                amount,
-                                statusCCM,
-                                FE
-                            ]).draw(false);
-                        }
+                        table.row.add([
+                            request_date,
+                            review_date_Cost_center_manager,
+                            review_date_Financial_employee,
+                            description,
+                            amount,
+                            statusCCM,
+                            FE,
+                            null
+                        ]).draw(false);
                     })
                     tooltips();
                 })

@@ -19,7 +19,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="gebruiker_toevoegenLabel">Gebruiker toevoegen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -37,7 +37,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="gebruiker_bewerkenLabel">Gebruiker bewerken</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -111,6 +111,11 @@
         $(document).ready( function () {
             buildTable();
             getProgrammes();
+
+            $(".close").click(function () {
+                $("#gebruiker_toevoegen").modal('hide');
+                $("#gebruiker_bewerken").modal('hide');
+            })
 
             $('tbody').on('click', '.btn-delete', function () {
                 let id = $(this).data('id');
