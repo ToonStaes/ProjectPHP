@@ -134,7 +134,7 @@ class LaptopController extends Controller
         else{
             log::Debug('bestand veranderd');
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
-            $request->UploadBestand->storeAs('LaptopBewijzen', $FileName);
+            $request->UploadBestand->storeAs('public/LaptopBewijzen', $FileName);
             $request->UploadBestand->move(base_path('public_html/storage/LaptopBewijzen'), $FileName);
             $laptopInvoice->amount = $request->bedrag;
             $laptopInvoice->invoice_description = $request->reden;
