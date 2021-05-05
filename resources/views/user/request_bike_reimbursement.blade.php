@@ -36,13 +36,17 @@
             <form action="/user/save_bikerides" method="post" class="row justify-content-start">
                 <input id="fietsritten" name="fietsritten" type="hidden"/>
                 <input  id="teVerwijderen" name="teVerwijderen" type="hidden"/>
-                    <div class="col-3"><label class="mr-2" for="numberOfKm">Aantal km</label> <input style="width: 70px;" id="numberOfKm" name="numberOfKm" type="number" value="{{$user->number_of_km}}"/></div>
+
+                    <div class="col-3"><label class="mr-2" for="numberOfKm">Aantal km</label> <input style="width: 70px;" class="form-control {{ $errors->first('numberOfKm') ? 'is-invalid' : '' }}" id="numberOfKm" name="numberOfKm" type="number" min="0.0" step="0.1" value="{{$user->number_of_km}}"/></div>
                 @csrf
                     <div class="col-4">
                         <span  id="save-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Er moeten fietsritten geselecteerd zijn om de ritten te kunnen opslaan." >
-                    <button id="save"type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
+                    <button id="save" type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
                 </span>
                     </div>
+                <div class="col-3">
+                    <div class="invalid-feedback">{{ $errors->first('bikereimbursement') }}</div>
+                </div>
             </form>
         </div>
         <div class="col-3">

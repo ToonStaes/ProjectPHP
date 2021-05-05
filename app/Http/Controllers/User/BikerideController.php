@@ -58,7 +58,13 @@ class BikerideController extends Controller
      */
     public function store(Request $request)
     {
-
+        $this->validate($request,[
+            'numberOfKm' => 'required|numeric|min:0',
+        ], [
+            'numberOfKm.numeric' => 'Het aantal km moet een getal zijn.',
+            'numberOfKm.min' => 'Het aantal km moet groter zijn dan 0.',
+            'numberOfKm.required' => 'Het aantal km moet ingevuld zijn.',
+        ]);
         $user = Auth::user();
         $user_id = $user->id;
         $bikerides = explode(',', $request->fietsritten);
