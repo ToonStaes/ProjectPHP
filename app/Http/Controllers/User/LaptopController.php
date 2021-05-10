@@ -10,6 +10,7 @@ use App\Laptop_reimbursement_parameter;
 use App\Parameter;
 use DateTime;
 use Facades\App\Helpers\Json;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -23,14 +24,14 @@ class LaptopController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'bedrag' => 'required|numeric|min:0',
+            'bedrag' => 'required|numeric|min:1',
             'reden' => 'required',
             'datum' => 'required|before_or_equal:today',
             'UploadBestand' => 'required',
         ], [
             'bedrag.required' => 'Het bedrag voor de laptopvergoeding moet ingevuld zijn.',
             'bedrag.numeric' => 'Het bedrag voor de laptopvergoeding moet een getal zijn.',
-            'bedrag.min' => 'Het bedrag voor de laptopvergoeding moet groter of gelijk zijn aan 0.',
+            'bedrag.min' => 'Het bedrag voor de laptopvergoeding moet groter of gelijk zijn aan 1.',
             'reden.required' => 'De verkaring voor de aanvraag moet ingevuld zijn.',
             'datum.required' => 'De aankoopdatum moet ingevuld zijn.',
             'datum.before_or_equal' => 'De aankoopdatum moet een dag voor vandaag of vandaag zijn.',
@@ -95,30 +96,21 @@ class LaptopController extends Controller
 
     public function update(Request $request, $id)
     {
-//        dd($request);
-//        return $request;
+        $this->validate($request, [
+            'bedrag' => 'required|numeric|min:1',
+            'reden' => 'required',
+            'datum' => 'required|before_or_equal:today',
+        ], [
+            'bedrag.required' => 'Het bedrag voor de laptopvergoeding moet ingevuld zijn.',
+            'bedrag.numeric' => 'Het bedrag voor de laptopvergoeding moet een getal zijn.',
+            'bedrag.min' => 'Het bedrag voor de laptopvergoeding moet groter of gelijk zijn aan 1.',
+            'reden.required' => 'De verkaring voor de aanvraag moet ingevuld zijn.',
+            'datum.required' => 'De aankoopdatum moet ingevuld zijn.',
+            'datum.before_or_equal' => 'De aankoopdatum moet een dag voor vandaag of vandaag zijn.',
+        ]);
+
         $laptopInvoice = Laptop_invoice::find($id);
-        $date_current = new DateTime();
-        $date_given    = new DateTime($request->datum);
-
-        $iserror = false;
-        $errormessage = "";
-        if ($date_current < $date_given) {
-            $errormessage = $errormessage . "De aankoopdatum is ongeldig. ";
-            $iserror = true;
-        }
-
-        if ($request->bedrag < 1) {
-            $errormessage = $errormessage . "Het aankoopbedrag is ongeldig. ";
-            $iserror = true;
-        }
-
-        if ($iserror){
-            session()->flash('danger', $errormessage);
-            return back();
-        }
-        elseif ($request->UploadBestand == null){
-            log::Debug('bestand niet veranderd');
+        if ($request->UploadBestand == null){
             $laptopInvoice->amount = $request->bedrag;
             $laptopInvoice->invoice_description = $request->reden;
             $laptopInvoice->purchase_date = $request->datum;
@@ -129,10 +121,13 @@ class LaptopController extends Controller
                 $item->status_CC_manager = 1;
                 $item->save();
             }
-            session()->flash('success', 'Uw aanvraag is aangepast.');
+            $text = "Uw aanvraag is aangepast";
+            $kind = "success";
+            $result = compact('text', 'kind');
+            return $result;
         }
         else{
-            log::Debug('bestand veranderd');
+
             $FileName = date('YzHis') . $request->UploadBestand->getClientOriginalName();
             $request->UploadBestand->storeAs('public/LaptopBewijzen', $FileName);
             $request->UploadBestand->move(base_path('public_html/storage/LaptopBewijzen'), $FileName);
@@ -147,7 +142,10 @@ class LaptopController extends Controller
                 $item->status_CC_manager = 1;
                 $item->save();
             }
-            session()->flash('success', 'Uw aanvraag is aangepast.');
+            $text = "Uw aanvraag is aangepast";
+            $kind = "success";
+            $result = compact('text', 'kind');
+            return $result;
         }
     }
 }
