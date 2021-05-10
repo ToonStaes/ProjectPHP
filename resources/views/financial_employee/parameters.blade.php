@@ -7,7 +7,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <h1>Parameters beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u de parameters wijzigen."></i></h1>
-                @include('shared.alert')
+{{--                @include('shared.alert')--}}
                 <div class="card">
                     <div class="card-body">
                         <form action="/parameters" method="post" enctype="multipart/form-data" novalidate>
@@ -99,14 +99,30 @@
     </div>
 @endsection
 @section('script_after')
-
-
     <script>
+        @if (session()->has('success'))
+            let success = new Noty({
+                type: 'success',
+                text: '{!! session()->get('success') !!}',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
+        @if (session()->has('danger'))
+            let error = new Noty({
+                type: 'error',
+                text: "{!! session()->get('danger') !!}",
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
         $(document).ready(function(){
-
             // Initialize select2
             $(".search-dropdown").select2();
-
         });
     </script>
 @endsection

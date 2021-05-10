@@ -71,7 +71,7 @@ class ParameterController extends Controller
             $bike_reimbursement_new->amount_per_km = $request->bikereimbursement;
             $bike_reimbursement_new->description = 'De prijs die een WN ontvangt per gefietste kilometer voor woon-werkverkeer';
             $bike_reimbursement_new->save();
-            $melding = $melding . "\n" . "De fietsvergoeding is aangemaakt, <b>€ $bike_reimbursement_new->amount_per_km</b> per km. ";
+            $melding = $melding . "De fietsvergoeding is aangemaakt, <b>€ $bike_reimbursement_new->amount_per_km</b> per km. ";
         }
         else{
             if($request->bikereimbursement != $bike_reimbursement[0]->amount_per_km){
@@ -86,7 +86,7 @@ class ParameterController extends Controller
                 $bike_reimbursement_new->amount_per_km = $request->bikereimbursement;
                 $bike_reimbursement_new->description = $bike_reimbursement[0]->description;
                 $bike_reimbursement_new->save();
-                $melding = $melding . "\n" . "De fietsvergoeding is aangepast naar <b>€ $bike_reimbursement_new->amount_per_km</b> per km. ";
+                $melding = $melding . "De fietsvergoeding is aangepast naar <b>€ $bike_reimbursement_new->amount_per_km</b> per km. ";
             }
         }
 
@@ -100,7 +100,7 @@ class ParameterController extends Controller
             $car_reimbursement_new->amount_per_km = $request->carreimbursement;
             $car_reimbursement_new->description = 'De prijs die een WN ontvangt per afgelegde kilometer voor verplaatsingen tijdens schooluren. Bijvoorbeeld stagebezoeken ...';
             $car_reimbursement_new->save();
-            $melding = $melding . "\n" . "De autovergoeding is aangemaakt, <b>€ $car_reimbursement_new->amount_per_km</b> per km. ";
+            $melding = $melding . "De autovergoeding is aangemaakt, <b>€ $car_reimbursement_new->amount_per_km</b> per km. ";
         }
         else{
             if($request->carreimbursement != $car_reimbursement[0]->amount_per_km){
@@ -144,7 +144,7 @@ class ParameterController extends Controller
                 $laptop_new->max_reimbursement_laptop = $request->laptop;
                 $laptop_new->description = $laptop[0]->description;
                 $laptop_new->save();
-                $melding = $melding . "\n" . "De maximum schijfgrootte laptop is aangepast naar <b>€ $laptop_new->max_reimbursement_laptop</b>. ";
+                $melding = $melding . "De maximum schijfgrootte laptop is aangepast naar <b>€ $laptop_new->max_reimbursement_laptop</b>. ";
             }
         }
 
@@ -212,10 +212,19 @@ class ParameterController extends Controller
                 $cost_center = Cost_center::where('id', $cost_center_bikereimbursement_new->standard_Cost_center_id)->get();
                 $cost_center_name = $cost_center[0]->name;
                 $melding = $melding .  "De standaard kostenplaats voor de fietsvergoeding is aangepast naar <b>$cost_center_name</b>. ";
+
             }
         }
-
         session()->flash('success', $melding);
-        return redirect('parameters');
+        $cost_centers = Cost_center::orderBy('name')->get();
+        $bike_reimbursement = Parameter::whereNull('valid_until')->where('name', 'Fietsvergoeding')->get();
+        $car_reimbursement = Parameter::whereNull('valid_until')->where('name', 'Autovergoeding')->get();
+        $laptop = Parameter::whereNull('valid_until')->where('name', 'Maximum schijfgrootte laptop')->get();
+        $cost_center_laptopreimbursement = Parameter::whereNull('valid_until')->where('name', 'Standaard kostenplaats laptopvergoeding')->get();
+        $cost_center_bikereimbursement = Parameter::whereNull('valid_until')->where('name', 'Standaard kostenplaats fietsvergoeding')->get();
+        $result = compact('cost_centers', 'bike_reimbursement', 'car_reimbursement', 'laptop', 'cost_center_laptopreimbursement', 'cost_center_bikereimbursement');
+
+        Json::dump($result);
+        return view('financial_employee.parameters', $result);
     }
 }
