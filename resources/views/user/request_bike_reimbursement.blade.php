@@ -2,8 +2,6 @@
 
 @section('main')
 
-
-    @include('shared.alert')
     <h1 class="text-center">Fietsvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"  data-html="true" title="Op deze pagina kan u een of meerdere fietsritten opslaan. Ook kan u op deze pagina een fietsvergoeding aanvragen van de opgeslagen fietsritten. <br/> <ul><li>Oranje datums = geslecteerde fietsritten</li> <li>Blauwe datums = opgeslagen fietsritten</li> <li>Grijze datums = aangevraagde fietsritten</li></ul>"></i></h1>
     <div class="container-calendar">
         <div class="calendar">
@@ -25,7 +23,6 @@
                 <div>Za</div>
 
             </div>
-
                 <div class="days" data-saved="{{$saved_fietsritten}}" data-requested="{{$requested_fietsritten}}">
 
             </div>
@@ -63,6 +60,26 @@
 
 @section('script_after')
     <script>
+        @if (session()->has('success'))
+            let success = new Noty({
+                type: 'success',
+                text: '{!! session()->get('success') !!}',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
+        @if (session()->has('danger'))
+            let error = new Noty({
+                type: 'error',
+                text: '{!! session()->get('danger') !!}',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
         const date = new Date();
         let selected_dates = [];
         let saved_dates = document.querySelector(".days").getAttribute("data-saved").split(',');
