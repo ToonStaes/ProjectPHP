@@ -123,7 +123,7 @@
                         <a class="card" href="/financial_employee/help/parametersBeheren">
                             <div class="card-body container row">
                                 <div class="col-sm-3 col-md-12 col-lg-3">
-                                    <i style="font-size: 50px;" class="fas fa-edit card-img col-6"></i>
+                                    <i style="font-size: 50px;" class="fas fa-edit card-img col-6" id="edit-help"></i>
                                 </div>
                                 <div class="col-sm-9 col-md-12 col-lg-9">
                                     <h5 class="card-title">Parameters beheren</h5>
