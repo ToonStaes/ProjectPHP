@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Pas laptopaanvraag aan</h5>
+                <h5 class="modal-title">Pas uw laptopaanvraag aan</h5>
                 <button type="button" class="close">
                     <span>&times;</span>
                 </button>
@@ -12,7 +12,7 @@
                     @method('')
                     @csrf
                     <div class="form-group">
-                        <label for="bedrag">Bedrag in Euro</label>
+                        <label for="bedrag">Aankoopbedrag in euro</label>
                         <input type="number" name="bedrag" id="bedrag"
                                class="form-control"
                                placeholder="123">
@@ -47,7 +47,7 @@
                                class="form-control-file">
                         <span id="UploadBestand_error" class="form-error text-danger"></span>
                     </div>
-                    <button type="submit" class="btn btn-success">Aanvraag aanpassen
+                    <button type="submit" class="btn btn-primary">Aanvraag aanpassen
                     </button>
                 </form>
             </div>
