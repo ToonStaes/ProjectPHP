@@ -352,17 +352,9 @@
                 type: "success",
                 text: text,
                 layout: "topRight",
-                timeout: 10000,
+                timeout: 5000,,
                 progressBar: true,
-                modal: false,
-                buttons: [
-                    Noty.button(
-                        "Sluiten",
-                        "btn btn-success",
-                        function(){
-                            notification.close();
-                        })
-                    ]
+                modal: false
             }).show();
         }
 
@@ -371,18 +363,9 @@
                 type: "error",
                 text: text,
                 layout: "topRight",
-                timeout: 10000,
+                timeout: 5000,
                 progressBar: true,
-                modal: false,
-                buttons: [
-                    Noty.button(
-                        "Sluiten",
-                        "btn btn-danger",
-                        function(){
-                            notification.close();
-                        }
-                    )
-                ]
+                modal: false
             }).show();
         }
     </script>
