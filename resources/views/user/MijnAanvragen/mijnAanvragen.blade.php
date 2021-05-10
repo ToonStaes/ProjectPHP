@@ -204,7 +204,7 @@
                                 strAmount,
                                 CCM,
                                 FE,
-                                `<a href="#!" class="btn-edit diversevergoeding" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
+                                `<a href="/user/divers/${value.id}" class="btn-edit diversevergoeding"><i class="fas fa-edit"></i></a>`
                             ]).draw(false);
                         } else {
                             table.row.add([
