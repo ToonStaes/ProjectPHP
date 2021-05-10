@@ -56,28 +56,6 @@ class AanvraagController extends Controller
                     }else {
                         $item->amount += $line->amount;
                     }
-//                    unset($line->parameter, $line->parameter_id, $line->number_of_km, $line->id, $line->DR_request_id);
-//                    foreach ($line->diverse_reimbursement_evidences as $evidence){
-//                        $exploded_path = explode('/', $evidence->filepath);
-//                        if (!empty($exploded_path)){
-//                            $evidence['name'] = end($exploded_path);
-//                            $extension = explode(".", $evidence['name']);
-//                            $extension = end($extension);
-//                            $extension = strtolower($extension);
-//
-//                            $extensions = ["doc", "docx", "gif", "jpg", "jpeg", "mkv", "mov", "mp3", "mp4", "mpg", "pdf", "png", "ppt", "rar", "tiff", "txt", "xls", "xlsx", "zip"];
-//                            if (in_array($extension, $extensions)){
-//                                if ($extension == "jpeg"){
-//                                    $evidence['icon'] = "jpg.png";
-//                                } else {
-//                                    $evidence['icon'] = $extension . ".png";
-//                                }
-//                            } else {
-//                                $evidence['icon'] = "unknown.png";
-//                            }
-//                        }
-//                        unset($evidence['DR_line_id'], $evidence['created_at'], $evidence['updated_at']);
-//                    }
                 }
                 unset($item->diverse_reimbursement_lines);
                 $item->request_date = $this->FormatDate($item->request_date);
@@ -151,6 +129,7 @@ class AanvraagController extends Controller
                     }
                 }
 
+                $item->laptop_invoice->purchase_date_no_format = $item->laptop_invoice->purchase_date;
                 $item->laptop_invoice->purchase_date = $this->FormatDate($item->laptop_invoice->purchase_date);
                 $item->payment_date = $this->FormatDate($item->payment_date);
                 $item->review_date_Cost_center_manager = $this->FormatDate($item->review_date_Cost_center_manager);
