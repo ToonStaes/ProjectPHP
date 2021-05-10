@@ -18,3 +18,12 @@ $(function(){
     });
     $(".search-dropdown").select2();
 });
+
+// Noty JS
+window.Noty = require('noty');
+Noty.overrideDefaults({
+    theme: 'bootstrap-v4',
+    type: 'warning',
+    layout: 'center',
+    modal: true,
+});

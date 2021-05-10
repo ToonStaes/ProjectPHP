@@ -83,8 +83,10 @@ class MailcontentController extends Controller
         $mailcontent->content = $request->mailcontent;
         $mailcontent->mailtype = $request->mailtype;
         $mailcontent->save();
-        session()->flash('success', "De mail voor <b>$mailcontent->mailtype</b> is bijgewerkt");
-        return View::make('shared.alert');
+        $text = "De mailtekst is aangepast";
+        $kind = "success";
+        $result = compact('text', 'kind');
+        return response($result);
     }
 
     /**

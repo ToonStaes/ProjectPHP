@@ -86,7 +86,7 @@
                                     </div>
                                     <hr>
                                 </div></div>
-                            <button class="btn btn-success" id="btndienin" type="submit">Indienen</button>
+                            <button class="btn btn-primary" id="btndienin" type="submit">Indienen</button>
                         </form>
                     </div>
                 </div>
