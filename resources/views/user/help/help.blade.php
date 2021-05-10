@@ -71,7 +71,7 @@
                                 </div>
                                 <div class="col-sm-9 col-md-12 col-lg-9">
                                     <h5 class="card-title">Vergoedingen behandelen</h5>
-                                    <p class="card-text">Meer informatie over het goed- of afkeuren van vergoedingen.</p>
+                                    <p class="card-text">Meer informatie over het goed- of afkeuren en uitbetalen van vergoedingen.</p>
                                 </div>
                             </div>
                         </a>
@@ -145,19 +145,6 @@
                                     <h5 class="card-title">Aanvragen beheren</h5>
 
                                     <p class="card-text">Meer informatie over het goed- of afkeuren van aanvragen.</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a class="card" href="/cost_center_manager/help/kostenplaatsenVergelijken">
-                            <div class="card-body container row">
-                                <div class="col-sm-3 col-md-12 col-lg-3">
-                                    <i style="font-size: 50px;" class="fas fa-balance-scale card-img col-6"></i>
-                                </div>
-                                <div class="col-sm-9 col-md-12 col-lg-9">
-                                    <h5 class="card-title">Kostenplaatsen vergelijken</h5>
-                                    <p class="card-text">Meer informatie over het vergelijken van verschillende kostenplaatsen.</p>
                                 </div>
                             </div>
                         </a>

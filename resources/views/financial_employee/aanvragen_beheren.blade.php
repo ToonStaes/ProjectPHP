@@ -6,8 +6,7 @@
 @section('main')
     <h1>Vergoedingen behandelen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u vergoedingen die goedgekeurd zijn door de kostenplaatsverantwoordelijke, af- en goedkeuren."></i></h1>
     <div class="messages"></div>
-    <p class="text-right"><button class="btn-primary mb-5" id="openstaande_betalingen" data-toggle="modal" data-target="#betaal-modal">Openstaande betalingen uitbetalen (€)</button></p>
-
+    <p class="text-right"><button class="btn-primary mb-5" id="openstaande_betalingen">Openstaande betalingen uitbetalen (€)</button></p>
     <div id="tabel">
         <table id="requestsTable" class="table">
             <thead>
@@ -61,7 +60,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="openstaandeBetalingen">Openstaande betalingen</h5>
-                    <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -123,6 +122,11 @@
 
             $(".close").click(function () {
                 $("#commentaar-modal").modal('hide');
+                $("#betaal-modal").modal('hide');
+            })
+
+            $("#openstaande_betalingen").click(function () {
+                $("#betaal-modal").modal("show");
             })
 
             let previous = "";
@@ -156,6 +160,15 @@
                     $.post(action, pars, 'json')
                         .done(function (data) {
                             console.log(data);
+                            let notification = new Noty({
+                                type: "success",
+                                text: "Beoordeling opgeslagen",
+                                layout: "topRight",
+                                timeout: 2000,
+                                progressBar: true,
+                                modal: false
+                            }).show();
+
                             buildTable();
                         })
                         .fail(function (data) {
@@ -175,6 +188,16 @@
                         console.log(data);
                         $("#commentaar-modal").modal('hide');
                         $("#commentaar-modal form textarea").val("");
+
+                        let notification = new Noty({
+                            type: "success",
+                            text: "Beoordeling opgeslagen",
+                            layout: "topRight",
+                            timeout: 2000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
+
                         buildTable();
                     })
                     .fail(function (data) {
@@ -193,8 +216,16 @@
                 };
 
                 $.post("/financial_employee/payOpenPayments", pars)
-                    .done(function () {
+                    .done(function (data) {
                         $("#betaal-modal").modal('hide');
+                        let notification = new Noty({
+                            type: "success",
+                            text: data,
+                            layout: "topRight",
+                            timeout: 5000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
                         buildTable();
                 });
             })

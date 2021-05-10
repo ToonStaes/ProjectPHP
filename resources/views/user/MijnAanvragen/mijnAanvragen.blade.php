@@ -10,7 +10,9 @@
 
     </div>
     <div class="container">
-        <h1>Laptopvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina vindt u een overzicht van alle door u ingediende aanvragen."></i></h1>
+        <h1>Laptopvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"
+                                          title="Op deze pagina vindt u een overzicht van alle door u ingediende aanvragen."></i>
+        </h1>
         <table id="mijnAanvragen" class="table">
             <thead>
             <tr>
@@ -59,28 +61,57 @@
             $('#modal-laptop form').submit(function (e) {
                 // Don't submit the form
                 e.preventDefault();
+                let form = $('#modal-laptop form')[0];
+                let formData = new FormData(form);
+
                 // Get the action property (the URL to submit)
                 let action = $(this).attr('action');
-                // Serialize the form and send it as a parameter with the post
-                let pars = $(this).serialize();
-                // Post the data to the URL
-                $.post(action, pars, 'json')
-                    .done(function (data) {
-                        $('#Message').html(data);
+
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    type: 'POST',
+                    url: action,
+                    data: formData,
+                    cache: false,
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+
+                    success: function (data) {
+                        console.log('redurn ok data', data)
                         // Hide the modal
                         $('#modal-laptop').modal('hide');
                         // Rebuild the table
                         buildTable();
-                    })
-                    .fail(function (e) {
-                        // Loop over the e.responseJSON.errors array and create an ul list with all the error messages
-                        let msg = '<p>Errors: <ul>';
-                        $.each(e.responseJSON.errors, function (key, value) {
-                            msg += `<li>${value}</li>`;
+                        // show noty
+                        let notification = new Noty({
+                            type: data.kind,
+                            text: data.text,
+                            layout: "topRight",
+                            timeout: 5000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
+                    },
+                    error: function (error) {
+                        let errors = JSON.parse(error.responseText).errors;
+                        $.each(errors, function (key, val) {
+                            $("#" + key + "_error").text(val);
                         });
-                        msg += '</ul></p>';
-                        $('#Message').html(msg);
-                    });
+                    },
+                    fail: function (data) {
+                        // show noty
+                        let notification = new Noty({
+                            type: error,
+                            text: "Probeer opnieuw",
+                            layout: "topRight",
+                            timeout: 5000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
+
+                    }
+                });
             });
         })
 
@@ -105,7 +136,8 @@
                 $('#reden').val(description);
                 $('#datum').val(purchaseDate);
                 $('#filepath').attr('href', filepath).html(content);
-                $('input[name="_method"]').val('put');
+                $('#bestand').val(null);
+                $('input[name="_method"]').val('post');
                 // Show the modal
                 $('#modal-laptop').modal('show');
             }
