@@ -76,17 +76,20 @@ class BikerideController extends Controller
         $melding_verwijderen = "";
         foreach ($teVerwijderen as $datum) {
             $date = date_create_from_format('Y-m-d', $datum);
-            Bikeride::with('user')
-                ->where(function ($query) use ($user_id) {
-                    $query->where('user_id', 'like', $user_id);
-                })
-                ->whereDate('date', '=', $date)
-                ->delete();
-            if ($melding_verwijderen === "") {
-                $melding_verwijderen = $datum;
-            } else {
-                $melding_verwijderen = $melding_verwijderen . ', ' . $datum;
+            if ($date){
+                Bikeride::with('user')
+                    ->where(function ($query) use ($user_id) {
+                        $query->where('user_id', 'like', $user_id);
+                    })
+                    ->whereDate('date', '=', $date)
+                    ->delete();
+                if ($melding_verwijderen === "") {
+                    $melding_verwijderen = $date->format('d/m/Y');
+                } else {
+                    $melding_verwijderen = $melding_verwijderen . ', ' . $date->format('d/m/Y');
+                }
             }
+
         }
         foreach ($bikerides as $datum) {
             $date = date_create_from_format('Y-m-d', $datum);
@@ -111,9 +114,9 @@ class BikerideController extends Controller
                     }
                     $bikeride->save();
                     if ($melding === "") {
-                        $melding = $datum;
+                        $melding = $date->format('d/m/Y');
                     } else {
-                        $melding = $melding . ', ' . $datum;
+                        $melding = $melding . ', ' . $date->format('d/m/Y');
                     }
                 }
             }
