@@ -10,7 +10,7 @@
 
     </div>
     <div class="container">
-        <h1>Laptopvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"
+        <h1>Mijn aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"
                                           title="Op deze pagina vindt u een overzicht van alle door u ingediende aanvragen."></i>
         </h1>
         <table id="mijnAanvragen" class="table">

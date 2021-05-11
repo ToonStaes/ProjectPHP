@@ -143,10 +143,10 @@
                         for(budget in budgets_changed){
                             if (budgets_changed[budget] == this.toCheck) budgets_changed.splice(budget, 1);
                         }
-                        show_success_notification("De budgetten werden succesvol geüpdated");
+                        show_success_notification("De budgetten werden succesvol geüpdated.");
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
-                            show_failure_notification("Er is een fout gebeurt bij het opslagen");
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan");
                             return;
                         }
                         this.tryCount++;
@@ -154,7 +154,7 @@
                         jQuery.ajax(this);
                     }).always(function(){
                         if(this.tryCount>this.tryLimit){
-                            show_failure_notification("Er is een fout gebeurt bij het opslagen");
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan");
                         }
                     });
                 }
@@ -203,10 +203,10 @@
                 context: {id: center_id, name: center_name}
             }).done(function(data){
                 delete_cost_center_row(this.id, this.name);
-                show_success_notification("De kostenplaats werd succesvol verwijderd");
+                show_success_notification("De kostenplaats werd succesvol verwijderd.");
             }).fail(function(jqXHR, statusText, errorText){
                 if(jqXHR.status == 500){
-                    show_failure_notification("Er is een fout gebeurt bij het verwijderen");
+                    show_failure_notification("Er is een fout gebeurt bij het verwijderen.");
                     return;
                 }
                 this.tryCount++;
@@ -313,7 +313,7 @@
                 reset_form();
                 this.cost_center.cost_center_id = data.id;
                 add_cost_center(this.cost_center);
-                show_success_notification("De kostenplaats werd succesvol opgeslagen");
+                show_success_notification("De kostenplaats werd succesvol opgeslaan.");
             }).fail(function(jqXHR, statusText, errorText){
                 //  Laravels form validation error code is 422
                 if(jqXHR.status == 409){
@@ -352,7 +352,7 @@
                 type: "success",
                 text: text,
                 layout: "topRight",
-                timeout: 5000,,
+                timeout: 5000,
                 progressBar: true,
                 modal: false
             }).show();
