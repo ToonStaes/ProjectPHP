@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col col-12"><label for="programmes_list">Opleiding / unit<sup>*</sup></label></div>
                 <div class="col col-12">
-                    <select name="programmes_list" required id="programmes_list">
+                    <select class="search-dropdown" name="programmes_list" required id="programmes_list">
                         @foreach($programmes as $programme)
                             <option value="{{$programme->id}}">{{$programme->name}}</option>
                         @endforeach
@@ -14,12 +14,12 @@
             </div>
             <div class="row">
                 <div class="col col-12"><label for="cost_center_input">Kostenplaats<sup>*</sup></label></div>
-                <div class="col col-12"><input list="cost_centers_list" required id="cost_center_input">
-                    <datalist id="cost_centers_list">
+                <div class="col col-12">
+                    <select class="search-dropdown" required id="cost_center_input">
                         @foreach($cost_center_names as $cost_center_name)
                             <option>{{$cost_center_name}}</option>
                         @endforeach
-                    </datalist>
+                    </select>
                     <div class="invalid-feedback d-block" id="invalid-cost_center"></div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col col-12"><label for="responsible_list">Verantwoordelijke<sup>*</sup></label></div>
                 <div class="col col-12">
-                    <select name="responsible_list" required id="responsible_list">
+                    <select class="search-dropdown" name="responsible_list" required id="responsible_list">
                         @foreach($users as $user)
                             <option value="{{$user->id}}">{{$user->first_name.' '.$user->last_name}}</option>
                         @endforeach
@@ -59,5 +59,5 @@
         </div>
     </div>
     <button type="submit" class="btn btn-primary" id="cost_center_submit">Kostenplaats opslaan</button>
-    <button type="button" class="btn btn-danger modal-close">Annuleren</button>
+    <button type="button" class="btn btn-secondary modal-close">Annuleren</button>
 </form>

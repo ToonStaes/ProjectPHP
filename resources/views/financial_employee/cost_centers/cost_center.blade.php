@@ -26,7 +26,7 @@
                 <td>{{($cost_center->programmes[0]->name) ?? "Geen opleiding"}}</td>
                 <td class="cost_center_name">{{$cost_center->name}}</td>
                 <td>
-                    <select class="resp-select" name="Verantwoordelijkenlijst kostenplaats {{$cost_center->id}}" id="resp-list-{{$cost_center->id}}">
+                    <select class="resp-select search-dropdown" name="Verantwoordelijkenlijst kostenplaats {{$cost_center->id}}" id="resp-list-{{$cost_center->id}}">
                         @foreach($users as $user)
                             <option value="{{$user->id}}" {{($cost_center->user->id == $user->id) ? "selected" : ""}}>{{$user->first_name." ".$user->last_name}}</option>
                         @endforeach
@@ -118,6 +118,8 @@
                 event.preventDefault();
                 event.stopPropagation();
             });
+
+            $(".search-dropdown").select2();
         });
 
         /*
@@ -361,7 +363,7 @@
                 "<td class=\"cost_center_name\">"+cost_center.cost_center_name+"</td>",
                 "<td><select class=\"resp-select\" name=\"Verantwoordelijkenlijst kostenplaats "+cost_center.id+"\" id=\"resp-list-"+cost_center.id+"\">"+rowstring+"</select></td>",
                 "<td>"+cost_center.description+"</td>",
-                "<td><input class=\"input-budget\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
+                "<td><input class=\"input-budget search-dropdown\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
                 "                           step=\"0.01\" min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
                 "<td><button type=\"submit\" class=\"deleteCostCenter\">\n" +
                 "                        <i class=\"fas fa-trash-alt\" data-toggle=\"tooltip\" title=\"Verwijder kostenplaats "+cost_center.cost_center_name+"\"></i></button></td>"
