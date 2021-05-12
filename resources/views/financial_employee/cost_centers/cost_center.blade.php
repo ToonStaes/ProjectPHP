@@ -25,7 +25,13 @@
             <tr data-id="{{$cost_center->id}}">
                 <td>{{($cost_center->programmes[0]->name) ?? "Geen opleiding"}}</td>
                 <td class="cost_center_name">{{$cost_center->name}}</td>
-                <td>{{$cost_center->user->first_name." ".$cost_center->user->last_name}}</td>
+                <td>
+                    <select class="resp-select" name="Verantwoordelijkenlijst kostenplaats {{$cost_center->id}}" id="resp-list-{{$cost_center->id}}">
+                        @foreach($users as $user)
+                            <option value="{{$user->id}}" {{($cost_center->user->id == $user->id) ? "selected" : ""}}>{{$user->first_name." ".$user->last_name}}</option>
+                        @endforeach
+                    </select>
+                </td>
                 <td>{{$cost_center->description}}</td>
                 <td><input class="input-budget" type="number"
                            value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"
