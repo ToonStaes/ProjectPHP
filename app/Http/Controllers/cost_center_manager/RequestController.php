@@ -93,7 +93,7 @@ class RequestController extends Controller
                 return $item;
             });
 
-        $maxpaymentlaptop = Parameter::find(3)->max_reimbursement_laptop;
+        $maxpaymentlaptop = Parameter::where('name', '=', 'Maximum schijfgrootte laptop')->latest('created_at')->first()->max_reimbursement_laptop;
 
         $laptop_requests = Laptop_reimbursement::with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_cc_manager', 'status_fe', 'financial_employee'])
             ->where("user_id_Cost_center_manager", "=", Auth::user()->id)

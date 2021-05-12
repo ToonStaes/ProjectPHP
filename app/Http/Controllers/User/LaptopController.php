@@ -72,7 +72,7 @@ class LaptopController extends Controller
 
             $NewLapReimb = new Laptop_reimbursement();
             $NewLapReimb->laptop_invoice_id = $NewInvoice->id;
-            $NewLapReimb->user_id_Cost_center_manager = Parameter::with('cost_center.user')->findOrFail(4)->cost_center->user->id;
+            $NewLapReimb->user_id_Cost_center_manager = Parameter::with('cost_center.user')->where('name', '=', 'Standaard kostenplaats laptopvergoeding')->latest('created_at')->first()->cost_center->user->id;
             $NewLapReimb->payment_date = null;
             $NewLapReimb->save();
 

@@ -48,6 +48,7 @@
                         <input type="hidden" value="" name="keuring" id="commentaar-keuring">
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary annuleren">Annuleren</button>
                         <input type="submit" class="btn btn-primary" value="Opslaan">
                     </div>
                 </form>
@@ -68,7 +69,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuleren</button>
+                    <button type="button" class="btn btn-secondary annuleren">Annuleren</button>
                     <button type="button" class="btn btn-primary" id="betalen_knop">Betalen</button>
                 </div>
             </div>
@@ -121,6 +122,11 @@
             buildTable();
 
             $(".close").click(function () {
+                $("#commentaar-modal").modal('hide');
+                $("#betaal-modal").modal('hide');
+            })
+
+            $(".annuleren").click(function () {
                 $("#commentaar-modal").modal('hide');
                 $("#betaal-modal").modal('hide');
             })
