@@ -71,6 +71,7 @@
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script>
         let budgets_changed = [];
+        let responsible_changed = [];
         let cost_center_names = [];
         let _csrf = "{{csrf_token()}}";
         let _query_url = "http://cma.test/cost_centers/";
@@ -127,6 +128,7 @@
         * */
         $('#button-save').on('click', function(){
             send_budget_changes();
+            send_responsibles_changed();
         });
 
         $('.input-budget').change(function() {
@@ -134,6 +136,12 @@
             id = parseInt($(this).parent().parent().data("id"), 10);
             modify_budgets_changed(id, budget);
         });
+
+        $('.resp-select').change(function() {
+            resp_id = parseInt($(this).val(), 10);
+            id = parseInt($(this).parent().parent().data("id"), 10);
+            modify_responsible_changed(id, resp_id);
+        })
 
         function send_budget_changes(){
             if(!(budgets_changed.length === 0)){
@@ -152,7 +160,7 @@
                         show_success_notification("De budgetten werden succesvol geüpdated.");
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
-                            show_failure_notification("Er is een fout gebeurt bij het opslaan");
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de budgetten");
                             return;
                         }
                         this.tryCount++;
@@ -167,13 +175,45 @@
             }
         }
 
+        function send_responsibles_changed(){
+            if(!(responsible_changed.length === 0)){
+                for(responsible_index in responsible_changed){
+                    jQuery.ajax({
+                        url: _query_url+responsible_changed[responsible_index].id,
+                        method: "PUT",
+                        tryCount: 0,
+                        tryLimit: 3,
+                        context: {toCheck: responsible_changed[responsible_index]},
+                        data: responsible_changed[responsible_index]
+                    }).done(function(){
+                        for(responsible in responsible_changed){
+                            if(responsible_changed[responsible] == this.toCheck) budgets_changed.splice(responsible, 1);
+                        }
+                        show_success_notification("De verantwoordelijken werden succesvol geüpdated.");
+                    }).fail(function(jqXHR, statusText, errorText){
+                        if(jqXHR.status == 500){
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de verantwoordelijken.");
+                            return;
+                        }
+                        this.tryCount++;
+                        if(this.tryCount > this.tryLimit) return;
+                        jQuery.ajax(this);
+                    }).always(function(){
+                        if(this.tryCount > this.tryLimit){
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de verantwoordelijken.")
+                        }
+                    });
+                }
+            }
+        }
+
         function modify_budgets_changed(center_id, center_budget) {
             /*
             *   Check if the changed budget is already in the array
             *   if not, add it, else update the value in the array
             * */
             isPresent = false;
-            if(budgets_changed.length === 0) budgets_changed.push({id: center_id, budget: center_budget})
+            if(budgets_changed.length === 0) budgets_changed.push({id: center_id, budget: center_budget});
             else {
                 for(budget_index in budgets_changed) {
                     if(budgets_changed[budget_index].id === center_id) {
@@ -183,6 +223,25 @@
                     }
                 }
                 if(!isPresent) budgets_changed.push({id: center_id, budget: center_budget});
+            }
+        }
+
+        function modify_responsible_changed(center_id, resp_id){
+            /*
+            *   Check if the changed person responsible is already in the array
+            *   if not, add it, else update the value in the array
+            * */
+            isPresent = false;
+            if(responsible_changed.length === 0) responsible_changed.push({id: center_id, resp: resp_id});
+            else {
+                for(resp_index in responsible_changed) {
+                    if(responsible_changed[resp_index].id === center_id){
+                        responsible_changed[resp_index].resp = resp_id;
+                        isPresent = true;
+                        break;
+                    }
+                }
+                if(!isPresent) responsible_changed.push({id: center_id, resp: resp_id});
             }
         }
 
