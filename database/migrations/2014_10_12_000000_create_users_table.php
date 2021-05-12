@@ -38,66 +38,87 @@ class CreateUsersTable extends Migration
         DB::table('users')->insert(
             [
                 [
-                    'first_name' => 'Financial',
-                    'last_name' => 'Employee',
-                    'address' => 'Hazenstraat 1',
-                    'zip_code' => '2440',
+                    'first_name' => 'Arne',
+                    'last_name' => 'Hus',
+                    'address' => 'Laagland 29',
+                    'zip_code' => '2450',
+                    'city' => 'Meerhout',
                     'IBAN' => 'BE12345678912345',
-                    'email' => 'financial.employee@mailinator.com',
-                    'password' => Hash::make('finance1234'),
-                    'changedPassword' => true,
-                    'isCost_Center_manager' => false,
+                    'email' => 'arne.hus@hotmail.com',
+                    'phone_number' => '0470 65 74 58',
+                    'password' => Hash::make('arne'),
+                    'changedPassword' => false,
+                    'isCost_Center_manager' => true,
                     'isFinancial_employee' => true,
-                    'number_of_km' => 6.7,
+                    'number_of_km' => 14,
                     'created_at' => now()
                 ],
                 [
-                    'first_name' => 'Cost_center',
-                    'last_name' => 'Manager',
-                    'address' => 'Leeuwerikstraat 4',
-                    'zip_code' => '2300',
-                    'IBAN' => 'BE12345678912346',
-                    'email' => 'cost_center.manager@mailinator.com',
-                    'changedPassword' => true,
-                    'password' => Hash::make('costcenter1234'),
-                    'changedPassword' => true,
+                    'first_name' => 'Jorne',
+                    'last_name' => 'Marx',
+                    'address' => 'Torenstraat',
+                    'zip_code' => '3581',
+                    'city' => 'Beverlo',
+                    'IBAN' => 'BE00 0000 0000',
+                    'email' => 'jornemarx@telenet.be',
+                    'phone_number' => '0470 00 00 00',
+                    'password' => Hash::make('jorne'),
+                    'changedPassword' => false,
                     'isCost_Center_manager' => true,
                     'isFinancial_employee' => false,
-                    'number_of_km' => 17.5,
+                    'number_of_km' => 30,
                     'created_at' => now()
                 ],
                 [
-                    'first_name' => 'John',
-                    'last_name' => 'Doe',
-                    'address' => 'Boslaan 7',
-                    'zip_code' => '2450',
-                    'IBAN' => 'BE12345678912347',
-                    'email' => 'john.doe@mailinator.com',
-                    'password' => Hash::make('user1234'),
-                    'changedPassword' => true,
+                    'first_name' => 'Britt',
+                    'last_name' => 'Theunis',
+                    'address' => 'Kapucijnenplein 8',
+                    'zip_code' => '3920',
+                    'city' => 'Lommel',
+                    'IBAN' => 'BE00 0000 0000',
+                    'email' => 'britt.theunis@hotmail.com',
+                    'phone_number' => '0470 00 00 00',
+                    'password' => Hash::make('britt'),
+                    'changedPassword' => false,
                     'isCost_Center_manager' => false,
                     'isFinancial_employee' => false,
-                    'number_of_km' => 10.3,
+                    'number_of_km' => 20,
                     'created_at' => now()
-                ]
+                ],
+                [
+                    'first_name' => 'Wilfer',
+                    'last_name' => 'Spaepen',
+                    'address' => 'Duitslandlaan 11',
+                    'zip_code' => '2400',
+                    'city' => 'Mol',
+                    'IBAN' => 'BE00 0000 0000',
+                    'email' => 'wilferspaepen@gmail.com',
+                    'phone_number' => '0470 00 00 00',
+                    'password' => Hash::make('wilfer'),
+                    'changedPassword' => false,
+                    'isCost_Center_manager' => true,
+                    'isFinancial_employee' => false,
+                    'number_of_km' => 15,
+                    'created_at' => now()
+                ],
+                [
+                    'first_name' => 'Toon',
+                    'last_name' => 'Staes',
+                    'address' => 'Polderken 7',
+                    'zip_code' => '2460',
+                    'city' => 'Kasterlee',
+                    'IBAN' => 'BE00 0000 0000',
+                    'email' => 'toon.staes@hotmail.com',
+                    'phone_number' => '0470 00 00 01',
+                    'password' => Hash::make('toon'),
+                    'changedPassword' => false,
+                    'isCost_Center_manager' => true,
+                    'isFinancial_employee' => false,
+                    'number_of_km' => 11,
+                    'created_at' => now()
+                ],
             ]
         );
-
-        for ($i = 0; $i <= 20; $i++) {
-            DB::table('users')->insert(
-                [
-                    'first_name' => 'normal',
-                    'last_name' => "User $i",
-                    'password' => Hash::make('user1234'),
-                    'address' => 'Kleinhoefstraat 4',
-                    'zip_code' => '2440',
-                    'IBAN' => "BE12345678912341$i",
-                    'email' => "normaluser$i@mailinator.com",
-                    'number_of_km' => '0',
-                    'created_at' => now()
-                ]
-            );
-        }
     }
 
     /**

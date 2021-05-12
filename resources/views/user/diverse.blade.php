@@ -6,8 +6,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h1>Diverse vergoeding aanvragen</h1>
-                @include('shared.alert')
+                <h1>Diverse vergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u een vergoeding aanvragen voor diverse aankopen of voor een autorit."></i></h1>
                 <div class="card">
                     <div class="card-body" id="FormDiv">
                         <button class="btn btn-primary" id="btnaddvergoeding"><i class="fas fa-plus-square"></i> Kost toevoegen</button>
@@ -29,7 +28,7 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="reden">Verklaring aanvraag</label>
+                                <label for="reden">Verklaring aanvraag <i class="fas fa-info-circle pr-3 pl-1" data-toggle="tooltip" data-placement="right"  data-html="true" title="Geef hier de reden van aankoop in. <em>Voorbeeld: 'Aankoop museumticket voor schoolreis.' </em>"></i></label>
                                 <input type="text" name="reden" id="reden"
                                        class="form-control @error('reden') is-invalid @enderror"
                                        placeholder="Reden"
@@ -42,10 +41,10 @@
                                 <div class="kost">
                                     <div class="form-check form-switch mx-3">
                                         <input class="form-check-input autoswitch" type="checkbox" id="AutoSwitch1" name="AutoSwitch1">
-                                        <label class="form-check-label" for="flexSwitchCheckDefault">Autovergoeding?</label>
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">Kilometervergoeding?</label>
                                     </div>
                                     <div class="form-group NotAuto">
-                                        <label for="bedrag">Bedrag in Euro</label>
+                                        <label for="bedrag">Aankoopbedrag in Euro</label>
                                         <input type="number" name="bedrag1" id="bedrag1"
                                                class="Bedrag NotAuto form-control @error('bedrag') is-invalid @enderror"
                                                placeholder="123"
@@ -67,7 +66,7 @@
                                     <div class="form-group NotAuto FileUpRoot">
                                         <input type="hidden" name="aantalbestanden1" id="aantalbestanden1" value=1
                                                class="form-control FileCount" required>
-                                        <label for="bestand">Uploaden bewijsstuk</label> <a class="btn btn-sm btn-outline-dark btnaddbewijs"><i class="fas fa-plus-square"></i></a>
+                                        <label for="bestand">Uploaden bewijsstuk <i class="fas fa-info-circle pr-3 pl-1" data-toggle="tooltip" data-placement="right"  data-html="true" title="Upload hier een bewijs van de aankoop. Bijvoorbeeld een factuur, leveringsbon, etc."></i></label> <a class="btn btn-sm btn-outline-dark btnaddbewijs"><i class="fas fa-plus-square"></i></a>
                                         <div class="FileUpDiv">
                                             <input type="file" name="UploadBestand1-1" id="bestand1-1" class="BestandInput NotAuto form-control-file @error('bestand') is-invalid @enderror" required>
                                         </div>
@@ -86,7 +85,7 @@
                                     </div>
                                     <hr>
                                 </div></div>
-                            <button class="btn btn-success" id="btndienin" type="submit">Indienen</button>
+                            <button class="btn btn-primary" id="btndienin" type="submit">Indienen</button>
                         </form>
                     </div>
                 </div>
@@ -146,5 +145,25 @@
                 $( this ).parent().parent().find('.IsAuto').removeAttr('required');
             }
         });
+        @if (session()->has('success'))
+            let success = new Noty({
+                text: '{!! session()->get('success') !!}',
+                type: 'success',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
+        @if (session()->has('danger'))
+            let error = new Noty({
+                text: '{!! session()->get('danger') !!}',
+                type: 'error',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
     </script>
 @endsection

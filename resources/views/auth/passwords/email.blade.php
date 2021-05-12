@@ -40,3 +40,27 @@
         </div>
     </div>
 @endsection
+@section('script_after')
+    <script>
+            @if (session()->has('success'))
+        let success = new Noty({
+                text: '{!! session()->get('success') !!}',
+                type: 'success',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+            @endif
+            @if (session()->has('danger'))
+        let error = new Noty({
+                text: '{!! session()->get('danger') !!}',
+                type: 'error',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
+    </script>
+@endsection

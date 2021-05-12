@@ -2,8 +2,6 @@
 
 @section('main')
 
-
-    @include('shared.alert')
     <h1 class="text-center">Fietsvergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"  data-html="true" title="Op deze pagina kan u een of meerdere fietsritten opslaan. Ook kan u op deze pagina een fietsvergoeding aanvragen van de opgeslagen fietsritten. <br/> <ul><li>Oranje datums = geslecteerde fietsritten</li> <li>Blauwe datums = opgeslagen fietsritten</li> <li>Grijze datums = aangevraagde fietsritten</li></ul>"></i></h1>
     <div class="container-calendar">
         <div class="calendar">
@@ -25,56 +23,99 @@
                 <div>Za</div>
 
             </div>
-
                 <div class="days" data-saved="{{$saved_fietsritten}}" data-requested="{{$requested_fietsritten}}">
 
             </div>
         </div>
     </div>
     <div class="row knoppen justify-content-between">
-        <form action="/user/save_bikerides" method="post">
-            @csrf
-            <input id="fietsritten" name="fietsritten" type="hidden"/>
-            <span id="save-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Er moeten fietsritten geselecteerd zijn om de ritten te kunnen opslaan." >
-                <button id="save" type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
-            </span>
+        <div class="col-4">
+            <form action="/user/save_bikerides" method="post" class="row justify-content-start">
+                <input id="fietsritten" name="fietsritten" type="hidden"/>
+                <input  id="teVerwijderen" name="teVerwijderen" type="hidden"/>
 
-        </form>
-        <form action="/user/request_bikeReimbursement" method="post">
-            @csrf
-            <span id="request-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="left" title="Er moeten fietsritten zijn opgeslagen om een fietsvergoeding aan te vragen.">
+                    <div class="col-3"><label class="mr-2" for="numberOfKm">Aantal km</label> <input style="width: 90px;" class="form-control {{ $errors->first('numberOfKm') ? 'is-invalid' : '' }}" id="numberOfKm" name="numberOfKm" type="number" min="0.0" step="0.1" value="{{$user->number_of_km}}"/></div>
+                @csrf
+                    <div class="col-4">
+                        <span  id="save-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Er moeten fietsritten geselecteerd zijn om de ritten te kunnen opslaan." >
+                    <button id="save" type="submit" class="btn btn-primary" disabled>Ritten opslaan</button>
+                </span>
+                    </div>
+                <div class="col-3">
+                    <div class="invalid-feedback">{{ $errors->first('bikereimbursement') }}</div>
+                </div>
+            </form>
+        </div>
+        <div class="col-3">
+            <form action="/user/request_bikeReimbursement" method="post">
+                @csrf
+                <span id="request-tooltip-wrapper" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="left" title="Er moeten fietsritten zijn opgeslagen om een fietsvergoeding aan te vragen.">
                 <button id="request" type="submit" class="btn btn-secondary" disabled>Aanvraag indienen</button>
             </span>
 
-        </form>
+            </form>
+        </div>
     </div>
-
 @endsection
 
 @section('script_after')
     <script>
+        @if (session()->has('success'))
+            let success = new Noty({
+                type: 'success',
+                text: '{!! session()->get('success') !!}',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
+        @if (session()->has('danger'))
+            let error = new Noty({
+                type: 'error',
+                text: '{!! session()->get('danger') !!}',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
         const date = new Date();
         let selected_dates = [];
         let saved_dates = document.querySelector(".days").getAttribute("data-saved").split(',');
         let requested_days = document.querySelector(".days").getAttribute("data-requested").split(',');
-
+        let te_verwijderen = [];
 
         function selecteer(el){
             if(selected_dates.includes(el.getAttribute("data-value"))){
                 selected_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
                 el.classList.remove("geselecteerd");
+                document.getElementById("fietsritten").value = selected_dates;
+            }
+            else if(saved_dates.includes(el.getAttribute("data-value"))){
+                el.classList.remove("opgeslaan");
+                saved_dates.splice(selected_dates.indexOf(el.getAttribute("data-value")),  1);
+                te_verwijderen.push(el.getAttribute("data-value"));
+                document.getElementById("teVerwijderen").value = te_verwijderen;
+                selecteerDatums();
             }
             else{
                 selected_dates.push(el.getAttribute("data-value"));
-                selecteerDatums();
                 document.getElementById("fietsritten").value = selected_dates;
+                selecteerDatums();
             }
 
         }
 
         function selecteerDatums(){
+            if(document.getElementById("teVerwijderen").value !== ""){
+                document.getElementById("save").disabled = false;
+                //tooltip wijzigen
+                document.getElementById("save-tooltip-wrapper").setAttribute("data-original-title", "De opgeslagen fietsritten wijzigen.");
+                document.getElementById("save-tooltip-wrapper").setAttribute("title", "De opgeslagen fietsritten wijzigen.");
+            }
             //indien er datums zijn geselecteerd
-            if(selected_dates.length > 0){
+            if(document.getElementById("fietsritten").value !== ""){
                 document.getElementById("save").disabled = false;
                 //tooltip wijzigen
                 document.getElementById("save-tooltip-wrapper").setAttribute("data-original-title", "De geselecteerde fietsritten opslaan.");
@@ -88,7 +129,6 @@
             }
             //controleren of datums opgeslagen/ geselecteerd/ aangevraagd zijn
             let result=document.querySelectorAll('[data-value]');
-            console.log(selected_dates);
             for (let index in result){
                 if (result.hasOwnProperty(index)){
                     if(selected_dates.includes(result[index].getAttribute('data-value'))){
@@ -96,6 +136,9 @@
                     }
                     if(saved_dates.includes(result[index].getAttribute('data-value'))){
                         result[index].classList.add("opgeslaan");
+                    }
+                    if(te_verwijderen.includes(result[index].getAttribute('data-value'))){
+                        result[index].classList.remove("opgeslaan");
                     }
                     if(requested_days.includes(result[index].getAttribute('data-value'))){
                         result[index].classList.add("aangevraagd");
@@ -142,18 +185,22 @@
             if(date.getMonth() === 11){
                 document.querySelector('#next').setAttribute('title', "Ga naar januari");
                 document.querySelector('#next').setAttribute('data-original-title', "Ga naar januari");
+                document.querySelector('#next').setAttribute('data-bs-original-title', "Ga naar januari");
             } else{
                 document.querySelector('#next').setAttribute('title', "Ga naar " + months[date.getMonth()+1].toLowerCase());
                 document.querySelector('#next').setAttribute('data-original-title', "Ga naar " + months[date.getMonth()+1].toLowerCase());
+                document.querySelector('#next').setAttribute('data-bs-original-title', "Ga naar " + months[date.getMonth()+1].toLowerCase());
             }
 
             if(date.getMonth() === 0){
                 document.querySelector('#prev').setAttribute('title', "Ga naar december");
                 document.querySelector('#prev').setAttribute('data-original-title', "Ga naar december");
+                document.querySelector('#prev').setAttribute('data-bs-original-title', "Ga naar december");
 
             }else{
                 document.querySelector('#prev').setAttribute('title', "Ga naar " + months[date.getMonth()-1].toLowerCase());
                 document.querySelector('#prev').setAttribute('data-original-title', "Ga naar " + months[date.getMonth()-1].toLowerCase());
+                document.querySelector('#prev').setAttribute('data-bs-original-title', "Ga naar " + months[date.getMonth()-1].toLowerCase());
 
             }
 
@@ -216,7 +263,5 @@
         });
 
         renderCalender();
-
-
     </script>
 @endsection

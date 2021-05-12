@@ -28,28 +28,24 @@ class CreateLaptopInvoicesTable extends Migration
 
         DB::table('laptop_invoices')->insert(
             [
-                'filepath' => "0000000000000laptopaanvraag.docx",
-                'user_id' => 3,
-                'amount' => 600,
-                'invoice_description' => "aanschaf laptop",
-                'purchase_date' => now(),
-                'created_at' => now()
-            ]
-        );
-
-        for ($i = 1; $i <= 10; $i++) {
-            DB::table('laptop_invoices')->insert(
                 [
-                    'filepath' => "0000000000000laptop$i.docx",
+                    'filepath' => "0000000000000laptopaanvraag.docx",
                     'user_id' => 2,
-                    'amount' => 750,
-                    'invoice_description' => "aanschaf nieuwe laptop",
+                    'amount' => 800,
+                    'invoice_description' => "Aanschaf laptop vanwege te trage oude pc",
+                    'purchase_date' => now(),
+                    'created_at' => now()
+                ],
+                [
+                    'filepath' => "0000000000000laptop_factuur.pdf",
+                    'user_id' => 3,
+                    'amount' => 800,
+                    'invoice_description' => "Vorige laptop was kapot",
                     'purchase_date' => now(),
                     'created_at' => now()
                 ]
-            );
-        }
-
+            ]
+        );
     }
 
     /**

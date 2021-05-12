@@ -11,13 +11,21 @@ use App\Laptop_reimbursement;
 use App\User;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AanvraagController extends Controller
 {
     public function index() {
         return view('user.MijnAanvragen.mijnAanvragen');
     }
-//
+
+    private function FormatDate($item){
+        if ($item != null) {
+            $item = date("d/m/Y", strtotime($item));
+        }
+        return $item;
+    }
+
     public function qryRequests() {
         // get all diverse_reimbursement_requests with linked tables included
         $diverse_requests = Diverse_reimbursement_request::with(['user', 'cost_center.user', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'status_cc_manager', 'status_fe', 'financial_employee'])
@@ -49,30 +57,11 @@ class AanvraagController extends Controller
                     }else {
                         $item->amount += $line->amount;
                     }
-//                    unset($line->parameter, $line->parameter_id, $line->number_of_km, $line->id, $line->DR_request_id);
-//                    foreach ($line->diverse_reimbursement_evidences as $evidence){
-//                        $exploded_path = explode('/', $evidence->filepath);
-//                        if (!empty($exploded_path)){
-//                            $evidence['name'] = end($exploded_path);
-//                            $extension = explode(".", $evidence['name']);
-//                            $extension = end($extension);
-//                            $extension = strtolower($extension);
-//
-//                            $extensions = ["doc", "docx", "gif", "jpg", "jpeg", "mkv", "mov", "mp3", "mp4", "mpg", "pdf", "png", "ppt", "rar", "tiff", "txt", "xls", "xlsx", "zip"];
-//                            if (in_array($extension, $extensions)){
-//                                if ($extension == "jpeg"){
-//                                    $evidence['icon'] = "jpg.png";
-//                                } else {
-//                                    $evidence['icon'] = $extension . ".png";
-//                                }
-//                            } else {
-//                                $evidence['icon'] = "unknown.png";
-//                            }
-//                        }
-//                        unset($evidence['DR_line_id'], $evidence['created_at'], $evidence['updated_at']);
-//                    }
                 }
                 unset($item->diverse_reimbursement_lines);
+                $item->request_date = $this->FormatDate($item->request_date);
+                $item->review_date_Cost_center_manager = $this->FormatDate($item->review_date_Cost_center_manager);
+                $item->review_date_Financial_employee = $this->FormatDate($item->review_date_Financial_employee);
 
                 return $item;
             });
@@ -90,7 +79,7 @@ class AanvraagController extends Controller
                     $item->financial_employee_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
                 }
 
-                unset($item->laptop_invoice->user, $item->laptop_invoice->user_id, $item->laptop_invoice->created_at, $item->laptop_invoice->updated_at,
+                unset($item->laptop_invoice->user, $item->laptop_invoice->user_id,
                     $item->cost_center_manager, $item->financial_employee, $item->laptop_invoice_id, $item->user_id_Cost_center_manager, $item->user_id_Financial_employee,
                     $item->created_at, $item->updated_at);
 
@@ -140,6 +129,12 @@ class AanvraagController extends Controller
                         $item['laptop_invoice']['file_icon'] = "unknown.png";
                     }
                 }
+
+                $item->laptop_invoice->purchase_date_no_format = $item->laptop_invoice->purchase_date;
+                $item->laptop_invoice->purchase_date = $this->FormatDate($item->laptop_invoice->purchase_date);
+                $item->payment_date = $this->FormatDate($item->payment_date);
+                $item->review_date_Cost_center_manager = $this->FormatDate($item->review_date_Cost_center_manager);
+                $item->review_date_Financial_employee = $this->FormatDate($item->review_date_Financial_employee);
 
                 return $item;
             });
@@ -196,6 +191,9 @@ class AanvraagController extends Controller
                 $item->amount = $amount;
 
                 unset($item->status, $item->id, $item->status_id, $item->created_at, $item->updated_at);
+
+                $item->request_date = $this->FormatDate($item->request_date);
+                $item->review_date_Financial_employee = $this->FormatDate($item->review_date_Financial_employee);
 
                 return $item;
             });

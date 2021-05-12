@@ -3,6 +3,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css');
 @import url('https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css');
+@import '~noty/src/noty';
+@import '~noty/src/themes/bootstrap-v4';
 
 // Variables
 @import 'variables';
@@ -10,6 +12,10 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css');
+
+// Noty
+@import '~noty/src/noty';
+@import '~noty/src/themes/bootstrap-v4';
 
 
 @import 'main';
@@ -21,3 +27,4 @@
 @import "table";
 @import "costcenter";
 @import "help";
+@import "laptopModal";

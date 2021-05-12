@@ -34,7 +34,19 @@ class CreateProgrammeCostCentersTable extends Migration
                 [
                     'programme_id' => 1,
                     'cost_center_id' => 2
-                ]
+                ],
+                [
+                    'programme_id' => 1,
+                    'cost_center_id' => 3
+                ],
+                [
+                    'programme_id' => 1,
+                    'cost_center_id' => 4
+                ],
+                [
+                    'programme_id' => 1,
+                    'cost_center_id' => 5
+                ],
             ]
         );
     }

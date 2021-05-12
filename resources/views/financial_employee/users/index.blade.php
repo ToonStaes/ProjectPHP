@@ -6,7 +6,6 @@
 
 @section('main')
     <h1>Gebruikers beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u gebruikers toevoegen, wijzigen en verwijderen."></i></h1>
-    <div class="messages"></div>
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" id="gebruiker_toevoegen_knop">
         <i class="fas fa-plus"></i> Gebruiker toevoegen
@@ -19,7 +18,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="gebruiker_toevoegenLabel">Gebruiker toevoegen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -37,7 +36,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="gebruiker_bewerkenLabel">Gebruiker bewerken</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -112,6 +111,16 @@
             buildTable();
             getProgrammes();
 
+            $(".close").click(function () {
+                $("#gebruiker_toevoegen").modal('hide');
+                $("#gebruiker_bewerken").modal('hide');
+            })
+
+            $(".annuleren").click(function () {
+                $("#gebruiker_toevoegen").modal('hide');
+                $("#gebruiker_bewerken").modal('hide');
+            })
+
             $('tbody').on('click', '.btn-delete', function () {
                 let id = $(this).data('id');
                 deleteUser(id);
@@ -137,7 +146,15 @@
                         console.log(data);
                         // Hide the modal
                         $('#gebruiker_toevoegen').modal('hide');
-                        $("div.messages").html(data);
+                        let notification = new Noty({
+                            type: "success",
+                            text: data,
+                            layout: "topRight",
+                            timeout: 5000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
+
                         // Rebuild the table
                         buildTable();
                     })
@@ -168,7 +185,15 @@
                         console.log(data);
                         // Hide the modal
                         $('#gebruiker_bewerken').modal('hide');
-                        $("div.messages").html(data);
+                        let notification = new Noty({
+                            type: "success",
+                            text: data,
+                            layout: "topRight",
+                            timeout: 5000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
+
                         // Rebuild the table
                         buildTable();
                     })
@@ -282,8 +307,15 @@
             };
             $.post(`/users/${id}`, pars, 'json')
                 .done(function (data) {
-                    console.log('message', data);
-                    $("div.messages").html(data);
+                    let notification = new Noty({
+                        type: "success",
+                        text: data,
+                        layout: "topRight",
+                        timeout: 5000,
+                        progressBar: true,
+                        modal: false
+                    }).show();
+
                     // Rebuild the table
                     buildTable();
                 })

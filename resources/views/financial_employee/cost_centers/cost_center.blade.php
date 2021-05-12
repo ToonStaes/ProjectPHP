@@ -7,12 +7,12 @@
 
 @section('main')
     <h1>Kostenplaatsen beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u kostenplaatsen toevoegen en verwijderen. Ook kan u hier het budget van de kostenplaats wijzigen."></i></h1>
-    <button class="btn btn-primary mb-4" id="button-cost_center-add" data-toggle="modal" data-target="#cost_center_form_modal"> <i class="fas fa-plus"></i> Kostenplaats toevoegen</button>
+    <button class="btn btn-primary mb-4" id="button-cost_center-add"> <i class="fas fa-plus"></i> Kostenplaats toevoegen</button>
     <button class="btn btn-primary float-right" id="button-save" data-toggle="tooltip" data-placement="left" title="De wijzigingen van de budgetten opslaan.">Opslaan</button>
     <table id="tabel" class="table">
         <thead>
         <tr>
-            <th>Opleiding</th>
+            <th>Opleiding/Unit</th>
             <th>Kostenplaats</th>
             <th>Verantwoordelijke</th>
             <th>Beschrijving</th>
@@ -22,22 +22,20 @@
         </thead>
         <tbody id="table_body">
         @foreach($cost_centers as $cost_center)
-            @if($cost_center->isActive)
-                <tr data-id="{{$cost_center->id}}">
-                    <td>{{count($cost_center->programmes) ? $cost_center->programmes[0]->name : "Onbekend"}}</td>
-                    <td class="cost_center_name">{{$cost_center->name}}</td>
-                    <td>{{$cost_center->user->first_name." ".$cost_center->user->last_name}}</td>
-                    <td>{{$cost_center->description}}</td>
-                    <td><input class="input-budget" type="number"
+            <tr data-id="{{$cost_center->id}}">
+                <td>{{($cost_center->programmes[0]->name) ?? "Geen opleiding"}}</td>
+                <td class="cost_center_name">{{$cost_center->name}}</td>
+                <td>{{$cost_center->user->first_name." ".$cost_center->user->last_name}}</td>
+                <td>{{$cost_center->description}}</td>
+                <td><input class="input-budget" type="number"
                            value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"
                            step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
-                    <td class="text-center">
-                        <button type="submit" class="deleteCostCenter" data-toggle="tooltip" title="Verwijder kostenplaats {{$cost_center->name}}">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endif
+                <td class="text-center">
+                    <button type="submit" class="deleteCostCenter">
+                        <i class="fas fa-trash-alt" data-toggle="tooltip" title="Verwijder kostenplaats {{$cost_center->name}}"></i>
+                    </button>
+                </td>
+            </tr>
         @endforeach
         </tbody>
     </table>
@@ -48,7 +46,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="add_cost_center_title">Kostenplaats toevoegen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close modal-close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -67,11 +65,14 @@
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script>
         let budgets_changed = [];
+        let cost_center_names = [];
         let _csrf = "{{csrf_token()}}";
         let _query_url = "http://cma.test/cost_centers/";
         let _datatable;
 
         $(document).ready( function () {
+            $('#notification').hide();
+
             _datatable = $('#tabel').DataTable({
                 "columns": [
                     {"name": "Opleiding", "orderable": true},
@@ -96,11 +97,16 @@
                     }
                 }
             });
+
+            $('#cost_center_form_modal').modal();
+
             jQuery.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": _csrf
                 }
             });
+
+            //$('.deleteCostCenter').tooltip({html:true, container:'body', boundary:'window'});
 
             document.getElementById("cost_center_form").addEventListener("submit", function(event){
                 event.preventDefault();
@@ -137,9 +143,10 @@
                         for(budget in budgets_changed){
                             if (budgets_changed[budget] == this.toCheck) budgets_changed.splice(budget, 1);
                         }
+                        show_success_notification("De budgetten werden succesvol geüpdated.");
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
-                            alert("Er is een fout gebeurt bij het opslagen");
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan");
                             return;
                         }
                         this.tryCount++;
@@ -147,7 +154,7 @@
                         jQuery.ajax(this);
                     }).always(function(){
                         if(this.tryCount>this.tryLimit){
-                            alert("Er is een fout gebeurt bij het opslagen");
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan");
                         }
                     });
                 }
@@ -177,7 +184,7 @@
 
         function cost_center_delete_click(event){
             name = $(this).parent().parent().children(".cost_center_name").text();
-            id = parseInt($("#cost_centers_list option:contains("+name+")").data("id"));
+            id = parseInt($(this).parent().parent().data("id"));
             send_deletion(id, name);
         }
 
@@ -196,9 +203,10 @@
                 context: {id: center_id, name: center_name}
             }).done(function(data){
                 delete_cost_center_row(this.id, this.name);
+                show_success_notification("De kostenplaats werd succesvol verwijderd.");
             }).fail(function(jqXHR, statusText, errorText){
                 if(jqXHR.status == 500){
-                    alert("Er is een fout gebeurt bij het verwijderen");
+                    show_failure_notification("Er is een fout gebeurt bij het verwijderen.");
                     return;
                 }
                 this.tryCount++;
@@ -206,6 +214,14 @@
                 jQuery.ajax(this);
             });
         }
+
+        $('#button-cost_center-add').on('click', function(){
+            $('#cost_center_form_modal').modal('show');
+        });
+
+        $('.modal-close').on('click', function(){
+            $('#cost_center_form_modal').modal('hide');
+        });
 
         function delete_cost_center_row(id, name){
             _datatable.row($("tr td.cost_center_name:contains("+name+")")).remove().draw();
@@ -220,6 +236,7 @@
             cost_center_name = $("#cost_center_input").val();
             cost_center_id = $("#cost_centers_list option:selected").data("id");
             description = $("#descr_input").val() ?? " ";
+            if(description.length == 0) description = " ";
 
             budget = parseInt($("#budget_input").val(), 10);
             if(isNaN(budget)) budget = 0;
@@ -252,13 +269,18 @@
 
             $("#budget_input").val("");
 
-            $("#active_input").prop("checked", false);
+            $("#active_input").prop("checked", true);
 
             $("#cost_center_form_modal").modal('hide');
+
+            $(".invalid-feedback").empty();
         }
 
         function add_cost_center(cost_center){
             if(cost_center.isActive == 0) return;
+
+            update_cost_center_names();
+
             newrow = _datatable.row.add([
                 "<td>"+cost_center.programme_name+"</td>",
                 "<td class=\"cost_center_name\">"+cost_center.cost_center_name+"</td>",
@@ -266,14 +288,17 @@
                 "<td>"+cost_center.description+"</td>",
                 "<td><input class=\"input-budget\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
                 "                           min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
-                "<td><button type=\"submit\" class=\"btn btn-outline-danger deleteCostCenter\">\n" +
-                "                        <i class=\"fas fa-trash-alt\"></i></button></td>"
+                "<td><button type=\"submit\" class=\"deleteCostCenter\">\n" +
+                "                        <i class=\"fas fa-trash-alt\" data-toggle=\"tooltip\" title=\"Verwijder kostenplaats "+cost_center.cost_center_name+"\"></i></button></td>"
             ]).draw().node();
             _datatable.draw();
             _datatable.sort();
             $("td:nth-child(2)").addClass("cost_center_name");
+            $("td:last-child").addClass("text-center");
             $(newrow).on('click','.deleteCostCenter', cost_center_delete_click);
-            $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
+            if(!cost_center_names.includes((cost_center.cost_center_name))){
+                $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
+            }
         }
 
         function send_new_cost_center(cost_center){
@@ -288,15 +313,60 @@
                 reset_form();
                 this.cost_center.cost_center_id = data.id;
                 add_cost_center(this.cost_center);
+                show_success_notification("De kostenplaats werd succesvol opgeslaan.");
             }).fail(function(jqXHR, statusText, errorText){
+                //  Laravels form validation error code is 422
                 if(jqXHR.status == 409){
-                    alert(JSON.parse(jqXHR.responseText).message);
+                    $('#invalid-cost_center').text(JSON.parse(jqXHR.responseText).message);
                     return;
+                }
+                else if(jqXHR.status == 422){
+                    errors = JSON.parse(jqXHR.responseText).errors;
+                    error_names = Object.getOwnPropertyNames(errors);
+                    error_names.forEach(function(name){
+                        switch(name){
+                            case "programme_id": $('#invalid-programme').text(errors.programme_id[0]); break;
+                            case "user_id": $('#invalid-user').text(errors.user_id[0]); break;
+                            case "budget": $('#invalid-budget').text(errors.budget[0]); break;
+                            case "cost_center_name": $('#invalid-cost_center').text(errors.cost_center_name[0]); break;
+                            case "description": $('#invalid-description').text(errors.description[0]); break;
+                        }
+                    });
                 }
                 this.tryCount++;
                 if(this.tryCount > this.tryLimit) return;
                 jQuery.ajax(this);
             });
+        }
+
+        function update_cost_center_names(){
+            $('#table_body .cost_center_name').each(function(index){
+                if(!cost_center_names.includes($(this).text())){
+                    cost_center_names.push($(this).text());
+                }
+            })
+        }
+
+        function show_success_notification(text){
+            let notification = new Noty({
+                type: "success",
+                text: text,
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        }
+
+        function show_failure_notification(text){
+            let notification = new Noty({
+                type: "error",
+                text: text,
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
         }
     </script>
 @endsection

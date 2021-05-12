@@ -1,29 +1,17 @@
-//footer{
-//    height: 50px;
-//    #border{
-//        background-color: $blue;
-//        height: 2px;
-//        box-shadow: 2px 2px 20px $dark-grey;
-//        margin-bottom: 1rem;
-//    }
-//    @media screen and (min-width: 900px) {
-//        #rechts {
-//            text-align: right;
-//        }
-//    }
-//}
-
-
 #footer {
     max-width: 85vw;
     margin:auto;
+    margin-left: -0.9rem;
     padding: 0;
     #border{
         background-color: $blue;
-        height: 2px;
+        height: 1px;
         width: 85vw;
-        box-shadow: 2px 2px 20px $dark-grey;
+        box-shadow: 1px 1px 20px $dark-grey;
         margin-bottom: 1rem;
+    }
+    #footerText{
+        padding: 0 0.5rem;
     }
     @media screen and (min-width: 900px) {
         #rechts {

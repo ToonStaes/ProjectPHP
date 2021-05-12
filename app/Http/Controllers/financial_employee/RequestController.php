@@ -103,7 +103,7 @@ class RequestController extends Controller
                 return $item;
             });
 
-        $maxpaymentlaptop = Parameter::find(3)->max_reimbursement_laptop;
+        $maxpaymentlaptop = Parameter::where('name', '=', 'Maximum schijfgrootte laptop')->latest('created_at')->first()->max_reimbursement_laptop;
 
         $laptop_requests = Laptop_reimbursement::whereHas('status_cc_manager', function ($innerQuery){
             $innerQuery->where('id', '=', 2);
@@ -193,6 +193,8 @@ class RequestController extends Controller
                 foreach ($item->bikerides as $bikeride){
                     if ($bikeride->number_of_km == null){
                         $item->amount += $bikeride->user->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
+                    }else {
+                        $item->amount += $bikeride->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
                     }
                 }
 
@@ -307,7 +309,7 @@ class RequestController extends Controller
                 return $item;
             });
 
-        $maxpaymentlaptop = Parameter::find(3)->max_reimbursement_laptop;
+        $maxpaymentlaptop = Parameter::where('name', '=', 'Maximum schijfgrootte laptop')->latest('created_at')->first()->max_reimbursement_laptop;
         $laptop_requests = Laptop_reimbursement::whereHas('status_FE', function ($innerQuery){
             $innerQuery->where('id', '=', 2);
         })
@@ -341,6 +343,8 @@ class RequestController extends Controller
                 foreach ($item->bikerides as $bikeride){
                     if ($bikeride->number_of_km == null){
                         $item->amount += $bikeride->user->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
+                    }else {
+                        $item->amount += $bikeride->number_of_km * $item->bike_reimbursement_parameters[0]->parameter->amount_per_km;
                     }
                 }
 
@@ -390,5 +394,7 @@ class RequestController extends Controller
             $bike_reimbursement->status_id = 4;
             $bike_reimbursement->save();
         }
+
+        return "De betaling is in orde";
     }
 }

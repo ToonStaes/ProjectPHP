@@ -28,17 +28,35 @@ class CreateCostCenterBudgetsTable extends Migration
         DB::table('cost_center_budgets')->insert(
             [
                 [
-                    'amount' => 4588,
+                    'amount' => 1000,
                     'cost_center_id' => 1,
                     'year' => 2021,
                     'created_at' => now()
                 ],
                 [
-                    'amount' => 4888,
+                    'amount' => 3000,
                     'cost_center_id' => 2,
                     'year' => 2021,
                     'created_at' => now()
-                ]
+                ],
+                [
+                    'amount' => 3000,
+                    'cost_center_id' => 3,
+                    'year' => 2021,
+                    'created_at' => now()
+                ],
+                [
+                    'amount' => 2000,
+                    'cost_center_id' => 4,
+                    'year' => 2021,
+                    'created_at' => now()
+                ],
+                [
+                    'amount' => 1000,
+                    'cost_center_id' => 5,
+                    'year' => 2021,
+                    'created_at' => now()
+                ],
             ]
         );
     }

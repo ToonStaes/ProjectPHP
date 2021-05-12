@@ -15,7 +15,7 @@ class CreateCostCentersTable extends Migration
     {
         Schema::create('cost_centers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->foreignId('user_id_Cost_center_manager');
             $table->string('description')->nullable();
             $table->boolean('isActive')->default(true);
@@ -31,27 +31,33 @@ class CreateCostCentersTable extends Migration
                 [
                     'name' => 'WU3TIGB00000',
                     'user_id_Cost_center_manager' => 2,
-                    'description' => 'TI Beleid en Opleidingsinitiatieven',
+                    'description' => 'Fietsvergoedingen',
                     'created_at' => now()
                 ],
                 [
-                    'name' => 'WU3TIGB01000',
-                    'user_id_Cost_center_manager' => 2,
-                    'description' => 'Professionalisering Personeel',
+                    'name' => 'WU3TIGB000001',
+                    'user_id_Cost_center_manager' => 4,
+                    'description' => 'Laptopvergoedingen',
                     'created_at' => now()
                 ],
                 [
-                    'name' => 'WU3TIGB01001',
-                    'user_id_Cost_center_manager' => 2,
-                    'description' => 'laptopvergoedingen',
+                    'name' => 'WU3TIGB000002',
+                    'user_id_Cost_center_manager' => 4,
+                    'description' => 'Opleiding personeel',
                     'created_at' => now()
                 ],
                 [
-                    'name' => 'WU3TIGB01002',
-                    'user_id_Cost_center_manager' => 2,
-                    'description' => 'fietsvergoedingen',
+                    'name' => 'WU3TIGB000003',
+                    'user_id_Cost_center_manager' => 5,
+                    'description' => 'Opendeurdag',
                     'created_at' => now()
-                ]
+                ],
+                [
+                    'name' => 'WU3TIGB000004',
+                    'user_id_Cost_center_manager' => 2,
+                    'description' => 'Stagebezoeken',
+                    'created_at' => now()
+                ],
             ]
         );
     }

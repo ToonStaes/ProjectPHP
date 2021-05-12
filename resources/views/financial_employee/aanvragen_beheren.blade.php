@@ -1,14 +1,12 @@
 @extends('layouts.template')
 @section('extra_css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
 @endsection
 
 @section('main')
     <h1>Vergoedingen behandelen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u vergoedingen die goedgekeurd zijn door de kostenplaatsverantwoordelijke, af- en goedkeuren."></i></h1>
     <div class="messages"></div>
-    <p class="text-right"><button class="btn-primary mb-5" id="openstaande_betalingen" data-toggle="modal" data-target="#betaal-modal">Openstaande betalingen uitbetalen (€)</button></p>
-
+    <p class="text-right"><button class="btn-primary mb-5" id="openstaande_betalingen">Openstaande betalingen uitbetalen (€)</button></p>
     <div id="tabel">
         <table id="requestsTable" class="table">
             <thead>
@@ -35,8 +33,8 @@
                     @method("put")
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modal-title">Commentaar</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title" id="commentaar">Commentaar</h5>
+                        <button type="button" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -50,6 +48,7 @@
                         <input type="hidden" value="" name="keuring" id="commentaar-keuring">
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary annuleren">Annuleren</button>
                         <input type="submit" class="btn btn-primary" value="Opslaan">
                     </div>
                 </form>
@@ -61,8 +60,8 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Openstaande betalingen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="openstaandeBetalingen">Openstaande betalingen</h5>
+                    <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -70,7 +69,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuleren</button>
+                    <button type="button" class="btn btn-secondary annuleren">Annuleren</button>
                     <button type="button" class="btn btn-primary" id="betalen_knop">Betalen</button>
                 </div>
             </div>
@@ -122,22 +121,66 @@
         $(document).ready(function () {
             buildTable();
 
+            $(".close").click(function () {
+                $("#commentaar-modal").modal('hide');
+                $("#betaal-modal").modal('hide');
+            })
+
+            $(".annuleren").click(function () {
+                $("#commentaar-modal").modal('hide');
+                $("#betaal-modal").modal('hide');
+            })
+
+            $("#openstaande_betalingen").click(function () {
+                $("#betaal-modal").modal("show");
+            })
+
             let previous = "";
             $("#requestsTable").on('focus', '.status-select', function () {
                 previous = $(this).val();
             });
 
             $("#requestsTable").on('change', '.status-select', function () {
-                $("#commentaar-modal").modal('show');
-                let id = $(this).data('id');
-                let type = $(this).data('type');
-                let keuring = $(this).val();
+                if($(this).val() === "afgekeurd"){
+                    $("#commentaar-modal").modal('show');
+                    let id = $(this).data('id');
+                    let type = $(this).data('type');
+                    let keuring = $(this).val();
 
-                $("#commentaar-id").val(id);
-                $("#commentaar-type").val(type);
-                $("#commentaar-keuring").val(keuring);
+                    $("#commentaar-id").val(id);
+                    $("#commentaar-type").val(type);
+                    $("#commentaar-keuring").val(keuring);
 
-                $(this).val(previous);
+                    $(this).val(previous);
+                } else {
+                    let action = "/financial_employee/saveComment";
+                    let pars = {
+                        '_token': '{{ csrf_token() }}',
+                        '_method': 'put',
+                        'commentaar': null,
+                        'type': $(this).data('type'),
+                        'id': $(this).data('id'),
+                        'keuring': $(this).val(),
+                    };
+
+                    $.post(action, pars, 'json')
+                        .done(function (data) {
+                            console.log(data);
+                            let notification = new Noty({
+                                type: "success",
+                                text: "Beoordeling opgeslagen",
+                                layout: "topRight",
+                                timeout: 2000,
+                                progressBar: true,
+                                modal: false
+                            }).show();
+
+                            buildTable();
+                        })
+                        .fail(function (data) {
+                            console.log(data);
+                        });
+                }
             });
 
             $("#commentaar-modal form").submit(function (e) {
@@ -151,6 +194,16 @@
                         console.log(data);
                         $("#commentaar-modal").modal('hide');
                         $("#commentaar-modal form textarea").val("");
+
+                        let notification = new Noty({
+                            type: "success",
+                            text: "Beoordeling opgeslagen",
+                            layout: "topRight",
+                            timeout: 2000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
+
                         buildTable();
                     })
                     .fail(function (data) {
@@ -169,8 +222,16 @@
                 };
 
                 $.post("/financial_employee/payOpenPayments", pars)
-                    .done(function () {
+                    .done(function (data) {
                         $("#betaal-modal").modal('hide');
+                        let notification = new Noty({
+                            type: "success",
+                            text: data,
+                            layout: "topRight",
+                            timeout: 5000,
+                            progressBar: true,
+                            modal: false
+                        }).show();
                         buildTable();
                 });
             })
@@ -222,8 +283,8 @@
                         select += `</select></span>`;
 
                         let status_cc_manager = value.status_CC_manager;
-                        if (value.comment_Cost_center_manager != null){
-                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Cost_center_manager}</p><p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
+                        if (value.review_date_Cost_center_manager != null){
+                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
                         }
 
                         let evidence = '';
@@ -288,8 +349,8 @@
                         let user_name = value.laptop_invoice.username;
 
                         let status_cc_manager = value.status_CC_manager;
-                        if (value.comment_Cost_center_manager != null){
-                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Commentaar: ${value.comment_Cost_center_manager}</p><p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
+                        if (value.review_date_Cost_center_manager != null){
+                            status_cc_manager = `<nobr><p>${value.status_CC_manager} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Datum: ${value.review_date_Cost_center_manager}</p><p>Door: ${value.ccm_name}</p>"></i></p></nobr>`;
                         }
 
                         let evidence = `<a class="btn btn-outline-dark" href="/storage/LaptopBewijzen/${value.laptop_invoice.filepath}" download><nobr><img src='/assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name.substring(13)}</nobr></a>`;
@@ -361,7 +422,7 @@
         }
 
         function makeTooltipsVisible() {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip({html:true});
         }
 
         function buildModal(){
