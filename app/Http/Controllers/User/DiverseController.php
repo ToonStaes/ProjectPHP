@@ -160,6 +160,7 @@ class DiverseController extends Controller
 
         for ($x = 1; $x <= $request->aantalkosten; $x++) {
             $currFileUpCountName = "aantalbestanden".$x;
+            $currExFileUpCountName = "aantalbestaandebestanden".$x;
             $currdatename = "datum".$x;
             $currswitchname = "AutoSwitch".$x;
             $currafstandname = "afstand".$x;
@@ -235,20 +236,33 @@ class DiverseController extends Controller
                     $NewLine->amount = $request->$currbedragname;
                     $NewLine->save();
 
-                    for ($y = 1; $y <= $request->$currFileUpCountName; $y++){
-                        $currbestandname = 'UploadBestand'.$x.'-'.$y;
-                        $FileName = date('YzHis') . $request->$currbestandname->getClientOriginalName();
-                        $request->$currbestandname->storeAs('public/DiverseBewijzen', $FileName);
+                        for ($y = 1; $y <= $request->$currFileUpCountName; $y++) {
+                            $currbestandname = 'UploadBestand' . $x . '-' . $y;
+                            if ($request->$currbestandname != null){
+                                $FileName = date('YzHis') . $request->$currbestandname->getClientOriginalName();
+                                $request->$currbestandname->storeAs('public/DiverseBewijzen', $FileName);
 
-                        $NewEvidence= new Diverse_reimbursement_evidence();
-                        $NewEvidence->filepath = $FileName;
-                        $NewEvidence->DR_line_id = $NewLine->id;
-                        $NewEvidence->save();
+                                $NewEvidence = new Diverse_reimbursement_evidence();
+                                $NewEvidence->filepath = $FileName;
+                                $NewEvidence->DR_line_id = $NewLine->id;
+                                $NewEvidence->save();
+                            }
+                        }
+
+                    for ($y = 1; $y <= $request->$currExFileUpCountName; $y++) {
+                        $currbestandname = 'ExistBestand' . $x . '-' . $y;
+                        if ($request->$currbestandname != null){
+                            $NewEvidence = new Diverse_reimbursement_evidence();
+                            $FileName = $request->$currbestandname;
+                            $NewEvidence->filepath = $FileName;
+                            $NewEvidence->DR_line_id = $NewLine->id;
+                            $NewEvidence->save();
+                        }
                     }
                 }
             }
         }
         session()->flash('success', 'De aanvraag is aangepast.');
-        return redirect("/user/divers/$NewRequest->id");
+        return redirect("/user/mijnaanvragen");
     }
 }

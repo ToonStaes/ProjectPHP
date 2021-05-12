@@ -65,11 +65,22 @@
                                         @enderror
                                     </div>
                                     <div class="form-group NotAuto FileUpRoot">
+                                        <input type="hidden" name="aantalbestaandebestanden1" id="aantalbestaandebestanden1" value=0
+                                               class="form-control ExFileCount" required>
+                                        <label for="existbestand">Bestaande bewijsstukken</label>
+                                        <div class="FileExistingDiv">
+
+                                        </div>
+                                        @error('existbestand')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group NotAuto FileUpRoot">
                                         <input type="hidden" name="aantalbestanden1" id="aantalbestanden1" value=1
                                                class="form-control FileCount" required>
-                                        <label for="bestand">Uploaden bewijsstuk</label> <a class="btn btn-sm btn-outline-dark btnaddbewijs"><i class="fas fa-plus-square"></i></a>
+                                        <label for="bestand">Upload extra bewijsstukken</label> <a class="btn btn-sm btn-outline-dark btnaddbewijs"><i class="fas fa-plus-square"></i></a>
                                         <div class="FileUpDiv">
-                                            <input type="file" name="UploadBestand1-1" id="bestand1-1" class="BestandInput NotAuto form-control-file @error('bestand') is-invalid @enderror" required>
+                                            <input type="file" name="UploadBestand1-1" id="bestand1-1" class="BestandInput NotAuto form-control-file @error('bestand') is-invalid @enderror">
                                         </div>
                                         @error('bestand')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -126,14 +137,20 @@
             $( ".Afstand" ).last().val(null);
             $( ".FileCount" ).last().attr("name","aantalbestanden"+$aantalaanvragen)
             $( ".FileCount" ).last().attr("id","aantalbestanden"+$aantalaanvragen)
+            $( ".ExFileCount" ).last().attr("name","aantalbestaandebestanden"+$aantalaanvragen)
+            $( ".ExFileCount" ).last().attr("id","aantalbestaandebestanden"+$aantalaanvragen)
             $( ".FileCount" ).last().val(1);
-            $('.FileUpDiv').last().html('<input type="file" name="UploadBestand1" id="bestand1" class="BestandInput NotAuto form-control-file" required>');
+            $('.FileExistingDiv').last().html("");
+            $('.FileUpDiv').last().html('<input type="file" name="UploadBestand1" id="bestand1" class="BestandInput NotAuto form-control-file">');
             $( ".BestandInput" ).last().attr("name","UploadBestand"+$aantalaanvragen+"-1")
             $( ".BestandInput" ).last().attr("id","bestand"+$aantalaanvragen+"-1")
             $('#aantalkosten').val($aantalaanvragen);
+            $(".BestandInput").removeAttr('required');
         }
 
         function BuildPage(){
+            $("#kostenplaats").val($Req["cost_center_id"]);
+
             $first = true;
             $Lines.forEach(currline => {
                 if ($first == false){
@@ -163,10 +180,24 @@
                     $( ".Bedrag" ).last().val(currline["amount"]);
                     $( ".Datum" ).last().val(currline["purchase_date"]);
 
-
+                    $Evid.forEach(currevid =>{
+                        if (currevid["DR_line_id"] == currline["id"]){
+                            //toevoegen existing file
+                            $FileCount =  $('.ExFileCount').last().val();
+                            $FileCount++;
+                            $displayname = currevid["filepath"].substring(13,currevid["filepath"].length);
+                            $('.FileExistingDiv').last().append("<p class='ExBewijsTXT'><i class=\"fas fa-file\"></i> "+$displayname+"<a class='btnExDelete' style='cursor: pointer'>   <i class=\"fas fa-times\"></i></a></p>");
+                            $('.FileExistingDiv').last().append('<input type="text" name="ExistBestand1-1" id="Exist1-1" class="d-none ExBestandInput NotAuto">');
+                            $('.ExBestandInput').last().attr("name","ExistBestand"+$aantalaanvragen+"-"+$FileCount)
+                            $('.ExBestandInput').last().attr("id","ExistBestand"+$aantalaanvragen+"-"+$FileCount)
+                            $('.ExBestandInput').last().val(currevid["filepath"]);
+                            $('.ExFileCount').last().val($FileCount);
+                        }
+                    });
                 }
                 $first = false;
             })
+            $(".BestandInput").removeAttr('required');
         }
 
         $('#FormDiv').on('click', '.autoswitch', function(){
@@ -182,6 +213,7 @@
                 $( this ).parent().parent().find(".IsAuto").hide();
                 $( this ).parent().parent().find('.IsAuto').removeAttr('required');
             }
+            $(".BestandInput").removeAttr('required');
         });
 
         $('#FormDiv').on('click', '.btnaddbewijs', function(){
@@ -191,6 +223,11 @@
             $(this).closest('.FileUpRoot').find('.BestandInput').last().attr("name","UploadBestand"+$aantalaanvragen+"-"+$FileCount)
             $(this).closest('.FileUpRoot').find('.BestandInput').last().attr("id","bestand"+$aantalaanvragen+"-"+$FileCount)
             $(this).closest('.FileUpRoot').find('.FileCount').val($FileCount);
+        });
+
+        $('#FormDiv').on('click', '.btnExDelete', function(){
+            $(this).parent().next().remove();
+            $(this).closest('.ExBewijsTXT').remove();
         });
 
         BuildPage();
