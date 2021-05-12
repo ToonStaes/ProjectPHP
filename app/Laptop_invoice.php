@@ -19,4 +19,9 @@ class Laptop_invoice extends Model
     public function laptop_reimbursements() {
         return $this->hasMany('App\Laptop_reimbursement');
     }
+
+    protected $casts = [
+        'created_at' => 'datetime:d/m/Y',
+        'updated_at' => 'datetime:d/m/Y'
+    ];
 }

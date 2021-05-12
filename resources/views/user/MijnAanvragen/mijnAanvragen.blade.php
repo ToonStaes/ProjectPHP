@@ -239,7 +239,11 @@
 
                     // laptop reimbursements
                     $.each(data.laptop_reimbursements, function (key, value) {
-                        let request_date = value.laptop_invoice.purchase_date;
+                        let request_date = value.laptop_invoice.updated_at;
+                        if (request_date == null){
+                            request_date = value.laptop_invoice.created_at;
+                        }
+
                         let review_date_Cost_center_manager = value.review_date_Cost_center_manager;
                         if (review_date_Cost_center_manager == null) {
                             review_date_Cost_center_manager = null

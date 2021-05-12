@@ -11,6 +11,7 @@ use App\Laptop_reimbursement;
 use App\User;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AanvraagController extends Controller
 {
@@ -78,7 +79,7 @@ class AanvraagController extends Controller
                     $item->financial_employee_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
                 }
 
-                unset($item->laptop_invoice->user, $item->laptop_invoice->user_id, $item->laptop_invoice->created_at, $item->laptop_invoice->updated_at,
+                unset($item->laptop_invoice->user, $item->laptop_invoice->user_id,
                     $item->cost_center_manager, $item->financial_employee, $item->laptop_invoice_id, $item->user_id_Cost_center_manager, $item->user_id_Financial_employee,
                     $item->created_at, $item->updated_at);
 
