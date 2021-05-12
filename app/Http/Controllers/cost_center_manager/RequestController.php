@@ -102,8 +102,6 @@ class RequestController extends Controller
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
                 unset($item->laptop_invoice->user);
 
-                unset($item->laptop_invoice->created_at, $item->laptop_invoice->updated_at);
-
                 $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
 
                 if ($item->review_date_Cost_center_manager != null){

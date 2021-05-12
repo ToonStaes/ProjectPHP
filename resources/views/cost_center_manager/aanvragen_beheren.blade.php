@@ -282,7 +282,10 @@
                         })
                         select += `</select></span>`;
 
-                        let request_date = value.laptop_invoice.purchasedate;
+                        let request_date = value.laptop_invoice.updated_at;
+                        if (request_date == null){
+                            request_date = value.laptop_invoice.created_at;
+                        }
                         let cost_center = '';
                         $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
                             if (value2.parameter.standard_Cost_center_id != null){
