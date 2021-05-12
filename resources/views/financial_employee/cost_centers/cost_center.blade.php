@@ -132,7 +132,7 @@
         });
 
         $('.input-budget').change(function() {
-            budget = $(this).val();
+            budget = parseInt($(this).val(), 10);
             id = parseInt($(this).parent().parent().data("id"), 10);
             modify_budgets_changed(id, budget);
         });
@@ -168,7 +168,7 @@
                         jQuery.ajax(this);
                     }).always(function(){
                         if(this.tryCount>this.tryLimit){
-                            show_failure_notification("Er is een fout gebeurt bij het opslaan");
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de budgetten");
                         }
                     });
                 }
@@ -187,7 +187,7 @@
                         data: responsible_changed[responsible_index]
                     }).done(function(){
                         for(responsible in responsible_changed){
-                            if(responsible_changed[responsible] == this.toCheck) budgets_changed.splice(responsible, 1);
+                            if(responsible_changed[responsible] == this.toCheck) responsible_changed.splice(responsible, 1);
                         }
                         show_success_notification("De verantwoordelijken werden succesvol geüpdated.");
                     }).fail(function(jqXHR, statusText, errorText){
