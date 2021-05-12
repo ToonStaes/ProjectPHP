@@ -1,7 +1,7 @@
-<div id="footer" class="container">
+<div id="footer">
         <div id="border">
         </div>
-            <div class="row ">
+            <div class="row" id="footerText">
                 <div class="col-lg-8 col-md-8 mb-4">
                     <h5>CM-A &copy;</h5>
                     <p> Arne Hus, Jorne Marx, Toon Staes, Wilfer Spaepen & Britt Theunis </p>
