@@ -76,6 +76,7 @@
         let _csrf = "{{csrf_token()}}";
         let _query_url = "http://cma.test/cost_centers/";
         let _datatable;
+        let _managers = {!! $users !!};
 
         $(document).ready( function () {
             $('#notification').hide();
@@ -113,8 +114,6 @@
                 }
             });
 
-            //$('.deleteCostCenter').tooltip({html:true, container:'body', boundary:'window'});
-
             document.getElementById("cost_center_form").addEventListener("submit", function(event){
                 event.preventDefault();
                 event.stopPropagation();
@@ -131,17 +130,21 @@
             send_responsibles_changed();
         });
 
-        $('.input-budget').change(function() {
+        $('.input-budget').change($.proxy(onBudgetChange));
+
+        function onBudgetChange(){
             budget = parseInt($(this).val(), 10);
             id = parseInt($(this).parent().parent().data("id"), 10);
             modify_budgets_changed(id, budget);
-        });
+        }
 
-        $('.resp-select').change(function() {
+        $('.resp-select').change($.proxy(onResponsibleChanged));
+
+        function onResponsibleChanged(){
             resp_id = parseInt($(this).val(), 10);
             id = parseInt($(this).parent().parent().data("id"), 10);
             modify_responsible_changed(id, resp_id);
-        })
+        }
 
         function send_budget_changes(){
             if(!(budgets_changed.length === 0)){
@@ -346,13 +349,20 @@
 
             update_cost_center_names();
 
+            rowstring = "";
+            for(user_index in _managers){
+                rowstring += "<option value=\""+_managers[user_index].id+"\" "+ ((_managers[user_index].id === cost_center.user_id) ? "selected" : "") +">" +
+                    _managers[user_index].first_name + " " + _managers[user_index].last_name +
+                    "</option>"
+            }
+
             newrow = _datatable.row.add([
                 "<td>"+cost_center.programme_name+"</td>",
                 "<td class=\"cost_center_name\">"+cost_center.cost_center_name+"</td>",
-                "<td>"+cost_center.user_name+"</td>",
+                "<td><select class=\"resp-select\" name=\"Verantwoordelijkenlijst kostenplaats "+cost_center.id+"\" id=\"resp-list-"+cost_center.id+"\">"+rowstring+"</select></td>",
                 "<td>"+cost_center.description+"</td>",
                 "<td><input class=\"input-budget\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
-                "                           min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
+                "                           step=\"0.01\" min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
                 "<td><button type=\"submit\" class=\"deleteCostCenter\">\n" +
                 "                        <i class=\"fas fa-trash-alt\" data-toggle=\"tooltip\" title=\"Verwijder kostenplaats "+cost_center.cost_center_name+"\"></i></button></td>"
             ]).draw().node();
@@ -362,6 +372,8 @@
             $("td:last-child").addClass("text-center");
             jQuery.data(newrow, "id", cost_center.cost_center_id);
             $(newrow).on('click','.deleteCostCenter', cost_center_delete_click);
+            $(newrow).on('change', '.input-budget', onBudgetChange);
+            $(newrow).on('change', '.resp-select', onResponsibleChanged);
             if(!cost_center_names.includes((cost_center.cost_center_name))){
                 $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
             }
