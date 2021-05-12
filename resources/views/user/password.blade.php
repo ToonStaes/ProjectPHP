@@ -9,7 +9,6 @@
                 <h1>Wachtwoord aanpassen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u uw wachtwoord wijzigen."></i></h1>
                 <div class="card">
                     <div class="card-body">
-                        @include('shared.alert')
                         <form action="/user/password" method="post">
                             @csrf
                             <div class="form-group">
@@ -59,33 +58,53 @@
 
 @section('script_after')
     <script>
-            //current password
-            document.querySelector('#togglePasswordCurrent').addEventListener('click', function (e) {
-                // toggle the type attribute
-                const type = document.querySelector('#current_password').getAttribute('type') === 'password' ? 'text' : 'password';
-                document.querySelector('#current_password').setAttribute('type', type);
-                // toggle the eye slash icon
-                this.classList.toggle('fa-eye-slash');
-            });
+        //current password
+        document.querySelector('#togglePasswordCurrent').addEventListener('click', function (e) {
+            // toggle the type attribute
+            const type = document.querySelector('#current_password').getAttribute('type') === 'password' ? 'text' : 'password';
+            document.querySelector('#current_password').setAttribute('type', type);
+            // toggle the eye slash icon
+            this.classList.toggle('fa-eye-slash');
+        });
 
-            //new password 1
-            document.querySelector('#togglePasswordNew1').addEventListener('click', function (e) {
-                // toggle the type attribute
-                const type = document.querySelector('#password').getAttribute('type') === 'password' ? 'text' : 'password';
-                document.querySelector('#password').setAttribute('type', type);
-                // toggle the eye slash icon
-                this.classList.toggle('fa-eye-slash');
-            });
+        //new password 1
+        document.querySelector('#togglePasswordNew1').addEventListener('click', function (e) {
+            // toggle the type attribute
+            const type = document.querySelector('#password').getAttribute('type') === 'password' ? 'text' : 'password';
+            document.querySelector('#password').setAttribute('type', type);
+            // toggle the eye slash icon
+            this.classList.toggle('fa-eye-slash');
+        });
 
-            //new password 2
-            document.querySelector('#togglePasswordNew2').addEventListener('click', function (e) {
-                // toggle the type attribute
-                const type = document.querySelector('#password_confirmation').getAttribute('type') === 'password' ? 'text' : 'password';
-                document.querySelector('#password_confirmation').setAttribute('type', type);
-                // toggle the eye slash icon
-                this.classList.toggle('fa-eye-slash');
-            });
+        //new password 2
+        document.querySelector('#togglePasswordNew2').addEventListener('click', function (e) {
+            // toggle the type attribute
+            const type = document.querySelector('#password_confirmation').getAttribute('type') === 'password' ? 'text' : 'password';
+            document.querySelector('#password_confirmation').setAttribute('type', type);
+            // toggle the eye slash icon
+            this.classList.toggle('fa-eye-slash');
+        });
 
+        @if (session()->has('success'))
+            let success = new Noty({
+                text: '{!! session()->get('success') !!}',
+                type: 'success',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
+        @if (session()->has('danger'))
+            let error = new Noty({
+                text: '{!! session()->get('danger') !!}',
+                type: 'error',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
 
     </script>
 @endsection

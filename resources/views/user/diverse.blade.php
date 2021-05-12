@@ -7,7 +7,6 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <h1>Diverse vergoeding aanvragen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u een vergoeding aanvragen voor diverse aankopen of voor een autorit."></i></h1>
-                @include('shared.alert')
                 <div class="card">
                     <div class="card-body" id="FormDiv">
                         <button class="btn btn-primary" id="btnaddvergoeding"><i class="fas fa-plus-square"></i> Kost toevoegen</button>
@@ -146,5 +145,25 @@
                 $( this ).parent().parent().find('.IsAuto').removeAttr('required');
             }
         });
+        @if (session()->has('success'))
+            let success = new Noty({
+                text: '{!! session()->get('success') !!}',
+                type: 'success',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
+        @if (session()->has('danger'))
+            let error = new Noty({
+                text: '{!! session()->get('danger') !!}',
+                type: 'error',
+                layout: "topRight",
+                timeout: 5000,
+                progressBar: true,
+                modal: false
+            }).show();
+        @endif
     </script>
 @endsection

@@ -33,7 +33,7 @@
             loadTable();
 
             $(".close").click(function () {
-                $('#modal-mailcontent').modal('hide');
+                $('.modal').modal('hide');
             })
         });
 
