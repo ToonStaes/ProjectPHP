@@ -68,6 +68,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuleren</button>
+        <button type="button" class="btn btn-secondary annuleren">Annuleren</button>
         <button type="submit" class="btn btn-primary">Opslaan</button>
     </div>

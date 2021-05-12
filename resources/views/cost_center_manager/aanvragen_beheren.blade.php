@@ -48,6 +48,7 @@
                         <input type="hidden" value="" name="keuring" id="commentaar-keuring">
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary annuleren">Annuleren</button>
                         <input type="submit" class="btn btn-primary" value="Opslaan">
                     </div>
                 </form>
@@ -101,6 +102,10 @@
             buildTable();
 
             $(".close").click(function () {
+                $("#commentaar-modal").modal('hide');
+            })
+
+            $(".annuleren").click(function () {
                 $("#commentaar-modal").modal('hide');
             })
 

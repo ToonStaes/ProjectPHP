@@ -116,6 +116,11 @@
                 $("#gebruiker_bewerken").modal('hide');
             })
 
+            $(".annuleren").click(function () {
+                $("#gebruiker_toevoegen").modal('hide');
+                $("#gebruiker_bewerken").modal('hide');
+            })
+
             $('tbody').on('click', '.btn-delete', function () {
                 let id = $(this).data('id');
                 deleteUser(id);
