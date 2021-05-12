@@ -230,12 +230,12 @@
 
         $("#cost_center_submit").on("click", function(){
             user_id = parseInt($("#responsible_list").val(), 10);
-            user_name = $("#responsible_list option:selected").text();
+            user_name = htmlEntities($("#responsible_list option:selected").text());
             programme_id = parseInt($("#programmes_list").val(), 10);
-            programme_name = $("#programmes_list option:selected").text();
-            cost_center_name = $("#cost_center_input").val();
+            programme_name = htmlEntities($("#programmes_list option:selected").text());
+            cost_center_name = htmlEntities($("#cost_center_input").val());
             cost_center_id = $("#cost_centers_list option:selected").data("id");
-            description = $("#descr_input").val() ?? " ";
+            description = htmlEntities($("#descr_input").val() ?? " ");
             if(description.length == 0) description = " ";
 
             budget = parseInt($("#budget_input").val(), 10);
@@ -295,6 +295,7 @@
             _datatable.sort();
             $("td:nth-child(2)").addClass("cost_center_name");
             $("td:last-child").addClass("text-center");
+            jQuery.data(newrow, "id", cost_center.cost_center_id);
             $(newrow).on('click','.deleteCostCenter', cost_center_delete_click);
             if(!cost_center_names.includes((cost_center.cost_center_name))){
                 $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
@@ -367,6 +368,10 @@
                 progressBar: true,
                 modal: false
             }).show();
+        }
+
+        function htmlEntities(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
     </script>
 @endsection
