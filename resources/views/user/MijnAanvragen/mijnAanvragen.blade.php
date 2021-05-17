@@ -218,17 +218,17 @@
                         let FE;
 
                         if (CCMComment == null) {
-                            CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `" data-placement="top">` + statusCCM + ` <i class="fas fa-info-circle"></i></p>`
+                            CCM = `<p>` + statusCCM + ` <i class="fas fa-info-circle" data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke:` + CCMName + `" data-placement="top"></i></p>`
                         } else {
-                            CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + ` <i class="fas fa-info-circle"></i></p>`
+                            CCM = `<p>` + statusCCM + ` <i class="fas fa-info-circle" data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top"></i></p>`
                         }
 
                         if (FEName === " ") {
                             FE = statusFE;
                         } else if (FEComment == null && (FEName !== " ")) {
-                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + ` <i class="fas fa-info-circle"></i></p>`
+                            FE = `<p>` + statusFE + ` <i class="fas fa-info-circle" data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top"></i></p>`
                         } else {
-                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + ` <i class="fas fa-info-circle"></i></p>`
+                            FE = `<p>` + statusFE + ` <i class="fas fa-info-circle" data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top"></i></p>`
                         }
 
                         if ((statusCCM === "in afwachting") || (statusFE === "afgekeurd")) {
@@ -287,17 +287,17 @@
                         let FE;
 
                         if (CCMComment == null) {
-                            CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `" data-placement="top">` + statusCCM + ` <i class="fas fa-info-circle"></i></p>`
+                            CCM = `<p>` + statusCCM + ` <i class="fas fa-info-circle"  data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `" data-placement="top"></i></p>`
                         } else {
-                            CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + ` <i class="fas fa-info-circle"></i></p>`
+                            CCM = `<p>` + statusCCM + ` <i class="fas fa-info-circle" data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top"></i></p>`
                         }
 
                         if (FEComment == null && FEName == null) {
                             FE = statusFE;
                         } else if (FEComment == null && FEName !== " ") {
-                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + ` <i class="fas fa-info-circle"></i></p>`
+                            FE = `<p>` + statusFE + ` <i class="fas fa-info-circle"  data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top"></i></p>`
                         } else {
-                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + ` <i class="fas fa-info-circle"></i></p>`
+                            FE = `<p>` + statusFE + ` <i class="fas fa-info-circle"  data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top"></i></p>`
                         }
 
                         if (((statusCCM === "in afwachting" || statusCCM === "afgekeurd")) || (statusFE === "afgekeurd")) {
@@ -346,9 +346,9 @@
                         if (FEComment == null && FEName == null) {
                             FE = statusFE;
                         } else if (FEComment == null && FEName !== " ") {
-                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + ` <i class="fas fa-info-circle"></i></p>`
+                            FE = `<p>` + statusFE + ` <i class="fas fa-info-circle" data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top"></i></p>`
                         } else {
-                            FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + ` <i class="fas fa-info-circle"></i></p>`
+                            FE = `<p>` + statusFE + ` <i class="fas fa-info-circle" data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top"></i></p>`
                         }
 
                         table.row.add([
@@ -362,13 +362,7 @@
                             null
                         ]).draw(false);
                     })
-                    tooltips();
                 })
-        }
-
-        // bootstrap tooltips
-        function tooltips() {
-            $('[data-toggle="tooltip"]').tooltip({html:true})
         }
     </script>
 

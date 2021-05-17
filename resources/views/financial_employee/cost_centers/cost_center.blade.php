@@ -6,9 +6,9 @@
 @endsection
 
 @section('main')
-    <h1>Kostenplaatsen beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u kostenplaatsen toevoegen en verwijderen. Ook kan u hier het budget van de kostenplaats wijzigen."></i></h1>
+    <h1>Kostenplaatsen beheren <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u kostenplaatsen toevoegen en verwijderen. Ook kan u hier de kostenplaatsen wijzigen."></i></h1>
     <button class="btn btn-primary mb-4" id="button-cost_center-add"> <i class="fas fa-plus"></i> Kostenplaats toevoegen</button>
-    <button class="btn btn-primary float-right" id="button-save" data-toggle="tooltip" data-placement="left" title="De wijzigingen van de budgetten opslaan.">Opslaan</button>
+    <button class="btn btn-primary float-right" id="button-save" data-toggle="tooltip" data-placement="left" title="De wijzigingen van de kostenplaatsen opslaan.">Opslaan</button>
     <table id="tabel" class="table">
         <thead>
         <tr>
@@ -68,6 +68,7 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script>
+        let message = "";
         let budgets_changed = [];
         let responsible_changed = [];
         let active_changed = [];
@@ -103,7 +104,9 @@
                         "last": "Laatste"
                     }
                 }
+
             });
+
 
             $('#cost_center_form_modal').modal();
 
@@ -120,17 +123,28 @@
 
             $(".search-dropdown").select2();
         });
-
+        $(document).ajaxStop(function() {
+            if (message !== ""){
+                show_success_notification(message);
+                message = "";
+            }
+        });
         /*
         *   When we want to save our changes by pressing the button,
         *   we send an asynchronous ajax request to the server,
         *   updating the resource with our specified data
         * */
         $('#button-save').on('click', function(){
+
+
             send_budget_changes();
             send_responsibles_changed();
             send_actives_changed();
+
+
+
         });
+
 
         $('.input-budget').change($.proxy(onBudgetChange));
 
@@ -170,7 +184,9 @@
                         for(budget in budgets_changed){
                             if (budgets_changed[budget] == this.toCheck) budgets_changed.splice(budget, 1);
                         }
-                        show_success_notification("De budgetten werden succesvol geüpdated.");
+                        if (!message.includes("De budgetten werden succesvol geüpdated.")){
+                            message += " De budgetten werden succesvol geüpdated.";
+                        }
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
                             show_failure_notification("Er is een fout gebeurt bij het opslaan van de budgetten");
@@ -202,7 +218,11 @@
                         for(responsible in responsible_changed){
                             if(responsible_changed[responsible] == this.toCheck) responsible_changed.splice(responsible, 1);
                         }
-                        show_success_notification("De verantwoordelijken werden succesvol geüpdated.");
+
+                        if (!message.includes("De verantwoordelijken werden succesvol geüpdated.")){
+                            message += " De verantwoordelijken werden succesvol geüpdated.";
+                        }
+
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
                             show_failure_notification("Er is een fout gebeurt bij het opslaan van de verantwoordelijken.");
@@ -234,7 +254,10 @@
                         for(state in active_changed){
                             if(active_changed[state] == this.toCheck) active_changed.splice(state, 1);
                         }
-                        show_success_notification("De statussen werden succesvol geüpdated.");
+                        if (!message.includes("De statussen werden succesvol geüpdated.")){
+                            message += " De statussen werden succesvol geüpdated.";
+                        }
+
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
                             show_failure_notification("Er is een fout gebeurt bij het opslaan van de statussen.");
@@ -332,7 +355,10 @@
                 context: {id: center_id, name: center_name}
             }).done(function(data){
                 delete_cost_center_row(this.id, this.name);
-                show_success_notification("De kostenplaats werd succesvol verwijderd.");
+                if (!message.includes("De kostenplaats werd succesvol verwijderd.")){
+                    message += " De kostenplaats werd succesvol verwijderd.";
+                }
+
             }).fail(function(jqXHR, statusText, errorText){
                 if(jqXHR.status == 500){
                     show_failure_notification("Er is een fout gebeurt bij het verwijderen.");
@@ -453,7 +479,9 @@
                 reset_form();
                 this.cost_center.cost_center_id = data.id;
                 add_cost_center(this.cost_center);
-                show_success_notification("De kostenplaats werd succesvol opgeslaan.");
+                if (!message.includes("De kostenplaats werd succesvol opgeslagen.")){
+                    message += " De kostenplaats werd succesvol opgeslagen.";
+                }
             }).fail(function(jqXHR, statusText, errorText){
                 //  Laravels form validation error code is 422
                 if(jqXHR.status == 409){

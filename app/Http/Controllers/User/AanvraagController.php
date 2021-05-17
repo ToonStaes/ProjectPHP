@@ -147,7 +147,9 @@ class AanvraagController extends Controller
             ->get()
             ->transform(function ($item, $key){
                 $item->status_FE = $item->status->name;
-                $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
+                if ($item->financial_employee != null){
+                    $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
+                }
 
                 $parameters = $item->bike_reimbursement_parameters;
                 $amount_per_km = null;
