@@ -35,6 +35,10 @@
             $(".close").click(function () {
                 $('.modal').modal('hide');
             })
+
+            $('.annuleren').click(function () {
+                $('#modal-mailcontent').modal('hide');
+            })
         });
 
         // load mailcontents with AJAX
@@ -82,6 +86,8 @@
             // Show the modal
             $('#modal-mailhelp').modal('show');
         });
+
+
 
         $('#modal-mailcontent form').submit(function (e) {
             // Don't submit the form
