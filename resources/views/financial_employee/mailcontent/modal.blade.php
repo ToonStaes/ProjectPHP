@@ -23,6 +23,7 @@
                         <input type="hidden" id="mailtype" name="mailtype">
                     </div>
                     <button type="submit" class="btn btn-primary">Sla mailtekst op</button>
+                    <button type="button" class="btn btn-secondary annuleren">Annuleren</button>
                 </form>
             </div>
         </div>
