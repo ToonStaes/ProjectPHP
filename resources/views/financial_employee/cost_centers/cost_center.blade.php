@@ -25,7 +25,13 @@
             <tr data-id="{{$cost_center->id}}">
                 <td>{{($cost_center->programmes[0]->name) ?? "Geen opleiding"}}</td>
                 <td class="cost_center_name">{{$cost_center->name}}</td>
-                <td>{{$cost_center->user->first_name." ".$cost_center->user->last_name}}</td>
+                <td>
+                    <select class="resp-select search-dropdown" name="Verantwoordelijkenlijst kostenplaats {{$cost_center->id}}" id="resp-list-{{$cost_center->id}}">
+                        @foreach($users as $user)
+                            <option value="{{$user->id}}" {{($cost_center->user->id == $user->id) ? "selected" : ""}}>{{$user->first_name." ".$user->last_name}}</option>
+                        @endforeach
+                    </select>
+                </td>
                 <td>{{$cost_center->description}}</td>
                 <td><input class="input-budget" type="number"
                            value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"
@@ -65,10 +71,12 @@
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
     <script>
         let budgets_changed = [];
+        let responsible_changed = [];
         let cost_center_names = [];
         let _csrf = "{{csrf_token()}}";
         let _query_url = "http://cma.test/cost_centers/";
         let _datatable;
+        let _managers = {!! $users !!};
 
         $(document).ready( function () {
             $('#notification').hide();
@@ -106,12 +114,12 @@
                 }
             });
 
-            //$('.deleteCostCenter').tooltip({html:true, container:'body', boundary:'window'});
-
             document.getElementById("cost_center_form").addEventListener("submit", function(event){
                 event.preventDefault();
                 event.stopPropagation();
             });
+
+            $(".search-dropdown").select2();
         });
 
         /*
@@ -121,13 +129,24 @@
         * */
         $('#button-save').on('click', function(){
             send_budget_changes();
+            send_responsibles_changed();
         });
 
-        $('.input-budget').change(function() {
-            budget = $(this).val();
+        $('.input-budget').change($.proxy(onBudgetChange));
+
+        function onBudgetChange(){
+            budget = parseInt($(this).val(), 10);
             id = parseInt($(this).parent().parent().data("id"), 10);
             modify_budgets_changed(id, budget);
-        });
+        }
+
+        $('.resp-select').change($.proxy(onResponsibleChanged));
+
+        function onResponsibleChanged(){
+            resp_id = parseInt($(this).val(), 10);
+            id = parseInt($(this).parent().parent().data("id"), 10);
+            modify_responsible_changed(id, resp_id);
+        }
 
         function send_budget_changes(){
             if(!(budgets_changed.length === 0)){
@@ -146,7 +165,7 @@
                         show_success_notification("De budgetten werden succesvol geüpdated.");
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
-                            show_failure_notification("Er is een fout gebeurt bij het opslaan");
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de budgetten");
                             return;
                         }
                         this.tryCount++;
@@ -154,7 +173,39 @@
                         jQuery.ajax(this);
                     }).always(function(){
                         if(this.tryCount>this.tryLimit){
-                            show_failure_notification("Er is een fout gebeurt bij het opslaan");
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de budgetten");
+                        }
+                    });
+                }
+            }
+        }
+
+        function send_responsibles_changed(){
+            if(!(responsible_changed.length === 0)){
+                for(responsible_index in responsible_changed){
+                    jQuery.ajax({
+                        url: _query_url+responsible_changed[responsible_index].id,
+                        method: "PUT",
+                        tryCount: 0,
+                        tryLimit: 3,
+                        context: {toCheck: responsible_changed[responsible_index]},
+                        data: responsible_changed[responsible_index]
+                    }).done(function(){
+                        for(responsible in responsible_changed){
+                            if(responsible_changed[responsible] == this.toCheck) responsible_changed.splice(responsible, 1);
+                        }
+                        show_success_notification("De verantwoordelijken werden succesvol geüpdated.");
+                    }).fail(function(jqXHR, statusText, errorText){
+                        if(jqXHR.status == 500){
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de verantwoordelijken.");
+                            return;
+                        }
+                        this.tryCount++;
+                        if(this.tryCount > this.tryLimit) return;
+                        jQuery.ajax(this);
+                    }).always(function(){
+                        if(this.tryCount > this.tryLimit){
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de verantwoordelijken.")
                         }
                     });
                 }
@@ -167,7 +218,7 @@
             *   if not, add it, else update the value in the array
             * */
             isPresent = false;
-            if(budgets_changed.length === 0) budgets_changed.push({id: center_id, budget: center_budget})
+            if(budgets_changed.length === 0) budgets_changed.push({id: center_id, budget: center_budget});
             else {
                 for(budget_index in budgets_changed) {
                     if(budgets_changed[budget_index].id === center_id) {
@@ -177,6 +228,25 @@
                     }
                 }
                 if(!isPresent) budgets_changed.push({id: center_id, budget: center_budget});
+            }
+        }
+
+        function modify_responsible_changed(center_id, resp_id){
+            /*
+            *   Check if the changed person responsible is already in the array
+            *   if not, add it, else update the value in the array
+            * */
+            isPresent = false;
+            if(responsible_changed.length === 0) responsible_changed.push({id: center_id, resp: resp_id});
+            else {
+                for(resp_index in responsible_changed) {
+                    if(responsible_changed[resp_index].id === center_id){
+                        responsible_changed[resp_index].resp = resp_id;
+                        isPresent = true;
+                        break;
+                    }
+                }
+                if(!isPresent) responsible_changed.push({id: center_id, resp: resp_id});
             }
         }
 
@@ -230,12 +300,12 @@
 
         $("#cost_center_submit").on("click", function(){
             user_id = parseInt($("#responsible_list").val(), 10);
-            user_name = $("#responsible_list option:selected").text();
+            user_name = htmlEntities($("#responsible_list option:selected").text());
             programme_id = parseInt($("#programmes_list").val(), 10);
-            programme_name = $("#programmes_list option:selected").text();
-            cost_center_name = $("#cost_center_input").val();
+            programme_name = htmlEntities($("#programmes_list option:selected").text());
+            cost_center_name = htmlEntities($("#cost_center_input").val());
             cost_center_id = $("#cost_centers_list option:selected").data("id");
-            description = $("#descr_input").val() ?? " ";
+            description = htmlEntities($("#descr_input").val() ?? " ");
             if(description.length == 0) description = " ";
 
             budget = parseInt($("#budget_input").val(), 10);
@@ -281,13 +351,20 @@
 
             update_cost_center_names();
 
+            rowstring = "";
+            for(user_index in _managers){
+                rowstring += "<option value=\""+_managers[user_index].id+"\" "+ ((_managers[user_index].id === cost_center.user_id) ? "selected" : "") +">" +
+                    _managers[user_index].first_name + " " + _managers[user_index].last_name +
+                    "</option>"
+            }
+
             newrow = _datatable.row.add([
                 "<td>"+cost_center.programme_name+"</td>",
                 "<td class=\"cost_center_name\">"+cost_center.cost_center_name+"</td>",
-                "<td>"+cost_center.user_name+"</td>",
+                "<td><select class=\"resp-select\" name=\"Verantwoordelijkenlijst kostenplaats "+cost_center.id+"\" id=\"resp-list-"+cost_center.id+"\">"+rowstring+"</select></td>",
                 "<td>"+cost_center.description+"</td>",
-                "<td><input class=\"input-budget\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
-                "                           min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
+                "<td><input class=\"input-budget search-dropdown\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
+                "                           step=\"0.01\" min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
                 "<td><button type=\"submit\" class=\"deleteCostCenter\">\n" +
                 "                        <i class=\"fas fa-trash-alt\" data-toggle=\"tooltip\" title=\"Verwijder kostenplaats "+cost_center.cost_center_name+"\"></i></button></td>"
             ]).draw().node();
@@ -295,7 +372,10 @@
             _datatable.sort();
             $("td:nth-child(2)").addClass("cost_center_name");
             $("td:last-child").addClass("text-center");
+            jQuery.data(newrow, "id", cost_center.cost_center_id);
             $(newrow).on('click','.deleteCostCenter', cost_center_delete_click);
+            $(newrow).on('change', '.input-budget', onBudgetChange);
+            $(newrow).on('change', '.resp-select', onResponsibleChanged);
             if(!cost_center_names.includes((cost_center.cost_center_name))){
                 $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
             }
@@ -367,6 +447,10 @@
                 progressBar: true,
                 modal: false
             }).show();
+        }
+
+        function htmlEntities(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
     </script>
 @endsection
