@@ -19,6 +19,7 @@ Auth::routes();
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::redirect('home', '/');
 Route::view('/', 'home');
+Route::view('register', 'errors.404');
 
 Route::get('user/firstPassword', 'User\PasswordController@edit');
 Route::post('user/password', 'User\PasswordController@update');
