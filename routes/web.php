@@ -64,7 +64,6 @@ Route::middleware(['auth', 'changed_password' ,'cost_center_manager'])->prefix('
     Route::get('/help/kostenplaatsenVergelijken', 'HelpController@compareCostcenters');
 });
 
-
 Route::middleware(['auth', 'changed_password' ,'financial_employee'])->group(function () {
   Route::get('/users/getUsers', 'financial_employee\UserController@getUsers');
   Route::get('/users/getProgrammes', 'financial_employee\UserController@getProgrammes');
