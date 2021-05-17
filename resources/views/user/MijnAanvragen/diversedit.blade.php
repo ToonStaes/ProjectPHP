@@ -1,13 +1,11 @@
 @extends('layouts.template')
 
 @section('title', 'Diverse vergoeding aanpassen')
-
 @section('main')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h1>Diverse vergoeding aanpassen</h1>
-                @include('shared.alert')
+                <h1>Diverse vergoeding aanpassen <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Op deze pagina kan u uw aanvraag aanpassen voor diverse aankopen of voor een autorit."></i></h1>
                 <div class="card">
                     <div class="card-body" id="FormDiv">
                         <button class="btn btn-primary" id="btnaddvergoeding"><i class="fas fa-plus-square"></i> Kost toevoegen</button>
@@ -97,7 +95,7 @@
                                     </div>
                                     <hr>
                                 </div></div>
-                            <button class="btn btn-success" id="btndienin" type="submit">Indienen</button>
+                            <button class="btn btn-primary" id="btndienin" type="submit">Indienen</button>
                         </form>
                     </div>
                 </div>
@@ -107,6 +105,7 @@
 @endsection
 @section('script_after')
     <script>
+
         $aantalaanvragen = 1;
 
         let $kostenplaatsen = {!! $kostenplaatsen !!};
@@ -231,5 +230,25 @@
         });
 
         BuildPage();
+        @if (session()->has('success'))
+        let success = new Noty({
+            text: '{!! session()->get('success') !!}',
+            type: 'success',
+            layout: "topRight",
+            timeout: 5000,
+            progressBar: true,
+            modal: false
+        }).show();
+        @endif
+        @if (session()->has('danger'))
+        let error = new Noty({
+            text: '{!! session()->get('danger') !!}',
+            type: 'error',
+            layout: "topRight",
+            timeout: 5000,
+            progressBar: true,
+            modal: false
+        }).show();
+        @endif
     </script>
 @endsection

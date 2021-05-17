@@ -40,6 +40,26 @@
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
 
     <script>
+        @if (session()->has('success'))
+        let success = new Noty({
+            text: '{!! session()->get('success') !!}',
+            type: 'success',
+            layout: "topRight",
+            timeout: 5000,
+            progressBar: true,
+            modal: false
+        }).show();
+        @endif
+        @if (session()->has('danger'))
+        let error = new Noty({
+            text: '{!! session()->get('danger') !!}',
+            type: 'error',
+            layout: "topRight",
+            timeout: 5000,
+            progressBar: true,
+            modal: false
+        }).show();
+        @endif
         $(document).ready(function () {
             buildTable();
 
