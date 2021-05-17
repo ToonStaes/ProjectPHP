@@ -26,11 +26,6 @@ class UserController extends Controller
      */
     public function index()
     {
-//        $users = $this->getUsers();
-//
-//        $result = compact('users');
-//        Json::dump($result);
-
         return view('financial_employee.users.index');
     }
 

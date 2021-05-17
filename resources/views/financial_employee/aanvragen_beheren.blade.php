@@ -165,7 +165,6 @@
 
                     $.post(action, pars, 'json')
                         .done(function (data) {
-                            console.log(data);
                             let notification = new Noty({
                                 type: "success",
                                 text: "Beoordeling opgeslagen",
@@ -176,9 +175,6 @@
                             }).show();
 
                             buildTable();
-                        })
-                        .fail(function (data) {
-                            console.log(data);
                         });
                 }
             });
@@ -191,7 +187,6 @@
 
                 $.post(action, pars, 'json')
                     .done(function (data) {
-                        console.log(data);
                         $("#commentaar-modal").modal('hide');
                         $("#commentaar-modal form textarea").val("");
 
@@ -205,9 +200,6 @@
                         }).show();
 
                         buildTable();
-                    })
-                    .fail(function (data) {
-                        console.log(data);
                     });
             });
 
@@ -241,7 +233,6 @@
 
             $.getJSON('/financial_employee/getRequests')
                 .done(function (data) {
-                    console.log('data', data);
                     // tbody leeg maken
                     table.clear();
 
@@ -423,9 +414,6 @@
 
                     $("#openstaande_betalingen").text(`Openstaande betalingen uitbetalen (€${(data.total_open_payments).toFixed(2)})`);
                     makeTooltipsVisible();
-                })
-                .fail(function (e) {
-                    console.log('error', e);
                 });
         }
 
@@ -439,7 +427,6 @@
 
             $.getJSON('/financial_employee/getOpenPayments')
                 .done(function (data) {
-                    console.log('data', data);
                     $.each(data.diverse_requests, function (key, val) {
                         $("#openstaande_betalingen_modal").append("<p>" + val.username + " (" + val.iban + ") - €" + val.amount + ": " + val.description +"</p>")
                     });
@@ -449,9 +436,6 @@
                     $.each(data.bike_reimbursements, function (key, val) {
                         $("#openstaande_betalingen_modal").append("<p>" + val.username + " (" + val.iban + ") - €" + val.amount + ": " + val.name +"</p>")
                     });
-                })
-                .fail(function (e) {
-                    console.log('error', e);
                 });
         }
     </script>
