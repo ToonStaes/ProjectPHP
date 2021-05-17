@@ -49,9 +49,4 @@ class HelpController extends Controller
     public function manageRequestsCC(){
         return view('cost_center_manager.help.manageRequest');
     }
-
-    public function compareCostcenters(){
-        return view('cost_center_manager.help.compareCostcenters');
-    }
-
 }
