@@ -329,6 +329,10 @@
                         $.each(data.statuses, function (key, value2) {
                             status_counter += 1;
 
+                            if (value.status_FE === "betaald") {
+                                select+= `<option selected>betaald</option>`;
+                            }
+
                             if (status_counter <= 3){
                                 select += `<option`;
                                 if (value2.name === value.status_FE){
@@ -337,9 +341,13 @@
                                 select +=  `>${value2.name}</option>`;
                             }
                         })
-                        select += `</select></span>`;;
+                        select += `</select></span>`;
 
-                        let request_date = value.laptop_invoice.purchasedate;
+                        let request_date = value.laptop_invoice.updated_at;
+                        if (request_date == null){
+                            request_date = value.laptop_invoice.created_at;
+                        }
+
                         let cost_center = '';
                         $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
                             if (value2.parameter.standard_Cost_center_id != null){
@@ -360,7 +368,7 @@
                             cost_center,
                             user_name,
                             value.laptop_invoice.invoice_description,
-                            "€" + (value.amount).toFixed(2),
+                            "€" + (value.laptop_invoice.amount).toFixed(2),
                             evidence,
                             status_cc_manager,
                             select
@@ -436,7 +444,7 @@
                         $("#openstaande_betalingen_modal").append("<p>" + val.username + " (" + val.iban + ") - €" + val.amount + ": " + val.description +"</p>")
                     });
                     $.each(data.laptop_requests, function (key, val) {
-                        $("#openstaande_betalingen_modal").append("<p>" + val.username + " (" + val.iban + ") - €" + val.amount + ": " + val.description +"</p>")
+                        $("#openstaande_betalingen_modal").append("<p>" + val.laptop_invoice.username + " (" + val.laptop_invoice.iban + ") - €" + val.laptop_invoice.amount + ": " + val.laptop_invoice.invoice_description +"</p>")
                     });
                     $.each(data.bike_reimbursements, function (key, val) {
                         $("#openstaande_betalingen_modal").append("<p>" + val.username + " (" + val.iban + ") - €" + val.amount + ": " + val.name +"</p>")

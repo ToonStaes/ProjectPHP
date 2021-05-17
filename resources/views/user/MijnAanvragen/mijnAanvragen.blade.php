@@ -281,7 +281,7 @@
 
                         let CCMName = value.cc_manager_name;
                         let CCMComment = value.comment_Cost_center_manager;
-                        let FEName = value.fe_name;
+                        let FEName = value.financial_employee_name;
                         let FEComment = value.comment_Financial_employee;
                         let CCM;
                         let FE;
@@ -368,7 +368,7 @@
 
         // bootstrap tooltips
         function tooltips() {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip({html:true})
         }
     </script>
 
