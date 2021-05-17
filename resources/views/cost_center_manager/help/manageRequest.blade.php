@@ -22,6 +22,9 @@
         <p><img src="/assets/icons/help/financial_employee/manageRequest/comment.png" alt="Commentaar"></p>
         <p>Als je een aanvraag afgekeurd hebt, kan je je commentaar bekijken door met je muis over de dropdownlijst te gaan staan. Als een financiële medewerker deze aanvraag beoordeeld heeft, kan je de gegevens daarvan bekijken door met je muis op het <i class="fas fa-info-circle"></i> in de laatste kolom te gaan staan.</p>
         <p><img src="/assets/icons/help/cost_center_manager/manageRequests/i.png" alt="Commentaar financieel medewerker"></p>
+        <div>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/YP3OQwOL6xA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
         <a href="#!" class="btn btn-primary m-0 mt-2" id="back">Terug</a>
     </div>
 @endsection

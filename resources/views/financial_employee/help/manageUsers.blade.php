@@ -29,6 +29,10 @@
             <p>Rechts bij elke gebruiker staan 2 knopjes: een potloodje om te bewerken en een vuilbakje om de gebruiker te deactiveren: <img src="/assets/icons/help/financial_employee/manageUsers/editDelete.png" alt="Bewerken en verwijderen van een gebruiker"></p>
             <p>Het vuilbakje verwijdert de gebruiker dus niet, maar zorgt er wel voor dat deze niet meer kan inloggen.</p>
             <p>Het bewerken van een gebruiker gebeurt identiek aan het aanmaken van een gebruiker. Je kan alle gegevens gewoon aanpassen en nadien op de knop “opslaan” drukken.</p>
+        <h2>Bekijk hier het demonstratiefilmpje</h2>
+        <div>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/S2-V_wX8iRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
         <a href="#!" class="btn btn-primary m-0 mt-2" id="back">Terug</a>
     </div>
 @endsection

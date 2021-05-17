@@ -21,7 +21,10 @@
         <h2>Aanvragen uitbetalen</h2>
         <p>Een goedgekeurde aanvraag is natuurlijk nog niet betaald. Om deze aanvragen uit te betalen, kan je rechts bovenaan klikken op ‘Openstaande betalingen uitbetalen’. <img src="/assets/icons/help/financial_employee/manageRequest/pay.png" alt="Openstaande betalingen"></p>
         <p>Dit zijn alle aanvragen die goedgekeurd zijn door een financiële medewerker, maar die nog niet betaald zijn. Na het drukken op deze knop krijg je nog een overzicht van alle aanvragen die betaald worden, hier kan je nog eens controleren of alles correct ingevuld is. Zolang een aanvraag nog niet betaald is, kan deze nog aangepast worden dus kijk dit zeker goed na.</p>
-
+        <h2>Bekijk hier het demonstratiefilmpje</h2>
+        <div>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/88lxG567Is8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
         <a href="#!" class="btn btn-primary m-0 mt-2" id="back">Terug</a>
     </div>
 @endsection
