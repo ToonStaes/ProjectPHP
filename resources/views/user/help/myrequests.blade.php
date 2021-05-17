@@ -34,6 +34,13 @@
         <p>Ook kan je nog bewijsstukken verwijderen door op het kruisje naast het bewijsstuk te klikken.</p>
         <p><img src="/assets/images/BestaandeBewijsstukken.png" alt="Bestaande bewijsstukken"></p>
         <p>Extra bewijsstukken uploaden kan op dezelfde manier als voorheen.</p>
+        
+        <h2>Bekijk hier het demonstratiefilmpje</h2>
+        <div>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/9bV1FBjZq6A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/Qb6AlEzy4QQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        
         <a href="#!" class="btn btn-primary m-0 mt-2" id="back">Terug</a>
     </div>
 @endsection

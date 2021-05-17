@@ -23,6 +23,10 @@
         <p>Voor de opgeslagen, blauw gekleurde, fietsritten kan een fietsvergoeding aangevraagd worden. Dit kan door op de knop “Aanvraag indienen”. </p>
         <p>De aangevraagde fietsritten krijgen een grijze achtergrondkleur en kunnen niet meer aangepast worden.</p>
         <p><img src="/assets/icons/help/user/bike/request.png" alt="Fietsvergoeding aanvragen"></p>
+        <h2>Bekijk hier het demonstratiefilmpje</h2>
+        <div>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/ukKXXLm9HPU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
         <a href="#!" class="btn btn-primary m-0 mt-2" id="back">Terug</a>
     </div>
 @endsection

@@ -8,6 +8,19 @@
         <div class="container row justify-content-between">
             @auth
                 <div class="col-md-6">
+                    <a class="card" href="help/uitgebreid">
+                        <div class="card-body container row">
+                            <div class="col-sm-3 col-md-12 col-lg-3" >
+                                <i style="font-size: 50px;" class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="col-sm-9 col-md-12 col-lg-9">
+                                <h5 class="card-title">Uitgebreide helpfunctie</h5>
+                                <p class="card-text">Hier vind u een uitgebreid demonstratiefilmpje en een handleiding.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6">
                     <a class="card" href="help/fietsvergoeding">
                         <div class="card-body container row">
                             <div class="col-sm-3 col-md-12 col-lg-3" >

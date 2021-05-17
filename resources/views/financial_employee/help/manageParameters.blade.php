@@ -22,6 +22,10 @@
         <h2>Standaard kostenplaats van de fietsvergoeding aanpassen</h2>
         <p>In het invoerveld vindt u de standaard kostenplaats voor de fietsvergoeding op dit moment. Deze kan u aanpassen door een andere kostenplaats te selecteren in de dropdownlijst, het is ook mogelijk om in deze lijst te zoeken. De waarde wordt opgeslagen bij het klikken op de knop “Parameters opslaan”.</p>
         <p><img src="/assets/icons/help/financial_employee/manageParameters/kostenplaatsFiets.png" alt="Standaard kostenplaats fietsvergoeding"></p>
+        <h2>Bekijk hier het demonstratiefilmpje</h2>
+        <div>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/8rp_dPN8YeU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
         <a href="#!" class="btn btn-primary m-0 mt-2" id="back">Terug</a>
     </div>
 @endsection
