@@ -231,7 +231,7 @@
                                 amount,
                                 CCM,
                                 FE,
-                                ""
+                                null
                             ]).draw(false);
                         }
 
@@ -300,7 +300,7 @@
                                 amount,
                                 CCM,
                                 FE,
-                                ""
+                                null
                             ]).draw(false);
                         }
                     });
@@ -339,7 +339,7 @@
                             amount,
                             statusCCM,
                             FE,
-                            ""
+                            null
                         ]).draw(false);
                     })
                     tooltips();
