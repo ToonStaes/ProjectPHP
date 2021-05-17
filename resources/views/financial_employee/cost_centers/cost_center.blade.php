@@ -17,7 +17,7 @@
             <th>Verantwoordelijke</th>
             <th>Beschrijving</th>
             <th>Budget</th>
-            <th>Verwijderen</th>
+            <th>Status</th>
         </tr>
         </thead>
         <tbody id="table_body">
@@ -37,9 +37,7 @@
                            value="{{count($cost_center->cost_center_budgets) ? $cost_center->cost_center_budgets[0]->amount : 0}}"
                            step="0.01" min="0" oninput="this.value = (this.value < 0) ? 0 : this.value"></td>
                 <td class="text-center">
-                    <button type="submit" class="deleteCostCenter">
-                        <i class="fas fa-trash-alt" data-toggle="tooltip" title="Verwijder kostenplaats {{$cost_center->name}}"></i>
-                    </button>
+                    <input class="form-check-input table-active-checkbox" {{($cost_center->isActive) ? "checked" : ""}} type="checkbox" id="cost_active_{{$cost_center->id}}">
                 </td>
             </tr>
         @endforeach
@@ -72,6 +70,7 @@
     <script>
         let budgets_changed = [];
         let responsible_changed = [];
+        let active_changed = [];
         let cost_center_names = [];
         let _csrf = "{{csrf_token()}}";
         let _query_url = "http://cma.test/cost_centers/";
@@ -130,9 +129,18 @@
         $('#button-save').on('click', function(){
             send_budget_changes();
             send_responsibles_changed();
+            send_actives_changed();
         });
 
         $('.input-budget').change($.proxy(onBudgetChange));
+
+        $('.table-active-checkbox').change($.proxy(onActiveChange))
+
+        function onActiveChange(){
+            active = (($(this).prop("checked")) ? 1 : 0);
+            id = parseInt($(this).parent().parent().data("id"), 10);
+            modify_active_changed(id, active);
+        }
 
         function onBudgetChange(){
             budget = parseInt($(this).val(), 10);
@@ -212,6 +220,38 @@
             }
         }
 
+        function send_actives_changed(){
+            if(!(active_changed.length === 0)){
+                for(state_index in active_changed){
+                    jQuery.ajax({
+                        url: _query_url+active_changed[state_index].id,
+                        method: "PUT",
+                        tryCount: 0,
+                        tryLimit: 3,
+                        context: {toCheck: active_changed[state_index]},
+                        data: active_changed[state_index]
+                    }).done(function(){
+                        for(state in active_changed){
+                            if(active_changed[state] == this.toCheck) active_changed.splice(state, 1);
+                        }
+                        show_success_notification("De statussen werden succesvol geüpdated.");
+                    }).fail(function(jqXHR, statusText, errorText){
+                        if(jqXHR.status == 500){
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de statussen.");
+                            return;
+                        }
+                        this.tryCount++;
+                        if(this.tryCount > this.tryLimit) return;
+                        jQuery.ajax(this);
+                    }).always(function(){
+                        if(this.tryCount > this.tryLimit){
+                            show_failure_notification("Er is een fout gebeurt bij het opslaan van de statussen.")
+                        }
+                    });
+                }
+            }
+        }
+
         function modify_budgets_changed(center_id, center_budget) {
             /*
             *   Check if the changed budget is already in the array
@@ -247,6 +287,25 @@
                     }
                 }
                 if(!isPresent) responsible_changed.push({id: center_id, resp: resp_id});
+            }
+        }
+
+        function modify_active_changed(center_id, center_state){
+            /*
+            *   Check if the changed state is already in the array
+            *   if not, add it, else update the value in the array
+            * */
+            isPresent = false;
+            if(active_changed.length === 0) active_changed.push({id: center_id, isActive: center_state});
+            else {
+                for(state_index in active_changed){
+                    if(active_changed[state_index].id === center_id) {
+                        active_changed[state_index].isActive = center_state;
+                        isPresent = true;
+                        break;
+                    }
+                }
+                if(!isPresent) active_changed.push({id: center_id, isActive: center_state});
             }
         }
 
@@ -365,8 +424,8 @@
                 "<td>"+cost_center.description+"</td>",
                 "<td><input class=\"input-budget search-dropdown\" type=\"number\"value=\""+cost_center.budget+"\"\n" +
                 "                           step=\"0.01\" min=\"0\" oninput=\"this.value = (this.value < 0) ? 0 : this.value\"></td>",
-                "<td><button type=\"submit\" class=\"deleteCostCenter\">\n" +
-                "                        <i class=\"fas fa-trash-alt\" data-toggle=\"tooltip\" title=\"Verwijder kostenplaats "+cost_center.cost_center_name+"\"></i></button></td>"
+                "<td class=\"text-center\">" +
+                "<input class=\"form-check-input table-active-checkbox\" "+((cost_center.isActive) ? "checked" : "")+" type=\"checkbox\" id=\"cost_active_"+cost_center.id+"\"></td>"
             ]).draw().node();
             _datatable.draw();
             _datatable.sort();
@@ -376,6 +435,7 @@
             $(newrow).on('click','.deleteCostCenter', cost_center_delete_click);
             $(newrow).on('change', '.input-budget', onBudgetChange);
             $(newrow).on('change', '.resp-select', onResponsibleChanged);
+            $(newrow).on('change', '.table-active-checkbox', onActiveChange);
             if(!cost_center_names.includes((cost_center.cost_center_name))){
                 $("#cost_centers_list").append('<option data-id="'+cost_center.cost_center_id+'">'+cost_center.cost_center_name+'</option>');
             }

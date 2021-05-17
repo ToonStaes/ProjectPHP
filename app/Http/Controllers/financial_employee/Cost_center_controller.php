@@ -24,7 +24,7 @@ class Cost_center_controller extends Controller
      */
     public function index()
     {
-        $cost_centers = Cost_center::where('isActive', true)->with(['user', 'cost_center_budgets', 'programmes'])->get();
+        $cost_centers = Cost_center::with(['user', 'cost_center_budgets', 'programmes'])->get();
 
         $users = User::where('isActive', 1)
             ->where('isCost_center_manager', 1)
@@ -170,8 +170,9 @@ class Cost_center_controller extends Controller
     {
         // Server-side validation of form input data
         $this->validate($request, [
-            'resp'=>'required_without:budget|integer|min:0',
-            'budget'=>'required_without:resp|integer|min:0'
+            'resp'=>'required_without_all:budget,isActive|integer|min:0',
+            'budget'=>'required_without_all:resp,isActive|integer|min:0',
+            'isActive'=>'required_without_all:resp,budget|boolean'
         ]);
 
         if(!is_null($request->budget)){
@@ -193,6 +194,11 @@ class Cost_center_controller extends Controller
                 $cost_center_budget->year = strval(date('Y'));
                 $cost_center_budget->save();
             }
+            return response(['r'=>'ok']);
+        }
+        else if(!is_null($request->isActive)){
+            $cost_center->isActive = $request->isActive;
+            $cost_center->save();
             return response(['r'=>'ok']);
         }
         $cost_center->user_id_Cost_center_manager = $request->resp;
