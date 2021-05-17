@@ -265,6 +265,5 @@ class DiverseController extends Controller
         }
         session()->flash('success', 'De aanvraag is aangepast.');
         return redirect("/user/mijnaanvragen");
-        //return back();
     }
 }
