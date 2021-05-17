@@ -74,7 +74,7 @@
         let active_changed = [];
         let cost_center_names = [];
         let _csrf = "{{csrf_token()}}";
-        let _query_url = "http://cma.test/cost_centers/";
+        let _query_url = "/cost_centers";
         let _datatable;
         let _managers = {!! $users !!};
 
@@ -135,14 +135,9 @@
         *   updating the resource with our specified data
         * */
         $('#button-save').on('click', function(){
-
-
             send_budget_changes();
             send_responsibles_changed();
             send_actives_changed();
-
-
-
         });
 
 
