@@ -15,6 +15,7 @@ use App\Status;
 use Facades\App\Helpers\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class RequestController extends Controller
 {
@@ -33,6 +34,8 @@ class RequestController extends Controller
             ->with(['user', 'cost_center', 'diverse_reimbursement_lines.parameter', 'diverse_reimbursement_lines.diverse_reimbursement_evidences', 'status_fe', 'financial_employee', 'cost_center_manager'])
             ->get()
             ->transform(function ($item, $key) use (&$total_open_payments){
+                $item->description = htmlspecialchars($item->description);
+
                 unset($item->user_id, $item->cost_center_id);
 
                 $item->username = $item->user->first_name . ' ' . $item->user->last_name;
@@ -111,9 +114,16 @@ class RequestController extends Controller
             ->with(['laptop_invoice.user', 'laptop_reimbursement_parameters.parameter', 'status_fe', 'financial_employee', 'cost_center_manager'])
             ->get()
             ->transform(function ($item, $key) use (&$total_open_payments, $maxpaymentlaptop){
+                Log::debug($item->laptop_invoice->invoice_description);
+                $item->laptop_invoice->invoice_description = htmlspecialchars($item->laptop_invoice->invoice_description);
+                Log::debug($item->laptop_invoice->invoice_description);
 
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
                 unset($item->laptop_invoice->user);
+
+                $item->invoice_decription = htmlspecialchars($item->invoice_description);
+
+                unset($item->laptop_invoice->created_at, $item->laptop_invoice->updated_at);
 
                 $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
 
