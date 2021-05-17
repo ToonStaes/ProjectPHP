@@ -26,19 +26,7 @@ class Cost_center_controller extends Controller
     {
         $cost_centers = Cost_center::where('isActive', true)
             ->with(['user', 'cost_center_budgets', 'programmes'])
-            ->get()
-            ->transform(function($item, $key){
-                //  cost center attributes
-                $item['name'] = htmlentities($item['name']);
-                $item['description'] = htmlentities($item['description']);
-
-                //  user attributes
-                $item['first_name'] = htmlentities($item['first_name']);
-                $item['last_name'] = htmlentities($item['last_name']);
-
-                //  programmes attributes
-                $item['name'] = htmlentities($item['name']);
-            });
+            ->get();
 
         $users = User::where('isActive', 1)
             ->where('isCost_center_manager', 1)
@@ -55,9 +43,6 @@ class Cost_center_controller extends Controller
                 unset($item['isCost_center_manager']);
                 unset($item['isFinancial_employee']);
                 unset($item['number_of_km']);
-
-                $item['first_name'] = htmlentities($item['first_name']);
-                $item['last_name'] = htmlentities($item['last_name']);
 
                 return $item;
         });
