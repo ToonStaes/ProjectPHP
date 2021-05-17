@@ -140,10 +140,8 @@
                 })
 
                 pars += '&opleidingen=' + opleidingen;
-                console.log(pars);
                 $.post(action, pars, 'json')
                     .done(function (data) {
-                        console.log(data);
                         // Hide the modal
                         $('#gebruiker_toevoegen').modal('hide');
                         let notification = new Noty({
@@ -179,10 +177,8 @@
                 })
 
                 pars += '&opleidingen=' + opleidingen;
-                console.log(pars);
                 $.post(action, pars, 'json')
                     .done(function (data) {
-                        console.log(data);
                         // Hide the modal
                         $('#gebruiker_bewerken').modal('hide');
                         let notification = new Noty({
@@ -212,7 +208,6 @@
 
             $(".opleiding_zoek").keyup(function () {
                 let filter = $(this).val();
-                console.log(filter);
                 getProgrammes(filter);
             });
 
@@ -226,10 +221,6 @@
                 $(this).parent().parent().find('.geselecteerde_opleidingen li').each(function () {
                     opleidingen.push($(this).data('id'));
                 })
-
-                console.log("Name", name);
-                console.log("Id", id);
-                console.log("Opleidingen", opleidingen);
 
                 if (jQuery.inArray(parseInt(id), opleidingen) === -1) {
                     $(".geselecteerde_opleidingen").append(`<li data-id="${id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${name}</li>`);
@@ -252,7 +243,6 @@
 
             $.getJSON('/users/getUsers')
                 .done(function (data) {
-                    console.log('data', data);
                     // Clear tbody tag
                     table.clear();
                     $.each(data, function (key, value) {
@@ -279,6 +269,10 @@
                                 opleidingen += value.programme.name + '\n';
                             })
                         }
+                        let icons = `<a href="#!" class="btn-edit" data-toggle="tooltip" title="Wijzig ${value.name}" data-id="${value.id}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-toggle="tooltip" title="Verwijder ${value.name}" data-id="${value.id}" data-id="${value.id}"><i class="fas fa-trash-alt"></i></a>`
+                        if (value.id === {!! auth()->user()->id !!}){
+                            icons = "";
+                        }
                         table.row.add([
                             value.id,
                             value.name,
@@ -291,12 +285,9 @@
                             is_active,
                             isCost_Center_manager,
                             isFinancial_employee,
-                            `<a href="#!" class="btn-edit" data-toggle="tooltip" title="Wijzig ${value.name}" data-id="${value.id}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-toggle="tooltip" title="Verwijder ${value.name}" data-id="${value.id}" data-id="${value.id}"><i class="fas fa-trash-alt"></i></a>`
+                            icons
                         ]).draw(false);
                     });
-                })
-                .fail(function (e) {
-                    console.log('error', e);
                 })
         }
 
@@ -318,16 +309,12 @@
 
                     // Rebuild the table
                     buildTable();
-                })
-                .fail(function (e) {
-                    console.log('error', e);
                 });
         }
 
         function editUser(id) {
             $.getJSON(`/users/${id}`)
                 .done(function (data) {
-                    console.log('data', data);
                     $('#gebruiker_bewerken input[name="voornaam"]').val(data.first_name);
                     $('#gebruiker_bewerken input[name="achternaam"]').val(data.last_name);
                     $('#gebruiker_bewerken input[name="adres"]').val(data.address);
@@ -355,16 +342,12 @@
                     if (data.user_programmes.length !== 0){
                         $(".geselecteerde_opleidingen").empty();
                         $.each(data.user_programmes, function (key, value) {
-                            console.log(value.programme.name);
                             $(".geselecteerde_opleidingen").append(`<li data-id="${value.programme.id}"><a href="#!" class="verwijder-li-opleiding"><i class="fas fa-minus-square"></i></a> ${value.programme.name}</li>`);
                         })
                     }
 
                     $('#gebruiker_bewerken form').attr('action', "/users/" + data.id);
                     $('#gebruiker_bewerken').modal('show');
-                })
-                .fail(function (e) {
-                    console.log('error', e);
                 })
         }
 
@@ -377,8 +360,6 @@
 
             $.post(`/users/getProgrammes`, pars, 'json')
                 .done(function (data) {
-                    console.log('data', data);
-
                     let select = $(".opleidingen_select");
                     select.empty();
                     $.each(data, function (key, value) {
@@ -386,9 +367,6 @@
                                        ${value.name}
                                   </option>`);
                     });
-                })
-                .fail(function (e) {
-                    console.log('error', e);
                 });
         }
     </script>

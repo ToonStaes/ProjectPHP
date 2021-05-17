@@ -14,7 +14,8 @@
         <h2>Aanvragen goed-/ afkeuren</h2>
         <p>Je kan zelf een beoordeling toevoegen door een keuze te maken in de dropdownlijst in de laatste kolom.</p>
         <p><img src="/assets/icons/help/financial_employee/manageRequest/dropdown.png" alt="Beoordeling dropdownlist"></p>
-        <p>Als je hier een beoordeling selecteert, zal er een venster tevoorschijn komen waar je commentaar kan ingeven. De beoordeling wordt opgeslagen wanneer je ‘opslaan’ klikt in het geopende venster.</p>
+        <p>Als je hier een aanvraag afkeurt, zal er een venster tevoorschijn komen waar je commentaar kan ingeven. De beoordeling wordt opgeslagen wanneer je ‘opslaan’ klikt in het geopende venster.</p>
+        <p>Wanneer je een aanvraag goedkeurt, wordt dit meteen opgeslagen</p>
         <p><img src="/assets/icons/help/financial_employee/manageRequest/comment.png" alt="Commentaar"></p>
 
         <h2>Aanvragen uitbetalen</h2>

@@ -23,7 +23,7 @@
                     <h3>Afwijzing:</h3>
                     <ul>
                         <li>Naam van bestemmeling: [NAAM]</li>
-                        <li>Naam van de medewerker die de vergoeding heeft behandelt: [NAAM FINANCIEEL MEDEWERKER]</li>
+                        <li>Naam van de medewerker die de vergoeding heeft behandelt: [NAAM MEDEWERKER]</li>
                         <li>Omschrijving van de aanvraag: [AANVRAAG]</li>
                         <li>Reden van afwijzing: [REDEN]</li>
                     </ul>
