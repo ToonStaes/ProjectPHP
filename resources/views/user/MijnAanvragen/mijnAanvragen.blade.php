@@ -47,6 +47,10 @@
                 $('#modal-laptop').modal('hide');
             })
 
+            $('.annuleren').click(function () {
+                $('#modal-laptop').modal('hide');
+            })
+
             $('#delete').click(function () {
                 $(this).parent().addClass('d-none');
                 $('#uploadFile').removeClass('d-none');
