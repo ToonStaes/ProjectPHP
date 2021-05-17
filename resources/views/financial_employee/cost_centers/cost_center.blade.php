@@ -184,7 +184,9 @@
                         for(budget in budgets_changed){
                             if (budgets_changed[budget] == this.toCheck) budgets_changed.splice(budget, 1);
                         }
-                        message += " De budgetten werden succesvol geüpdated."
+                        if (!message.includes("De budgetten werden succesvol geüpdated.")){
+                            message += " De budgetten werden succesvol geüpdated.";
+                        }
                     }).fail(function(jqXHR, statusText, errorText){
                         if(jqXHR.status == 500){
                             show_failure_notification("Er is een fout gebeurt bij het opslaan van de budgetten");
@@ -477,7 +479,9 @@
                 reset_form();
                 this.cost_center.cost_center_id = data.id;
                 add_cost_center(this.cost_center);
-                message += " De kostenplaats werd succesvol opgeslagen.";
+                if (!message.includes("De kostenplaats werd succesvol opgeslagen.")){
+                    message += " De kostenplaats werd succesvol opgeslagen.";
+                }
             }).fail(function(jqXHR, statusText, errorText){
                 //  Laravels form validation error code is 422
                 if(jqXHR.status == 409){
