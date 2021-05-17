@@ -47,8 +47,8 @@
                                class="form-control-file">
                         <span id="UploadBestand_error" class="form-error text-danger"></span>
                     </div>
-                    <button type="submit" class="btn btn-primary">Aanvraag aanpassen
-                    </button>
+                    <button type="submit" class="btn btn-primary">Aanvraag aanpassen</button>
+                    <button type="button" class="btn btn-secondary annuleren">Annuleren</button>
                 </form>
             </div>
         </div>
