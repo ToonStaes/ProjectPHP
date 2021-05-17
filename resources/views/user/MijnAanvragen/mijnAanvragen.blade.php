@@ -32,6 +32,7 @@
         </table>
     </div>
     @include('user.MijnAanvragen.laptop_modal')
+    @include('user.MijnAanvragen.divers_modal')
 @endsection
 
 @section('script_after')
@@ -142,6 +143,21 @@
             }
         });
 
+        $('tbody').on('click', '.btn-edit', function () {
+            if($(this).hasClass('diversevergoeding')) {
+                // Get data attributes from td tag
+                let id = $(this).data('id');
+
+
+                // Update the modal
+                $('.modal-title').text(`Pas diverse vergoeding aan`);
+                $('#test').val(id);
+
+                // Show the modal
+                $('#modal-divers').modal('show');
+            }
+        });
+
         let table = $('#mijnAanvragen').DataTable({
             "columns": [
                 {"name": "Aanvraagdatum", "orderable": true},
@@ -220,7 +236,7 @@
                                 strAmount,
                                 CCM,
                                 FE,
-                                `<a href="#!" class="btn-edit" data-id="${value.id}"><i class="fas fa-edit"></i></a>`
+                                `<a href="/user/divers/${value.id}" class="btn-edit diversevergoeding"><i class="fas fa-edit"></i></a>`
                             ]).draw(false);
                         } else {
                             table.row.add([
