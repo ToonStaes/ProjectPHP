@@ -16,7 +16,8 @@
         <p><img src="/assets/images/MijnAanvragen.png" alt="Overzicht mijn aanvragen"></p>
         <p>In de eerste kolommen vind je de aanvraagdatum en de beoordelingsdata van de financieel medewerker en de kostenplaatsverantwoordelijke.</p>
         <p><img src="/assets/images/Datums.png" alt="Kolom 1 tot en met 3"></p>
-        <p>Als u met de muis over de statussen gaat staan, krijg je meer informatie over de kostenplaatsverantwoordelijke of de financieel medewerker. Als er nog geen informatie bekend is over die persoon of diens beoordeling krijg je geen extra info te zien.</p>
+        <p>Als u met de muis over de statussen gaat staan, krijg je meer informatie over de kostenplaatsverantwoordelijke of de financieel medewerker en eventuele commentaar van die persoon. Als er nog geen informatie bekend is over die persoon of diens beoordeling krijg je geen extra info te zien.</p>
+        <p><img src="/assets/images/Status.png" alt="Tooltip status"></p>
 
         <h2>Aanvraag aanpassen</h2>
         <p>Indien er in de laatste kolom een knopje staat om te bewerken kan de aanvraag nog aangepast worden.</p>
