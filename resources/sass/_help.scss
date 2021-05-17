@@ -1,11 +1,11 @@
 .help{
     a{
-        color: $dark-grey;
+        color: $primary;
         margin: 2rem;
         padding-top: 36px;
-        :hover{
-            text-decoration: none;
-        }
+    }
+    .no-margin{
+        margin: 0;
     }
     #edit-help{
         color:$dark-grey;

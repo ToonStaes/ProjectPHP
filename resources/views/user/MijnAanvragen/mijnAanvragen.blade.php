@@ -292,7 +292,7 @@
                             CCM = `<p>` + statusCCM + ` <i class="fas fa-info-circle" data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top"></i></p>`
                         }
 
-                        if (FEComment == null && FEName == null) {
+                        if (FEName === " ") {
                             FE = statusFE;
                         } else if (FEComment == null && FEName !== " ") {
                             FE = `<p>` + statusFE + ` <i class="fas fa-info-circle"  data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top"></i></p>`

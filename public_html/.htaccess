@@ -19,3 +19,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+<Directory /storage/DiverseBewijzen>
+	php_flag engine off
+</Directory>
+<Directory /storage/LaptopBewijzen>
+	php_flag engine off
+</Directory>

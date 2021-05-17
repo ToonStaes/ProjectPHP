@@ -385,12 +385,12 @@
 
         $("#cost_center_submit").on("click", function(){
             user_id = parseInt($("#responsible_list").val(), 10);
-            user_name = htmlEntities($("#responsible_list option:selected").text());
+            user_name = $("#responsible_list option:selected").text();
             programme_id = parseInt($("#programmes_list").val(), 10);
-            programme_name = htmlEntities($("#programmes_list option:selected").text());
-            cost_center_name = htmlEntities($("#cost_center_input").val());
+            programme_name = $("#programmes_list option:selected").text();
+            cost_center_name = $("#cost_center_input").val();
             cost_center_id = $("#cost_centers_list option:selected").data("id");
-            description = htmlEntities($("#descr_input").val() ?? " ");
+            description = $("#descr_input").val() ?? " ";
             if(description.length == 0) description = " ";
 
             budget = parseInt($("#budget_input").val(), 10);
@@ -535,10 +535,6 @@
                 progressBar: true,
                 modal: false
             }).show();
-        }
-
-        function htmlEntities(str) {
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
     </script>
 @endsection

@@ -24,8 +24,8 @@ class Cost_center_controller extends Controller
      */
     public function index()
     {
-        $cost_centers = Cost_center::with(['user', 'cost_center_budgets', 'programmes'])->get();
 
+        $cost_centers = Cost_center::with(['user', 'cost_center_budgets', 'programmes'])->get();
         $users = User::where('isActive', 1)
             ->where('isCost_center_manager', 1)
             ->get()

@@ -32,6 +32,8 @@ class AanvraagController extends Controller
             ->where('user_id', '=', auth()->user()->id)
             ->get()
             ->transform(function ($item, $key){
+                $item->description = htmlspecialchars($item->description);
+
                 unset($item->user_id, $item->cost_center_id, $item->user_id_Fin_employee, $item->user_id_CC_manager, $item->created_at, $item->updated_at, $item->user);
                 $item->cost_center_name = $item->cost_center->name;
 
@@ -72,6 +74,8 @@ class AanvraagController extends Controller
             })
             ->with(['laptop_reimbursement_parameters', 'status_fe', 'status_cc_manager', 'cost_center_manager', 'financial_employee'])->get()
             ->transform(function ($item, $key){
+                $item->laptop_invoice->invoice_description = htmlspecialchars($item->laptop_invoice->invoice_description);
+
                 $item->user_name = $item->laptop_invoice->user->first_name . " " . $item->laptop_invoice->user->last_name;
                 $item->cc_manager_name = $item->cost_center_manager->first_name . " " . $item->cost_center_manager->last_name;
 

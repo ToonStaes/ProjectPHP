@@ -29,6 +29,8 @@ class RequestController extends Controller
             ->where("user_id_CC_manager", "=", Auth::user()->id)
             ->get()
             ->transform(function ($item, $key){
+                $item->description = htmlspecialchars($item->description);
+
                 unset($item->user_id, $item->cost_center_id, $item->user_id_Fin_employee, $item->user_id_CC_manager);
 
                 $item->username = $item->user->first_name . ' ' . $item->user->last_name;
@@ -99,6 +101,8 @@ class RequestController extends Controller
             ->where("user_id_Cost_center_manager", "=", Auth::user()->id)
             ->get()
             ->transform(function ($item, $key) use ($maxpaymentlaptop){
+                $item->laptop_invoice->invoice_description = htmlspecialchars($item->laptop_invoice->invoice_description);
+
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
                 unset($item->laptop_invoice->user);
 
