@@ -18,9 +18,9 @@
         <p><img src="/assets/icons/help/cost_center_manager/manageRequests/page.PNG" width="" alt="Pagina aanvragen beheren"></p>
         <p>In de voorlaatste tabel is een dropdownlijst waar je een beoordeling kan selecteren.</p>
         <p><img src="/assets/icons/help/financial_employee/manageRequest/dropdown.png" alt="Dropdown"></p>
-        <p>Na het selecteren van een beoordeling, krijg je een venster te zien waar je commentaar kan geven. Om alles op te slaan, kan je gewoon op de knop ‘opslaan’ klikken onderaan het commentaar-venster.</p>
+        <p>Als je hier een aanvraag afkeurt, krijg je een venster te zien waar je commentaar kan geven. Om alles op te slaan, kan je gewoon op de knop ‘opslaan’ klikken onderaan het commentaar-venster.</p>
         <p><img src="/assets/icons/help/financial_employee/manageRequest/comment.png" alt="Commentaar"></p>
-        <p>Als je een aanvraag goed- of afgekeurd hebt, kan je je commentaar bekijken door met je muis over de dropdownlijst te gaan staan. Als een financiële medewerker deze aanvraag beoordeeld heeft, kan je de gegevens daarvan bekijken door met je muis op het <i class="fas fa-info-circle"></i> in de laatste kolom te gaan staan.</p>
+        <p>Als je een aanvraag afgekeurd hebt, kan je je commentaar bekijken door met je muis over de dropdownlijst te gaan staan. Als een financiële medewerker deze aanvraag beoordeeld heeft, kan je de gegevens daarvan bekijken door met je muis op het <i class="fas fa-info-circle"></i> in de laatste kolom te gaan staan.</p>
         <p><img src="/assets/icons/help/cost_center_manager/manageRequests/i.png" alt="Commentaar financieel medewerker"></p>
         <a href="#!" class="btn btn-primary m-0 mt-2" id="back">Terug</a>
     </div>

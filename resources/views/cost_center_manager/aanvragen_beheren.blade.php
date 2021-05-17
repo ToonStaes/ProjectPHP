@@ -262,7 +262,7 @@
                         }
 
                         let select = `<span data-toggle="tooltip" data-placement="top" title="${value.comment_Cost_center_manager}" class="d-inline-block" tabindex="0"><select class="form-control w-auto status-select" data-id='${value.id}' data-type='laptop'`;
-                        if (value.status_fe.name !== "in afwachting"){
+                        if (value.status_FE !== "in afwachting"){
                             select += `disabled style="pointer-events: none;"`;
                         }
                         select += `>`;
@@ -282,7 +282,10 @@
                         })
                         select += `</select></span>`;
 
-                        let request_date = value.laptop_invoice.purchasedate;
+                        let request_date = value.laptop_invoice.updated_at;
+                        if (request_date == null){
+                            request_date = value.laptop_invoice.created_at;
+                        }
                         let cost_center = '';
                         $.each(value.laptop_reimbursement_parameters, function (key2, value2) {
                             if (value2.parameter.standard_Cost_center_id != null){
@@ -291,9 +294,9 @@
                         })
                         let user_name = value.laptop_invoice.username;
 
-                        let status_fe = value.status_fe.name;
+                        let status_fe = value.status_FE;
                         if (value.review_date_Financial_employee != null){
-                            status_fe = `<p>${value.status_fe.name} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
+                            status_fe = `<p>${value.status_FE} <i class="fas fa-info-circle" data-toggle="tooltip" data-html="true" data-placement="top" title="<p>Datum: ${value.review_date_Financial_employee}</p><p>Door: ${value.fe_name}</p>"></i></p>`;
                         }
 
                         let evidence = `<a class="btn btn-outline-dark" href="/storage/LaptopBewijzen/${value.laptop_invoice.filepath}" download><nobr><img src='assets/icons/file_icons/${value.laptop_invoice.file_icon}' alt="file icon" width="25px"> ${value.laptop_invoice.file_name.substring(13)}</nobr></a>`;

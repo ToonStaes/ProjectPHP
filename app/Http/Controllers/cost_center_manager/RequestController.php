@@ -102,9 +102,13 @@ class RequestController extends Controller
                 $item->laptop_invoice->username = $item->laptop_invoice->user->first_name . ' ' . $item->laptop_invoice->user->last_name;
                 unset($item->laptop_invoice->user);
 
-                unset($item->laptop_invoice->created_at, $item->laptop_invoice->updated_at);
-
                 $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
+
+                $item->status_FE = $item->status_fe->name;
+                unset($item->status_fe);
+
+                $item->status_CC_manager = $item->status_cc_manager->name;
+                unset($item->status_cc_manager);
 
                 if ($item->review_date_Cost_center_manager != null){
                     $item->review_date_Cost_center_manager = date("d/m/Y", strtotime($item->review_date_Cost_center_manager));
@@ -170,6 +174,7 @@ class RequestController extends Controller
 
             if ($status == 3){
                 $diverse_reimbursement->status_FE = 5;
+                $this->sendMail("divers", $request->id);
             }
 
             $diverse_reimbursement->save();
@@ -181,31 +186,56 @@ class RequestController extends Controller
             $laptop_reimbursement->status_CC_manager = $status;
             $laptop_reimbursement->user_id_Cost_center_manager = Auth()->user()->id;
 
+            if ($status == 3){
+                $laptop_reimbursement->status_FE = 5;
+                $this->sendMail("laptop", $request->id);
+            }
+
             $laptop_reimbursement->save();
         }
+    }
 
-        if($status==3){
-            //get the corresponding user
-            $diverse_with_user = Diverse_reimbursement_request::where('id', $request->id)->with(['user', 'cost_center_manager'])->get()[0];
+    public function sendMail($type, $id){
+        //get the corresponding user
+        if ($type == "divers"){
+            $diverse_with_user = Diverse_reimbursement_request::with(['user', 'cost_center_manager'])->findOrFail($id);
+        } else {
+            $laptop_with_user = Laptop_reimbursement::with('laptop_invoice.user', 'cost_center_manager')->findOrFail($id);
+        }
 
-            //get the mailcontent associated
-            //with this action
-            $mailcontent = Mailcontent::firstWhere('mailtype', 'Afwijzing');
-            $mailtext = $mailcontent->content;
+        //get the mailcontent associated
+        //with this action
+        $mailcontent = Mailcontent::firstWhere('mailtype', 'Afwijzing');
+        $mailtext = $mailcontent->content;
 
-            //replace all replaceables with
-            //the necessary data
+        //replace all replaceables with
+        //the necessary data
+        if ($type == "divers") {
             $mailtext = str_replace("[NAAM]", $diverse_with_user->user->first_name, $mailtext);
             $cost_manager = $diverse_with_user->cost_center_manager;
-            $mailtext = str_replace("[NAAM FINANCIEEL MEDEWERKER]", $cost_manager->first_name.' '.$cost_manager->last_name, $mailtext);
+        } else {
+            $mailtext = str_replace("[NAAM]", $laptop_with_user->laptop_invoice->user->first_name, $mailtext);
+            $cost_manager = $laptop_with_user->cost_center_manager;
+        }
+
+        $mailtext = str_replace("[NAAM MEDEWERKER]", $cost_manager->first_name.' '.$cost_manager->last_name, $mailtext);
+
+        if ($type == "divers") {
             $mailtext = str_replace("[AANVRAAG]", $diverse_with_user->description, $mailtext);
             $mailtext = str_replace("[REDEN]", $diverse_with_user->comment_Cost_center_manager, $mailtext);
+        } else {
+            $mailtext = str_replace("[AANVRAAG]", $laptop_with_user->laptop_invoice->invoice_description, $mailtext);
+            $mailtext = str_replace("[REDEN]", $laptop_with_user->comment_Cost_center_manager, $mailtext);
+        }
 
-            $mailtext = explode("\n", $mailtext);
+        $mailtext = explode("\n", $mailtext);
 
-            $data = array('content'=>$mailtext);
+        $data = array('content'=>$mailtext);
 
+        if ($type == "divers") {
             Mail::to($diverse_with_user->user->email)->send(new SendRequestDenied($data));
+        } else {
+            Mail::to($laptop_with_user->laptop_invoice->user->email)->send(new SendRequestDenied($data));
         }
     }
 }

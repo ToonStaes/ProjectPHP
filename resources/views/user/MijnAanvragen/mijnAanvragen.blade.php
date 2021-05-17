@@ -32,7 +32,6 @@
         </table>
     </div>
     @include('user.MijnAanvragen.laptop_modal')
-    @include('user.MijnAanvragen.divers_modal')
 @endsection
 
 @section('script_after')
@@ -40,6 +39,26 @@
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
 
     <script>
+        @if (session()->has('success'))
+        let success = new Noty({
+            text: '{!! session()->get('success') !!}',
+            type: 'success',
+            layout: "topRight",
+            timeout: 5000,
+            progressBar: true,
+            modal: false
+        }).show();
+        @endif
+        @if (session()->has('danger'))
+        let error = new Noty({
+            text: '{!! session()->get('danger') !!}',
+            type: 'error',
+            layout: "topRight",
+            timeout: 5000,
+            progressBar: true,
+            modal: false
+        }).show();
+        @endif
         $(document).ready(function () {
             buildTable();
 
@@ -83,7 +102,6 @@
                     contentType: false,
 
                     success: function (data) {
-                        console.log('redurn ok data', data)
                         // Hide the modal
                         $('#modal-laptop').modal('hide');
                         // Rebuild the table
@@ -126,11 +144,9 @@
                 let id = $(this).data('id');
                 let amount = $(this).data('amount');
                 let purchaseDate = $(this).data('purchasedate');
-                console.log("purchase Date :" + purchaseDate);
                 let filepath = "/storage/LaptopBewijzen/" + $(this).data('filepath');
                 let description = $(this).data('description');
                 let file_icon = $(this).data('fileicon');
-                console.log("file icon: " + file_icon)
                 let file_name = $(this).data('filename')
                 let content = `<img src="../assets/icons/file_icons/` + file_icon + `" alt="file icon" width="25px">` + file_name
 
@@ -144,21 +160,6 @@
                 $('input[name="_method"]').val('post');
                 // Show the modal
                 $('#modal-laptop').modal('show');
-            }
-        });
-
-        $('tbody').on('click', '.btn-edit', function () {
-            if($(this).hasClass('diversevergoeding')) {
-                // Get data attributes from td tag
-                let id = $(this).data('id');
-
-
-                // Update the modal
-                $('.modal-title').text(`Pas diverse vergoeding aan`);
-                $('#test').val(id);
-
-                // Show the modal
-                $('#modal-divers').modal('show');
             }
         });
 
@@ -192,7 +193,6 @@
         function buildTable() {
             $.getJSON('/user/mijnaanvragen/qryRequests')
                 .done(function (data) {
-                    console.log('data', data);
                     table.clear();
                     // diverse reimbursements
                     $.each(data.diverse_requests, function (key, value) {
@@ -281,7 +281,7 @@
 
                         let CCMName = value.cc_manager_name;
                         let CCMComment = value.comment_Cost_center_manager;
-                        let FEName = value.fe_name;
+                        let FEName = value.financial_employee_name;
                         let FEComment = value.comment_Financial_employee;
                         let CCM;
                         let FE;

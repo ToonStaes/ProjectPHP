@@ -111,7 +111,6 @@ class MailcontentController extends Controller
                 unset($item->created_at, $item->updated_at);
                 return $item;
             });
-//        $mailcontent->ID = trim($mailcontent->mailtype, ' ');
         $result = compact('mailcontent');
         \Facades\App\Helpers\Json::dump($result);
         return $result;

@@ -26,11 +26,6 @@ class UserController extends Controller
      */
     public function index()
     {
-//        $users = $this->getUsers();
-//
-//        $result = compact('users');
-//        Json::dump($result);
-
         return view('financial_employee.users.index');
     }
 
@@ -168,6 +163,10 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        if ($user->id == auth()->user()->id){
+            return "Je kan jezelf niet bewerken";
+        }
+
         $this->validate($request,[
             'voornaam' => 'required|min:3',
             'achternaam' => 'required|min:3',
@@ -247,6 +246,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if ($user->id == auth()->user()->id){
+            return "Je kan jezelf niet deactiveren";
+        }
+
         $user->isActive = 0;
         $user->save();
 
