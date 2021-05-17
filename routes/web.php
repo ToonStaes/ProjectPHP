@@ -45,6 +45,7 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::post('divers/{id}', 'user\DiverseController@update');
 
     Route::get('help', 'HelpController@index');
+    Route::get('help/uitgebreid', 'HelpController@full');
     Route::get('help/fietsvergoeding', 'HelpController@bikereimbursement');
     Route::get('help/laptopvergoeding', 'HelpController@laptopreimbursement');
     Route::get('help/diverseAanvragen', 'HelpController@diversrequests');

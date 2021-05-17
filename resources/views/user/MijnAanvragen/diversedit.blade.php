@@ -43,7 +43,7 @@
                                         <label class="form-check-label" for="flexSwitchCheckDefault">Autovergoeding?</label>
                                     </div>
                                     <div class="form-group NotAuto">
-                                        <label for="bedrag">Bedrag in Euro</label>
+                                        <label for="bedrag">Bedrag in euro</label>
                                         <input type="number" name="bedrag1" id="bedrag1"
                                                class="Bedrag NotAuto form-control @error('bedrag') is-invalid @enderror"
                                                placeholder="123"

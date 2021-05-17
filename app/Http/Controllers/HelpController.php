@@ -10,6 +10,10 @@ class HelpController extends Controller
         return view('user.help.help');
     }
 
+    public function full(){
+        return view('user.help.uitgebreid');
+    }
+
     public function bikereimbursement(){
         return view('user.help.bikereimbursement');
     }

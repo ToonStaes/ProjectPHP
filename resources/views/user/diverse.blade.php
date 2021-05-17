@@ -44,7 +44,7 @@
                                         <label class="form-check-label" for="flexSwitchCheckDefault">Kilometervergoeding?</label>
                                     </div>
                                     <div class="form-group NotAuto">
-                                        <label for="bedrag">Aankoopbedrag in Euro</label>
+                                        <label for="bedrag">Aankoopbedrag in euro</label>
                                         <input type="number" name="bedrag1" id="bedrag1"
                                                class="Bedrag NotAuto form-control @error('bedrag') is-invalid @enderror"
                                                placeholder="123"
