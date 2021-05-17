@@ -163,21 +163,6 @@
             }
         });
 
-        $('tbody').on('click', '.btn-edit', function () {
-            if($(this).hasClass('diversevergoeding')) {
-                // Get data attributes from td tag
-                let id = $(this).data('id');
-
-
-                // Update the modal
-                $('.modal-title').text(`Pas diverse vergoeding aan`);
-                $('#test').val(id);
-
-                // Show the modal
-                $('#modal-divers').modal('show');
-            }
-        });
-
         let table = $('#mijnAanvragen').DataTable({
             "columns": [
                 {"name": "Aanvraagdatum", "orderable": true},
