@@ -200,7 +200,9 @@
                         }).show();
 
                         buildTable();
-                    });
+                    }).fail(function (data) {
+                    console.log(data);
+                });
             });
 
             $("#openstaande_betalingen").click(function () {
