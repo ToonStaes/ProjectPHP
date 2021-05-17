@@ -169,26 +169,34 @@ class Cost_center_controller extends Controller
     public function update(Request $request, Cost_center $cost_center)
     {
         // Server-side validation of form input data
-        $this->validate($request, ['budget'=>'required|integer|min:0']);
+        $this->validate($request, [
+            'resp'=>'required_without:budget|integer|min:0',
+            'budget'=>'required_without:resp|integer|min:0'
+        ]);
 
-        /*
+        if(!is_null($request->budget)){
+            /*
          * Just in case the cost_center does not yet
          * have a cost_center_budget, we check if it does
          *
          * If there is, we just update that one,
          * If there is none, we need to create a new one
          * */
-        if(Cost_center_budget::where('cost_center_id', '=', $cost_center->id)->exists()) {
-            $cost_center_budget = Cost_center_budget::where('cost_center_id', '=', $cost_center->id);
-            $cost_center_budget->update(['amount'=>$request->budget]);
+            if(Cost_center_budget::where('cost_center_id', '=', $cost_center->id)->exists()) {
+                $cost_center_budget = Cost_center_budget::where('cost_center_id', '=', $cost_center->id);
+                $cost_center_budget->update(['amount'=>$request->budget]);
+            }
+            else {
+                $cost_center_budget = new Cost_center_budget();
+                $cost_center_budget->cost_center_id = $cost_center->id;
+                $cost_center_budget->amount = $request->budget;
+                $cost_center_budget->year = strval(date('Y'));
+                $cost_center_budget->save();
+            }
+            return response(['r'=>'ok']);
         }
-        else {
-            $cost_center_budget = new Cost_center_budget();
-            $cost_center_budget->cost_center_id = $cost_center->id;
-            $cost_center_budget->amount = $request->budget;
-            $cost_center_budget->year = strval(date('Y'));
-            $cost_center_budget->save();
-        }
+        $cost_center->user_id_Cost_center_manager = $request->resp;
+        $cost_center->save();
         return response(['r'=>'ok']);
     }
 
