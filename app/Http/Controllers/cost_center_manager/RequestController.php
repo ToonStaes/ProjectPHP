@@ -218,7 +218,7 @@ class RequestController extends Controller
             $cost_manager = $laptop_with_user->cost_center_manager;
         }
 
-        $mailtext = str_replace("[NAAM FINANCIEEL MEDEWERKER]", $cost_manager->first_name.' '.$cost_manager->last_name, $mailtext);
+        $mailtext = str_replace("[NAAM MEDEWERKER]", $cost_manager->first_name.' '.$cost_manager->last_name, $mailtext);
 
         if ($type == "divers") {
             $mailtext = str_replace("[AANVRAAG]", $diverse_with_user->description, $mailtext);
