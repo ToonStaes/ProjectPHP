@@ -30,6 +30,9 @@ html{
             transition: 0.3s;
             font-size: 1rem;
             border: 1px solid darken($blue, 20%);
+            i{
+                color: $white;
+            }
         }
 
         .btn-secondary{
