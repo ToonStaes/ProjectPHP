@@ -203,9 +203,9 @@
                             CCM = `<p data-html="true" data-toggle="tooltip" title="Kostenplaatsverantwoordelijke: ` + CCMName + `<br> Opmerking: ` + CCMComment + `" data-placement="top">` + statusCCM + `</p>`
                         }
 
-                        if (FEName == null) {
+                        if (FEName === " ") {
                             FE = statusFE;
-                        } else if (FEComment == null && FEName !== " ") {
+                        } else if (FEComment == null && (FEName !== " ")) {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `" data-placement="top">` + statusFE + `</p>`
                         } else {
                             FE = `<p data-html="true" data-toggle="tooltip" title="Financieel medewerker: ` + FEName + `<br> Opmerking: ` + FEComment + `" data-placement="top">` + statusFE + `</p>`
