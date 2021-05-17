@@ -266,6 +266,10 @@ class RequestController extends Controller
             $bike_reimbursement->status_id = $status;
             $bike_reimbursement->user_id_Financial_employee = Auth()->user()->id;
 
+            if ($status == 3){
+                $this->sendMail("fiets", $request->id);
+            }
+
             $bike_reimbursement->save();
         }
     }
@@ -273,9 +277,11 @@ class RequestController extends Controller
     public function sendMail($type, $id){
         //get the corresponding user
         if ($type == "divers"){
-            $diverse_with_user = Diverse_reimbursement_request::with(['user', 'cost_center_manager'])->findOrFail($id);
+            $diverse_with_user = Diverse_reimbursement_request::with(['user', 'financial_employee'])->findOrFail($id);
+        } else if ($type == "fiets"){
+            $laptop_with_user = Laptop_reimbursement::with('laptop_invoice.user', 'financial_employee')->findOrFail($id);
         } else {
-            $laptop_with_user = Laptop_reimbursement::with('laptop_invoice.user', 'cost_center_manager')->findOrFail($id);
+            $fiets_with_user = Bike_reimbursement::with('bikeride.user', 'financial_employee')->findOrFail($id);
         }
 
         //get the mailcontent associated
@@ -287,20 +293,26 @@ class RequestController extends Controller
         //the necessary data
         if ($type == "divers") {
             $mailtext = str_replace("[NAAM]", $diverse_with_user->user->first_name, $mailtext);
-            $cost_manager = $diverse_with_user->cost_center_manager;
-        } else {
+            $financial_employee = $diverse_with_user->financial_employee;
+        } else if ($type == "laptop") {
             $mailtext = str_replace("[NAAM]", $laptop_with_user->laptop_invoice->user->first_name, $mailtext);
-            $cost_manager = $laptop_with_user->cost_center_manager;
+            $financial_employee = $laptop_with_user->financial_employee;
+        } else {
+            $mailtext = str_replace("[NAAM]", $fiets_with_user->bikeride[0]->user->first_name, $mailtext);
+            $financial_employee = $fiets_with_user->financial_employee;
         }
 
-        $mailtext = str_replace("[NAAM MEDEWERKER]", $cost_manager->first_name.' '.$cost_manager->last_name, $mailtext);
+        $mailtext = str_replace("[NAAM MEDEWERKER]", $financial_employee->first_name.' '.$financial_employee->last_name, $mailtext);
 
         if ($type == "divers") {
             $mailtext = str_replace("[AANVRAAG]", $diverse_with_user->description, $mailtext);
-            $mailtext = str_replace("[REDEN]", $diverse_with_user->comment_Cost_center_manager, $mailtext);
-        } else {
+            $mailtext = str_replace("[REDEN]", $diverse_with_user->comment_Financial_employee, $mailtext);
+        } else if ($type == "laptop") {
             $mailtext = str_replace("[AANVRAAG]", $laptop_with_user->laptop_invoice->invoice_description, $mailtext);
-            $mailtext = str_replace("[REDEN]", $laptop_with_user->comment_Cost_center_manager, $mailtext);
+            $mailtext = str_replace("[REDEN]", $laptop_with_user->comment_Financial_employee, $mailtext);
+        } else {
+            $mailtext = str_replace("[AANVRAAG]", $fiets_with_user->name, $mailtext);
+            $mailtext = str_replace("[REDEN]", $fiets_with_user->comment_Financial_employee, $mailtext);
         }
 
         $mailtext = explode("\n", $mailtext);
@@ -309,8 +321,10 @@ class RequestController extends Controller
 
         if ($type == "divers") {
             Mail::to($diverse_with_user->user->email)->send(new SendRequestDenied($data));
-        } else {
+        } else if ($type == "laptop"){
             Mail::to($laptop_with_user->laptop_invoice->user->email)->send(new SendRequestDenied($data));
+        } else {
+            Mail::to($fiets_with_user->bikeride[0]->user->email)->send(new SendRequestDenied($data));
         }
     }
 
