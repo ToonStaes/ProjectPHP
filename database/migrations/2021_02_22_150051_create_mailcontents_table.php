@@ -26,7 +26,7 @@ class CreateMailcontentsTable extends Migration
                     'mailtype' => 'Afwijzing',
                     'content' => 'Beste [NAAM]
 
-Onze financieel medewerker [NAAM FINANCIEEL MEDEWERKER] heeft je vergoedingsaanvraag, [AANVRAAG], afgekeurd omwille van de volgende reden: [REDEN].
+Onze medewerker [NAAM MEDEWERKER] heeft je vergoedingsaanvraag, [AANVRAAG], afgekeurd omwille van de volgende reden: [REDEN].
 
 MVG
 Onkostenportaal Thomas More',
