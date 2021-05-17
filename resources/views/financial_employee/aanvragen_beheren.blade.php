@@ -414,15 +414,10 @@
                     });
 
                     $("#openstaande_betalingen").text(`Openstaande betalingen uitbetalen (€${(data.total_open_payments).toFixed(2)})`);
-                    makeTooltipsVisible();
                 })
                 .fail(function (e) {
                     console.log('error', e);
                 });
-        }
-
-        function makeTooltipsVisible() {
-            $('[data-toggle="tooltip"]').tooltip({html:true});
         }
 
         function buildModal(){

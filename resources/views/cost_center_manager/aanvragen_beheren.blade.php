@@ -309,16 +309,10 @@
                             status_fe
                         ]).draw(false);
                     });
-                    makeTooltipsVisible();
                 })
                 .fail(function (e) {
                     console.log('error', e);
                 });
-        }
-
-        function makeTooltipsVisible()
-        {
-            $('[data-toggle="tooltip"]').tooltip({html:true});
         }
 
     </script>

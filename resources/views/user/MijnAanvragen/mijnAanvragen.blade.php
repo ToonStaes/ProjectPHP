@@ -362,13 +362,7 @@
                             null
                         ]).draw(false);
                     })
-                    tooltips();
                 })
-        }
-
-        // bootstrap tooltips
-        function tooltips() {
-            $('[data-toggle="tooltip"]').tooltip()
         }
     </script>
 
