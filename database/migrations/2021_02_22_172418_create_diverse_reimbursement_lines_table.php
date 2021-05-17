@@ -17,6 +17,7 @@ class CreateDiverseReimbursementLinesTable extends Migration
             $table->id();
             $table->foreignId('DR_request_id');
             $table->float('amount')->nullable();
+            $table->date('purchase_date')->nullable();
             $table->float('number_of_km')->nullable();
             $table->foreignId('parameter_id')->nullable();
 
