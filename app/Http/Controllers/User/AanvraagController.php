@@ -79,7 +79,7 @@ class AanvraagController extends Controller
                 $item->user_name = $item->laptop_invoice->user->first_name . " " . $item->laptop_invoice->user->last_name;
                 $item->cc_manager_name = $item->cost_center_manager->first_name . " " . $item->cost_center_manager->last_name;
 
-                if($item->financial_employee == []){
+                if($item->financial_employee != []){
                     $item->financial_employee_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
                 }
 
@@ -147,10 +147,13 @@ class AanvraagController extends Controller
         $bike_requests = Bike_reimbursement::whereHas('bikerides.user', function ($q) {
                 $q->where('user_id', '=', auth()->user()->id);
             })
-            ->with(['bike_reimbursement_parameters.parameter.cost_center', 'status'])
+            ->with(['bike_reimbursement_parameters.parameter.cost_center', 'status', 'financial_employee'])
             ->get()
             ->transform(function ($item, $key){
                 $item->status_FE = $item->status->name;
+                if ($item->financial_employee != null){
+                    $item->fe_name = $item->financial_employee->first_name . " " . $item->financial_employee->last_name;
+                }
 
                 $parameters = $item->bike_reimbursement_parameters;
                 $amount_per_km = null;

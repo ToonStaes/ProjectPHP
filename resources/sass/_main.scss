@@ -1,6 +1,11 @@
 html{
     height: 100%;
     box-sizing: border-box;
+
+    .tooltip {
+        pointer-events: none;
+    }
+
     body{
         color: $dark-grey ;
         background-color: $white;
@@ -25,6 +30,9 @@ html{
             transition: 0.3s;
             font-size: 1rem;
             border: 1px solid darken($blue, 20%);
+            i{
+                color: $white;
+            }
         }
 
         .btn-secondary{
