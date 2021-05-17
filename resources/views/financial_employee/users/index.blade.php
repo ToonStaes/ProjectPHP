@@ -279,6 +279,10 @@
                                 opleidingen += value.programme.name + '\n';
                             })
                         }
+                        let icons = `<a href="#!" class="btn-edit" data-toggle="tooltip" title="Wijzig ${value.name}" data-id="${value.id}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-toggle="tooltip" title="Verwijder ${value.name}" data-id="${value.id}" data-id="${value.id}"><i class="fas fa-trash-alt"></i></a>`
+                        if (value.id === {!! auth()->user()->id !!}){
+                            icons = "";
+                        }
                         table.row.add([
                             value.id,
                             value.name,
@@ -291,7 +295,7 @@
                             is_active,
                             isCost_Center_manager,
                             isFinancial_employee,
-                            `<a href="#!" class="btn-edit" data-toggle="tooltip" title="Wijzig ${value.name}" data-id="${value.id}"><i class="fas fa-edit"></i></a> <a href="#!" class="btn-delete" data-toggle="tooltip" title="Verwijder ${value.name}" data-id="${value.id}" data-id="${value.id}"><i class="fas fa-trash-alt"></i></a>`
+                            icons
                         ]).draw(false);
                     });
                 })
