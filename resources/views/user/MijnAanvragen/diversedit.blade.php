@@ -155,7 +155,6 @@
                 if ($first == false){
                     AddKost();
                 }
-                console.log(currline['amount']);
                 if (currline['amount'] == null){
                     $('.autoswitch').last().prop('checked', true)
 

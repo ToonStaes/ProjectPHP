@@ -32,7 +32,6 @@
         </table>
     </div>
     @include('user.MijnAanvragen.laptop_modal')
-    @include('user.MijnAanvragen.divers_modal')
 @endsection
 
 @section('script_after')
@@ -99,7 +98,6 @@
                     contentType: false,
 
                     success: function (data) {
-                        console.log('redurn ok data', data)
                         // Hide the modal
                         $('#modal-laptop').modal('hide');
                         // Rebuild the table
@@ -142,11 +140,9 @@
                 let id = $(this).data('id');
                 let amount = $(this).data('amount');
                 let purchaseDate = $(this).data('purchasedate');
-                console.log("purchase Date :" + purchaseDate);
                 let filepath = "/storage/LaptopBewijzen/" + $(this).data('filepath');
                 let description = $(this).data('description');
                 let file_icon = $(this).data('fileicon');
-                console.log("file icon: " + file_icon)
                 let file_name = $(this).data('filename')
                 let content = `<img src="../assets/icons/file_icons/` + file_icon + `" alt="file icon" width="25px">` + file_name
 
@@ -193,7 +189,6 @@
         function buildTable() {
             $.getJSON('/user/mijnaanvragen/qryRequests')
                 .done(function (data) {
-                    console.log('data', data);
                     table.clear();
                     // diverse reimbursements
                     $.each(data.diverse_requests, function (key, value) {

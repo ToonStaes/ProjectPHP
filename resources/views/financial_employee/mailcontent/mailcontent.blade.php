@@ -45,12 +45,10 @@
         // buttons die er moeten zijn: afwijzing aanvraag, nieuwe user aangemaakt met wachtwoord in, nieuw paswoord aanvragen
         function loadTable() {
             $.getJSON('/Mailcontent/qryMailcontents').done(function (data) {
-                console.log('data', data);
 
                 $('tbody').empty();
 
                 $.each(data.mailcontent, function (key, value) {
-                    console.log("MAIL", value);
                     let tr = `<tr>
                             <td class="column1">${value.mailtype}</td>
                             <td class="content">${value.content}</td>
@@ -60,9 +58,6 @@
                                         </a></td>`;
                     $('tbody').append(tr);
                 })
-            })
-            .fail(function (e) {
-                console.log('error', e);
             })
         }
 
