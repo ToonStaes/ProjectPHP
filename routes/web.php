@@ -41,8 +41,8 @@ Route::middleware(['auth', 'changed_password'])->prefix('user')->group(function 
     Route::get('divers', 'User\DiverseController@diverseindex');
     Route::post('divers', 'User\DiverseController@store');
 
-    Route::get('divers/{id}', 'user\DiverseController@edit');
-    Route::post('divers/{id}', 'user\DiverseController@update');
+    Route::get('divers/{id}', 'User\DiverseController@edit');
+    Route::post('divers/{id}', 'User\DiverseController@update');
 
     Route::get('help', 'HelpController@index');
     Route::get('help/uitgebreid', 'HelpController@full');
