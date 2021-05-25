@@ -11,8 +11,7 @@ Noty.overrideDefaults({
 $(function(){
     $('body').tooltip({
         selector: '[data-toggle="tooltip"]',
-        // animation: false,
-        // delay: 0
+        html : true
     }).on('click', '[data-toggle="tooltip"]', function () {
         // hide tooltip when you click on it
         $(this).tooltip('hide');
