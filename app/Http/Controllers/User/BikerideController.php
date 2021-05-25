@@ -45,7 +45,6 @@ class BikerideController extends Controller
         }
         $requested_fietsritten = substr($requested_fietsritten, 1, strlen($requested_fietsritten) - 1);
         $result = compact('saved_fietsritten', 'requested_fietsritten', 'user');
-        Json::dump($result);
         return view('user.request_bike_reimbursement', $result);
     }
 
@@ -166,7 +165,6 @@ class BikerideController extends Controller
 
 
         $result = compact('saved_fietsritten', 'requested_fietsritten', 'user');
-        Json::dump($result);
         return view('user.request_bike_reimbursement', $result);
     }
 

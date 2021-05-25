@@ -112,7 +112,6 @@ class MailcontentController extends Controller
                 return $item;
             });
         $result = compact('mailcontent');
-        \Facades\App\Helpers\Json::dump($result);
         return $result;
     }
 }

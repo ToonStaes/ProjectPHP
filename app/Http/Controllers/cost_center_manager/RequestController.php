@@ -162,7 +162,6 @@ class RequestController extends Controller
             });
         $statuses = Status::all();
         $result = compact('diverse_requests', 'laptop_requests', 'statuses', 'maxpaymentlaptop');
-        JSON::dump($result);
 
         return $result;
     }

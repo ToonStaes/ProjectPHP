@@ -226,7 +226,6 @@ class RequestController extends Controller
             });
         $statuses = Status::all();
         $result = compact('diverse_requests', 'laptop_requests', 'bike_reimbursements', 'statuses', 'total_open_payments');
-        JSON::dump($result);
 
         return $result;
     }
@@ -406,7 +405,6 @@ class RequestController extends Controller
             });
 
         $result = compact('diverse_requests', 'laptop_requests', 'bike_reimbursements','total_open_payments');
-        JSON::dump($result);
 
         return $result;
     }

@@ -27,7 +27,6 @@ class ParameterController extends Controller
         $cost_center_bikereimbursement = Parameter::whereNull('valid_until')->where('name', 'Standaard kostenplaats fietsvergoeding')->get();
         $result = compact('cost_centers', 'bike_reimbursement', 'car_reimbursement', 'laptop', 'cost_center_laptopreimbursement', 'cost_center_bikereimbursement');
 
-        Json::dump($result);
         return view('financial_employee.parameters', $result);
     }
 
@@ -224,7 +223,6 @@ class ParameterController extends Controller
         $cost_center_bikereimbursement = Parameter::whereNull('valid_until')->where('name', 'Standaard kostenplaats fietsvergoeding')->get();
         $result = compact('cost_centers', 'bike_reimbursement', 'car_reimbursement', 'laptop', 'cost_center_laptopreimbursement', 'cost_center_bikereimbursement');
 
-        Json::dump($result);
         return view('financial_employee.parameters', $result);
     }
 }

@@ -206,7 +206,6 @@ class AanvraagController extends Controller
             });
 
         $result = compact('diverse_requests', 'laptop_reimbursements', 'bike_requests');
-        Json::dump($result);
         return $result;
     }
 }
