@@ -20,7 +20,6 @@ class DiverseController extends Controller
     {
         $kostenplaatsen = Cost_center::all();
         $result = compact('kostenplaatsen');
-        Json::dump($result);
         return view('user.diverse', $result);
     }
 
@@ -141,7 +140,6 @@ class DiverseController extends Controller
         $Evid = collect($Evidarr);
         $kostenplaatsen = Cost_center::all();
         $result = compact("Req", "Lines", "Evid", "kostenplaatsen");
-        Json::dump($result);
         return view('user.MijnAanvragen.diversedit', $result);
     }
 

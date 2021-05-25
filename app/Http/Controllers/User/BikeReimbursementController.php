@@ -80,7 +80,6 @@ class BikeReimbursementController extends Controller
         $bike_parameter_standaard_kostenplaats->bike_reimbursement_id = $bike_reimbursement->id;
         $bike_parameter_standaard_kostenplaats->save();
 
-        Json::dump($result);
         return view('user.request_bike_reimbursement', $result);
     }
 
